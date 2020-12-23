@@ -1,0 +1,113 @@
+﻿@model HFZMVC.Models.PermitRequest.HazardCertificateModel
+
+<section id="detailscontainer">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="panel-body">
+                <div class="row">
+                    <h4 class="mt-0 header-title chargestitle" style="width: 100%;text-align: center;"> <span><i class="ti-receipt" style="float: unset;vertical-align: -4px;"></i> Permit Information</span></h4>
+                    <div class="col-lg-6">
+                        <div class="card" style="min-height: 100%;">
+                            <div class="card-body charges summary">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row"><i class="ti-zip charges-icons"></i> <p>Permit#</p></th>
+                                                <td id="companylabel">@ViewBag.ID</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><i class="ti-settings charges-icons"></i> <p>Contact Person</p></th>
+                                                <td id="tradelicenselabel">@ViewBag.company.Name</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Email</p></th>
+                                                <td id="managerlabel">@ViewBag.company.EmailID</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card" style="min-height: 100%;">
+                            <div class="card-body charges summary">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row"><i class="ti-zip charges-icons"></i> <p>Company Name</p></th>
+                                                <td id="companylabel">@ViewBag.company.CompanyName</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><i class="ti-settings charges-icons"></i> <p>Contact</p></th>
+                                                <td id="tradelicenselabel">@ViewBag.company.PhoneNumber</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Location</p></th>
+                                                <td id="managerlabel">@ViewBag.company.Address</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="card" style="min-height: 100%;">
+                <div class="card-body charges summary">
+
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th style="min-width:150px;">Name</th>
+                                    <th>Quantity(Tons)</th>
+                                    <th>State<br />(Liquid,Solid,..)</th>
+                                    <th>Container Type<br />(IBC,Drums,....)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in ViewBag.hazards)
+                                    {
+                                        <tr>
+                                            <td>1</td>
+                                            <td><input type="text" value="@item.name" disabled id="name" class="form-control" /></td>
+                                            <td><input type="text" value="@item.quantity" disabled id="quantity" class="form-control" /></td>
+                                            <td><input type="text" value="@item.state" disabled id="state" class="form-control" /></td>
+                                            <td><input type="text" value="@item.ContainerType" disabled id="ContainerType" class="form-control" /></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <table class="table mb-0">
+                            <tbody>
+                                <tr>
+                                    <th scope="row" style="width: 280px;">Description of Waste Generation</th>
+                                    <td><textarea id="WasteDescription" disabled class="form-control">@Model.WasteDescription</textarea></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Frequency of Disposal</th>
+                                    <td><textarea id="DisposalFrequency" name="DisposalFrequency" class="form-control">@Model.DisposalFrequency</textarea></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Transporter</th>
+                                    <td><textarea id="transporter" name="transporter" class="form-control">@Model.transporter</textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

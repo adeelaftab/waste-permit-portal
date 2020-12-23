@@ -1,0 +1,104 @@
+﻿
+@{
+  ViewBag.Title = "Create";
+
+  var MasterDataList =
+     new List<SelectListItem>();
+  #region Populaing Masterdata
+  MasterDataList.Add(
+new SelectListItem() {
+  Text = "Source Of SampleMaster",
+  Value = "SourceOfSampleMaster"
+}
+);
+  MasterDataList.Add(
+       new SelectListItem() {
+         Text = "Purpose Of SamplingMaster",
+         Value = "PurposeOfSamplingMaster"
+       }
+   );
+  MasterDataList.Add(
+       new SelectListItem() {
+         Text = "Permit Type",
+         Value = "PermitTypeMaster"
+       }
+   );
+  MasterDataList.Add(
+       new SelectListItem() {
+         Text = "Location Master",
+         Value = "LocationMaster"
+       }
+   );
+  MasterDataList.Add(
+       new SelectListItem() {
+         Text = "Master Items",
+         Value = "MasterItems"
+       }
+   );
+  #endregion
+}
+<div class="row">
+  <div class="col-sm-12">
+    <div class="page-title-box">
+
+      @if (ViewBag.section == null) {
+        <h4 class="page-title pull-left">Master Data</h4>
+      }
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-12">
+    <div class="card m-b-20">
+      <div class="card-body permits-managment-box">
+        <div class="col-md-6 form-group">
+          <label>
+            Maseter Data Type
+          </label>
+          @Html.DropDownList("ddlFieldGroup", (IEnumerable<SelectListItem>)MasterDataList
+                        , "---Select---", new {
+                            onfocus = "this.size=8;",
+                            onblur = "this.size=1;",
+                               onchange = "this.size=1; this.blur();",
+                               @class = "form-control"
+                        }
+                        )
+        </div>
+        <div class="col-md-6 form-group">
+          <label>Data</label>
+          <input type="text" placeholder="Enter Data  " class="form-control" id="Fields" name="Fields" value="" />
+        </div>
+        <div class="col-md-6 form-group">
+          Is Active?
+
+          <input type="checkbox" id="isActive" />
+        </div>
+
+        <div class="col-md-6 form-group typeContainer" id="dvMasterItem" style="display:none;">
+          <label>Item Code</label>
+          <input type="text" class="form-control" name="ItemCode" id="ItemCode" value="" />
+          <label>Amount</label>
+          <input type="number" class="form-control" name="Amount" id="Amount" value="0" />
+        </div>
+        <div class="col-md-6 form-group">
+          <button type="button" id="btnCreate" 
+                  onclick="Submit()" class="btn btn-success btn-lg waves-effect" style="margin: 0 auto;">
+            Submit
+          </button>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>
+
+@section Scripts{
+
+  <script src="~/Scripts/MasterData/MasterDataCreate.js"></script>
+}

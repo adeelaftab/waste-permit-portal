@@ -1,0 +1,1067 @@
+﻿@model HFZMVC.Models.PermitRequest.FDCRequestDetailModel
+@{
+  ViewBag.Title = "Detail";
+  var Status = Model.StatusID;
+  ;
+
+  int RoleId = AppUtil.getUserRole();
+  int UserId = AppUtil.checkLogin();
+
+  var isUser = !(Model.IsFDCApproval || Model.IsPaymentApproval || RoleId == 1002);
+  bool isdisplayNextAction = false;
+  string MainClass = "";
+  string ChildClass = "";
+  bool isCompletedPermit = Model.History.Where(e => e.New_Value == "7").Any();
+
+  string Informationdisplay = "";
+  string Statusdisplay = "";
+  string Paymentdisplay = "";
+  string Downloaddisplay = "";
+  string Rejectdisplay = "";
+
+  string InformationActive = "";
+  string StatusActive = "";
+  string PaymentActive = "";
+  string DownloadActive = "";
+  switch (Status) {
+    case 1:
+      if (Model.IsSamplingRequest) {
+
+        isdisplayNextAction = true;
+      }
+
+
+
+      if (Model.IsFDCApproval) {
+        isdisplayNextAction = true;
+      }
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      break;
+    case 2:
+      if (isUser) {
+        isdisplayNextAction = true;
+      }
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      break;
+    case 4:
+
+      if (isUser) {
+        isdisplayNextAction = true;
+      }
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      break;
+    case 3:
+      if (Model.IsSamplingRequest) {
+        isdisplayNextAction = true;
+
+      }
+      if (Model.IsFDCApproval) {
+        isdisplayNextAction = true;
+      }
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+
+      break;
+    case 10:
+      if (isUser) {
+        isdisplayNextAction = true;
+
+      }
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+
+      break;
+
+    case 11:
+
+      isdisplayNextAction = true;
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+
+      break;
+    case 12:
+
+
+      if (isUser) {
+        isdisplayNextAction = false;
+      }
+      Paymentdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      PaymentActive = "active";
+
+      break;
+    case 13:
+      if (Model.IsFDCApproval) {
+        isdisplayNextAction = false;
+
+      }
+      Paymentdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      PaymentActive = "active";
+      break;
+
+    case 14:
+      if (Model.IsPaymentApproval) {
+        isdisplayNextAction = false;
+      }
+      Paymentdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      PaymentActive = "active";
+      DownloadActive = "";
+      break;
+    case 5:
+      isdisplayNextAction = false;
+      Rejectdisplay = "display:block;";
+      InformationActive = "";
+      StatusActive = "";
+      PaymentActive = "";
+      DownloadActive = "";
+      break;
+    default:
+      isdisplayNextAction = false;
+      Downloaddisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      PaymentActive = "active";
+      DownloadActive = "active";
+      break;
+  }
+}
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="page-title-box">
+      <h4 class="page-title">Permits Management</h4>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0);">Dashoard</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0);">Permits</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <div class="card m-b-20">
+      <div class="card-body permits-managment-box">
+
+        <div class="row tab">
+
+
+          <div class="col-sm-2"></div>
+          <div class="col-sm-2"><div class="tabcircle @InformationActive" onclick="openCity(event, 'Information')"> Information </div></div>
+          <div class="col-sm-2"><div class="tabcircle @StatusActive" onclick="openCity(event, 'Status')"> Status </div></div>
+          <div class="col-sm-2"><div class="tabcircle @PaymentActive" onclick="openCity(event, 'Payment')"> Payment </div></div>
+          <div class="col-sm-2"><div class="tabcircle @DownloadActive" onclick="openCity(event, 'Download')"> Download </div></div>
+          <div class="col-sm-2"></div>
+
+        </div>
+
+        <div class="row">
+          @Html.HiddenFor(e => e.StatusID)
+
+          <div class="col-sm-12 tabcontent" style="@Informationdisplay" id="Information">
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+
+                </div>
+                <div class="col-lg-12">
+                  <div class="card" style="min-height: 100%;">
+                    <div class="card-body charges summary">
+                      <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Company Information</span></h4>
+                      <div class="table-responsive">
+                        <table class="table mb-0">
+                          <tbody>
+                            <tr>
+                              <th scope="row"><i class="ti-zip charges-icons"></i> <p>Company Name</p></th>
+                              <td id="companylabel">@Model.company.CompanyName</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-settings charges-icons"></i> <p>Trade License Number</p></th>
+                              <td id="tradelicenselabel">@Model.company.LicenseNumber</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Manager Name</p></th>
+                              <td id="managerlabel">@Model.company.Name</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-bookmark-alt charges-icons"></i> <p>Phone</p></th>
+                              <td id="phonenumber">@Model.company.PhoneNumber</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i> <p>Email</p></th>
+                              <td id="emaillabel">@Model.company.EmailID</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <hr>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="card" style="min-height: 100%;">
+                    <div class="card-body charges summary">
+                      <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Waste Description</span></h4>
+                      <div class="table-responsive">
+                        <table class="table mb-0">
+                          <tbody>
+                            <tr>
+                              <th scope="row"><i class="ti-zip charges-icons"></i> <p>List of Items</p></th>
+                              <td id="itemslistlabel">@Model.ItemNames</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-settings charges-icons"></i><p>Country of Origin</p></th>
+                              <td id="origin_countrylabel">@Model.origin_country</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-ruler-pencil charges-icons"></i><p>Total Weight (kg\ton)</p></th>
+                              <td id="TotalWeightlabel">@Model.TotalWeight @Model.UnitOfMeasure</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-bookmark-alt charges-icons"></i><p>PRO</p></th>
+                              <td id="pro_datelabel">
+                                @if (Model.pro_date.Year != 1900) {
+                                  <text>  @Model.pro_date.ToString("dd-MMM-yyyy")</text>
+                                }
+                              </td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>EXP Date</p></th>
+                              <td id="expiry_datelabel">
+                                @if (Model.expiry_date.Year != 1900) {
+                                  <text>  @Model.expiry_date.ToString("dd-MMM-yyyy")</text>
+                                }
+                              </td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>Type of packaging</p></th>
+                              <td id="package_typelabel">@Model.PackageType</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>No of Pakages</p></th>
+                              <td id="package_countlabel">@Model.PackageCount</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>Package Size</p></th>
+                              <td id="total_package_weightlabel">@Model.PackageWeight</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>Reason for Destruction</p></th>
+                              <td id="destruction_reasonlabel">@Model.DestructionReason</td>
+                            </tr>
+
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>Location of facility</p></th>
+                              <td id="facility_locationlabel"><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=28.6139,77.2090">Open the Map</a></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <hr>
+              </div>
+
+              <hr />
+
+
+            </div>
+
+          </div>
+
+          <div class="col-sm-12 tabcontent" style="@Statusdisplay" id="Status">
+
+            <div class="timeline">
+              <div class="timeline__group">
+                @if (isdisplayNextAction) {
+                  <div class="timeline__box">
+                    <div class="timeline__date pending">
+                      <span class="timeline__day">Next</span>
+                      <span class="timeline__month">ACTION</span>
+                    </div>
+                    <div class="timeline__post tp-pending">
+                      <div class="timeline__content">
+
+
+                        <div class="action-container">
+                          @switch (Status) {
+                            case 1:
+                              if (Model.IsSamplingRequest) {
+                                <div class="panel-body" id="sampleinputpanel" style="display:none;">
+                                  <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                      <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                                          <hr>
+                                          <h6 class="wizard-title">Please Confirm the purpose of sampling below:</h6>
+                                          <hr>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                                          <label>Purpose of Sampling</label>
+
+                                          @Html.DropDownListFor(e => e.samplingpurpose,
+                                        (IEnumerable<SelectListItem>)ViewBag.samplingpurpose, "---Select----",
+                                        new { @class = "form-control" }
+                                        )
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                                          <label>Source of Sample</label>
+
+                                          @Html.DropDownListFor(e => e.samplesource,
+                                        (IEnumerable<SelectListItem>)ViewBag.samplesource, "---Select----",
+                                        new { @class = "form-control" }
+                                        )
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12 form-group">
+                                      <label>Other Source of Sample</label>
+                                      <input class="form-control" data-val="true" data-val-length="Other Source of Sample cannot be longer than 200 characters" data-val-length-max="200" data-val-required="Other Source of Sample is required" id="OtherSourceOfSample" name="OtherSourceOfSample" rows="3" value="" type="text">
+                                      <span class="field-validation-valid text-danger" data-valmsg-for="OtherSourceOfSample" data-valmsg-replace="true"></span>
+                                    </div>
+
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="checkbox">
+                                    <label>
+                                      <input id="IsSampling" onchange="$('#sampleinputpanel').toggle();" name="IsSampling" class="chkOption" type="checkbox"> Sampling Required?
+                                    </label>
+                                  </div>
+                                </div>
+                              }
+
+
+
+                              if (Model.IsFDCApproval) {
+                                <div class="btn-group" role="group" aria-label="...">
+                                  <button id="btnSave" type="button" data-id="12" class="btn btn-success">Approve</button>
+                                  <button id="btnReject" style="margin-left:4px;" data-id="5" type="button" class="btn btn-danger">Reject</button>
+                                </div>
+                              }
+
+                              break;
+                            case 2:
+                            case 4:
+                              if (isUser) {
+
+                                <a href="/Sampling/Create/@Model.ID" id="btnCreateSample" class="btn btn-primary">Create Sampling</a>
+
+                              }
+                              break;
+
+                            case 3:
+                              if (Model.IsSamplingRequest) {
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ViewSampleApplication">
+                                  View Sampling Application
+                                </button>
+                              }
+                              break;
+                            case 10:
+                              if (isUser) {
+                                <a href="/HazardCertificate/Create/@Model.ID" id="btnCreateSample" class="btn btn-primary">Add Hazard Certificate</a>
+
+
+                              }
+
+                              break;
+
+                            case 11:
+
+                              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Review Hazard Contract
+                              </button>
+
+
+                              break;
+                            case 12:
+
+
+                              if (isUser) {
+                                <a href="/Payments/PermitPayment/@Model.ID" id="btnCreateSample" class="btn btn-primary">Proceed to Payment</a>
+                              }
+
+
+
+                              break;
+                            case 13:
+                              if (Model.IsFDCApproval) {
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Paymentmodel">
+                                  View Payment Request
+                                </button>
+                              }
+                              break;
+
+                            case 14:
+                              if (Model.IsPaymentApproval) {
+                                <div class="btn-group" role="group" aria-label="...">
+                                  <button id="btnSave" type="button" data-id="7" class="btn btn-success">Approve</button>
+                                  <button id="btnReject" style="margin-left:4px;" data-id="5" type="button" class="btn btn-danger">Reject</button>
+                                </div>
+                              }
+                              break;
+
+                            default:
+                              <p>No Action Required</p>
+                              break;
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+
+                @foreach (var item in Model.History) {
+                  <div class="timeline__box">
+                    <div class="timeline__date done">
+                      <span class="timeline__day">@item.Created_Timestamp.Value.Day</span>
+                      <span class="timeline__month">@item.Created_Timestamp.Value.ToString("MMMM")</span>
+                    </div>
+                    <div class="timeline__post tp-done">
+                      <div class="timeline__content">
+                        <h6>@item.Created_Timestamp.Value.ToString("d/ M/ yyyy")</h6>
+                        <hr>
+                        <p>
+                          @if (item.New_Value == "1") {
+                            <text> New Permit Created by @item.UserName</text>
+                          } else if (item.New_Value == "3") {
+                            <text>
+                              Sampling Submitted  <br />
+                            </text>
+                            if (item.attachedSampling != null) {
+                              if (item.attachedSampling.ExpiryDate.HasValue) {
+                              <p>
+                                Sampling Expiry Date: @item.attachedSampling.ExpiryDate.Value.ToString("dd-MMM-yyyy")
+                              </p>
+                            }
+                            if (item.attachedSampling.SampleReportFile != null) {
+                              <a href="~/UploadedFiles/@item.attachedSampling.SampleReportFile" class="btn btn-primary" target="_blank">View Sampling Certificate</a>
+                            }
+                          }
+
+                        } else if (item.New_Value == "11") {
+
+                          <text>Hazard Certificate Submitted -  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                              Review Hazard Contract
+                            </button> </text>
+                        } else if (item.New_Value == "14") {
+                          <text>Payment Received via <b>@Model.PaymentMethod</b> against <a style="font-weight:bold" target="_blank" href="/Payments/Receipt?InvoiceNo=@Model.InvoiceId">@Model.InvoiceId</a> is verfied</text>
+                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Paymentmodel">
+                            View Payment Request
+                          </button>
+                        } else {
+                          <text> Status updated by @item.UserName.ToUpper() to  "@item.Description" </text>
+                        }
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  }
+
+
+              </div>
+            </div>
+
+          </div>
+          @{
+            string TitleMessage = "";
+            string ActionCenter = "";
+            string Invoicelink = "";
+            switch (Status) {
+              case 12: //Payment Pending
+                if (isUser) {
+                  TitleMessage = "<h6 class=\"wizard-title\"><center>Your payment Invoice has been generated and is ready to pay.</center></h6>";
+                  ActionCenter = "<a href=\"/Payments/PermitPayment/" + Model.ID + "\" id=\"btnCreateSample\" class=\"btn btn-primary\">Proceed to Payment</a>";
+                  Invoicelink = "/Payments/Invoice?InvoiceNo=" + Model.InvoiceId;
+                } else {
+                  TitleMessage = "<h6 class=\"wizard-title\"><center>Payment Invoice has been generated, waiting for payment.</center></h6>";
+                  ActionCenter = "";
+                  Invoicelink = "/Payments/Invoice?InvoiceNo=" + Model.InvoiceId;
+                }
+
+                break;
+              case 13:
+                if (isUser) {
+                  TitleMessage = "<h6 class=\"wizard-title\"><center>Your payment has been Submiited For Approval.</center></h6>";
+                  ActionCenter = "";
+                  Invoicelink = "/Payments/Invoice?InvoiceNo=" + Model.InvoiceId;
+                } else {
+                  if (Model.IsFDCApproval) {
+                    TitleMessage = "<h6 class=\"wizard-title\"><center>Payment Request is avaiable for approval.</center></h6>";
+                    ActionCenter = "<button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#Paymentmodel\">" +
+                        "View Payment Request" +
+                      "</button>";
+                    Invoicelink = "/Payments/Invoice?InvoiceNo=" + Model.InvoiceId;
+
+                  }
+                }
+                break;
+
+              case 14:
+                if (isUser) {
+                  TitleMessage = "<h6 class=\"wizard-title\"><center>Your payment done by " + Model.PaymentMethod + " has been received and verified, waiting for final approval.</center></h6>";
+                  ActionCenter = "";
+                  Invoicelink = "/Payments/Receipt?InvoiceNo=" + Model.InvoiceId;
+                } else {
+                  if (Model.IsPaymentApproval) {
+                    TitleMessage = "<h6 class=\"wizard-title\"><center>Payment from customer has been received via " + Model.PaymentMethod + " and verified, please verify to proceed.</center></h6>";
+                    ActionCenter = "<div class=\"btn-group\" role=\"group\">" +
+                        "<button id=\"btnSave\" type=\"button\" data-id=\"7\" class=\"btn btn-success\">Approve</button>" +
+                        "<button id=\"btnReject\" style=\"margin-left:4px;\" data-id=\"5\" type=\"button\" class=\"btn btn-danger\">Reject</button>" +
+                      "</div>";
+                    Invoicelink = "/Payments/Receipt?InvoiceNo=" + Model.InvoiceId;
+                  } else {
+                    TitleMessage = "<h6 class=\"wizard-title\"><center>Payment from customer has been received via " + Model.PaymentMethod + " and verified, managerial approval is pending.</center></h6>";
+                    ActionCenter = "";
+                    Invoicelink = "/Payments/Receipt?InvoiceNo=" + Model.InvoiceId;
+                  }
+
+                }
+                break;
+              case 7:
+                Invoicelink = "/Payments/Receipt?InvoiceNo=" + Model.InvoiceId;
+                break;
+              default:
+                <p></p>
+                break;
+            }
+          }
+          <div class="col-sm-12 tabcontent" style="@Paymentdisplay" id="Payment">
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <hr>
+                  @Html.Raw(HttpUtility.HtmlDecode(TitleMessage))
+                  <hr>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <center>
+                    @Html.Raw(HttpUtility.HtmlDecode(ActionCenter))
+                  </center>
+                  <br>
+                  <a target="_blank" href="@Invoicelink"><i class="mdi mdi-file-document payment-ref-icon"></i></a>
+                  <center> <a target="_blank" href="@Invoicelink" class="wizard-title status-title">@Model.InvoiceId</a></center>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-sm-12 tabcontent" style="@Downloaddisplay" id="Download">
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <hr>
+                  <h6 class="wizard-title"><center>Your permit request process has been completed successfully<br><br>You can download it via the below button</center></h6>
+                  <hr>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <a href="/Permit/GenerateFDCCertificatePDF/@Model.ID"><i class="dripicons-download approved"></i></a>
+                  <h6 class="wizard-title status-title"><a href="/Permit/GenerateFDCCertificatePDF/@Model.ID">Download</a></h6>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 tabcontent" style="@Rejectdisplay" id="Reject">
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  @if (AppUtil.getUserRole() == 3) {
+                    <hr>
+                    <h6 class="wizard-title"><center>Your permit request process has been Rejected By beea'h<br><br>Please Contact them for further details.</center></h6>
+                    <hr>
+                  } else {
+                    <hr>
+                    <h6 class="wizard-title"><center>The permit request process has been Rejected By beea'h<br><br>Please Contact them for further details.</center></h6>
+                    <hr>
+                    <h6 class="wizard-title"><b>Reason:</b> @Model.RejectionReason</h6>
+
+                  }
+
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <a href="javascript:;"><i class="dripicons-cross approved" style="background-color:red;box-shadow: 0 0 0px 3px var(--red);"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end col -->
+</div>
+<!-- Modal -->
+@if (ViewBag.PaymentDetails != null) {
+  <div class="modal fade" id="Paymentmodel" tabindex="-1" role="dialog" aria-labelledby="PaymentmodelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 80%;max-width: unset;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="PaymentmodelLabel">View Payment Request</h5>
+          <a href="" class="close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+        </div>
+        <div class="modal-body">
+          <section id="detailscontainer">
+            <div class="row">
+              @if (@ViewBag.PaymentDetails.PaymentMethod == "CreditCard" || @ViewBag.PaymentDetails.PaymentMethod == "AccountBalance") {
+                MainClass = "col-xs-12 col-sm-12 col-md-12 col-lg-12";
+                ChildClass = "col-xs-12 col-sm-6 col-md-3 col-lg-3 pull-left form-group";
+              } else {
+                MainClass = "col-xs-12 col-sm-12 col-md-4 col-lg-4";
+                ChildClass = "col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group";
+                <div class="col-md-8">
+                  <div class="panel-body">
+                    <iframe frameborder="0" onload="$('iframe').contents().find('img').css({'width': '100%'});" scrolling="no" width="100%" height="532px" src="~/UploadedFiles/@ViewBag.PaymentDetails.ReferenceFIle"></iframe>
+                  </div>
+                </div>
+              }
+              <div class="@MainClass">
+                <div class="@ChildClass">
+                  <label>Transaction Type</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.PaymentMethod">
+                </div>
+                <div class="@ChildClass">
+                  <label>Reference No</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.ReferenceNo">
+                </div>
+                <div class="@ChildClass">
+                  <label>Amount Payable</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.AmountPayable">
+                </div>
+                <div class="@ChildClass">
+                  <label>Amount Paid</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.AmountPaid">
+                </div>
+                <div class="@ChildClass">
+                  <label>Transaction Date</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.TransactionDate">
+                </div>
+                <div class="@ChildClass">
+                  <label>Remarks</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.Remarks">
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        @if (Status == 13) {
+          <div class="modal-footer">
+            <div class="btn-group" role="group" aria-label="...">
+              <button id="btnSave" type="button" data-id="14" class="btn btn-success">Approve Payment</button>
+              <button id="btnReject" style="margin-left:4px;" data-id="5" type="button" class="btn btn-danger">Reject</button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+<!--- View Sample Application --->
+@if (Model.IsSamplingRequest != false) {
+  if (ViewBag.SampleDetails != null) {
+    <div class="modal fade" id="ViewSampleApplication" tabindex="-1" role="dialog" aria-labelledby="ViewSampleApplicationLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document" style="width: 80%;max-width: unset;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ViewSampleApplicationLabel">View Sample Request</h5>
+            <a href="" class="close">
+              <span aria-hidden="true">&times;</span>
+            </a>
+          </div>
+          <div class="modal-body">
+            <section id="detailscontainer">
+              <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                  <label>Sample No:</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.SampleDetails.ID">
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-3 form-group">
+                  <label>Sample Description:</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.SampleDetails.SamplingDescription">
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-3 form-group">
+                  <label>Sampling Address:</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.SampleDetails.SamplingAddress">
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                  <label>Request Date:</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.SampleDetails.RequestDate.ToString("dddd, d/ M/ yyyy")">
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                  <label>Recieved Date:</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.SampleDetails.RecievedDate.ToString("dddd, d/ M/ yyyy")">
+                </div>
+              </div>
+              @if (@ViewBag.SamplePaymentDetails.PaymentMethod == "CreditCard" || @ViewBag.SamplePaymentDetails.PaymentMethod == "AccountBalance") {
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                    <div class="alert alert-info alert-dismissable">
+                      <i class="fa fa-coffee"></i>
+                      The payment of amount <strong>@ViewBag.SamplePaymentDetails.AmountPaid.ToString("0.0")</strong> has been done via <strong>@ViewBag.SamplePaymentDetails.PaymentMethod</strong> against Transaction ID: <strong>@ViewBag.SamplePaymentDetails.ReferenceNo</strong>.
+                    </div>
+                  </div>
+                </div>
+              } else {
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="panel-body">
+                      <iframe frameborder="0" onload="$('iframe').contents().find('img').css({'width': '100%'});" scrolling="no" width="100%" height="532px" src="~/UploadedFiles/@ViewBag.SamplePaymentDetails.ReferenceFIle"></iframe>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                      <label>Transaction Type</label>
+                      <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.PaymentMethod">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                      <label>Reference No</label>
+                      <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.ReferenceNo">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                      <label>Amount Payable</label>
+                      <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.AmountPayable.ToString("0.0")">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                      <label>Amount Paid</label>
+                      <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.AmountPaid.ToString("0.0")">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                      <label>Transaction Date</label>
+                      <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.TransactionDate.ToString("dddd, d/ M/ yyyy")">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                      <label>Remarks</label>
+                      <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.Remarks">
+                    </div>
+                  </div>
+                </div>
+              }
+              @if (Status == 3) {
+                <hr />
+                <div class="row">
+
+                  <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                    <label style="font-weight:bold;">Upload Sample Certificate:</label>
+                    <input type="file" id="fileSample" class="form-control" />
+                    @if (ViewBag.SampleDetails.SampleReportFile != null) {
+                      <a href="~/UploadedFiles/@ViewBag.SampleDetails.SampleReportFile" target="_blank">View Uploaded Certificate</a>
+                    }
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                    <label>Select Expiry Date:</label>
+                    @if (ViewBag.SampleDetails.ExpiryDate != null) {
+                      <input type="text" id="dtSampleExpiry" readonly="readonly" class="form-control date-picker" name="name" value="@ViewBag.SampleDetails.ExpiryDate.ToString("MM/dd/yyyy")" />
+                    } else {
+                      <input type="text" id="dtSampleExpiry" readonly="readonly" class="form-control date-picker" name="name" value="" />
+                    }
+
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                    <button id="btnUploadSample" style="margin-top:42px;" class="btn btn-primary">Upload File</button>
+                  </div>
+                </div>
+
+              }
+            </section>
+          </div>
+          <div class="modal-footer">
+            <div class="col-md-12">
+              <div class="col-md-8 pull-left">&nbsp;</div>
+              <div class="col-md-2 pull-left ">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input id="IsMoreSampling" name="IsMoreSampling" type="checkbox" class="chkOption"> More Sampling Required?
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2 pull-left ">
+                @if (Model.IsFDCApproval) {
+                  if (isCompletedPermit) {
+                    <div class="btn-group" role="group" aria-label="...">
+                      <button type="button" data-id="18" class="btn btn-success btnSampling">Proceed</button>
+                      <button style="margin-left:4px;" data-id="19" type="button" class="btn btn-danger btnSampling">Reject</button>
+                    </div>
+                  } else {
+                    <div class="btn-group" role="group" aria-label="...">
+                      <button type="button" data-id="12" class="btn btn-success btnSampling">Proceed</button>
+                      <button id="btnReject" style="margin-left:4px;" data-id="5" type="button" class="btn btn-danger">Reject</button>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+}
+<section id="detailscontainer">
+  <div class="row">
+
+    @Html.HiddenFor(e => e.StatusID)
+
+    <div class="col-md-8 offset-2">
+
+    </div>
+  </div>
+</section>
+
+
+
+@section scripts{
+  <style>
+    a #detailscontainer {
+    }
+
+    div#StatusContainer {
+      display: inline-block;
+      position: sticky;
+      top: 0;
+      left: 0px;
+    }
+  </style>
+  <script type="text/javascript">
+    var isSampleFileUploaded = false;
+		$(document).ready(function () {
+	  $(".chkOption").click(function () {
+		var checkedElementId = $(this).attr("id");
+		$.each($(".chkOption"), function (index, element) {
+
+		  if (element.id != checkedElementId) {
+			element.checked = false;
+		  }
+
+		});
+	  });
+			// for sammpling inputs
+			$("#samplingpurpose").val(@Model.PurposeOfSampling);
+			$("#samplesource").val(@Model.SourceSampling);
+			$("#OtherSourceOfSample").val('@Model.OtherSource')
+			///////////////////////
+    $("#btnSave").click(function () {
+
+      var status = $(this).data("id");
+      ChangePermitStaus(status);
+
+			});
+
+    $(".bootbox-close-button, .bootbox-cancel").click(function () {
+				window.location.reload();
+            });
+    $("#btnReject").click(function () {
+				bootbox.prompt({
+					title: "Rejection Reason",
+					inputType: 'textarea',
+                    callback: function (result) {
+                        if (result != null) {
+                            if ($("textarea.bootbox-input.bootbox-input-textarea.form-control").val().trim() !== "") {
+								window.location.href = "/Permit/ChangeFDCStatus/@Model.ID?statusId=5&RejectionReason=" + $("textarea.bootbox-input.bootbox-input-textarea.form-control").val().trim() ;
+                            }
+                            else {
+								alert("Please Enter the reason to continue..")
+                            }
+                        }
+                        else {
+                            window.location.reload();
+                        }
+                        return false;
+					}
+				});
+            });
+
+	  $("#btnUploadSample").click(function () {
+				if (window.FormData !== undefined) {
+		var fileUpload = $("#fileSample").get(0);
+				var files = fileUpload.files;
+		// Create FormData object
+				var fileData = new FormData();
+
+		// Looping over all files and add it to FormData object
+		for (var i = 0; i < files.length; i++) {
+		  fileData.append(files[i].name, files[i]);
+				}
+		  fileData.append('Expirydate', $("#dtSampleExpiry").val());
+		$.ajax({
+		  url: '/Sampling/UploadSampleCert/@Model.ID',
+		  type: "POST",
+		  contentType: false, // Not to set any content header
+		  processData: false, // Not to process data
+		  data: fileData,
+		  success: function (result) {
+        alert(result);
+        isSampleFileUploaded = true;
+		  },
+		  error: function (err) {
+			alert(err.statusText);
+		  }
+		});
+
+
+			} else {
+
+		alert("File upload is not supported,please try thru latest Chrome browser");
+	  }
+			});
+
+
+      $(".btnSampling").click(function () {
+        var status = $(this).data("id");
+        if (status !== undefined) {
+
+          if (status == "12") {
+
+            if ($("#IsMoreSampling").prop("checked")) {
+              ChangePermitStaus("12");
+            } else {
+              if (!isSampleFileUploaded) {
+                alert("Please upload Sampling certificate!");
+                return;
+              }
+              else if ($("#dtSampleExpiry").val() == "") {
+                alert("Please enter date of Expiry!");
+                return;
+              }
+              else
+                ChangePermitStaus(status);
+
+            }
+
+
+
+          } else {
+            if (status=="18") {
+              if ($("#IsMoreSampling").prop("checked")) {
+                ChangePermitStaus("12");
+              }
+
+              if (!isSampleFileUploaded) {
+                alert("Please upload Sampling certificate!");
+                return;
+              }
+              else if ($("#dtSampleExpiry").val() == "") {
+                alert("Please enter date of Expiry!");
+                return;
+              }
+            }
+            window.location.href = "/Permit/ChangePostFDCStatus/@Model.ID?statusId=" + status;
+          }
+
+        }
+
+
+      })
+	});
+
+	function openCity(evt, cityName) {
+		  var statusID = $("#StatusID").val();
+		  if (cityName === "Payment") {
+			if (statusID == 14 || statusID == 12 || statusID == 13 || statusID == 7) {
+
+			} else {
+			  return false;
+			}
+		  }
+		  if (cityName === "Download") {
+			if (statusID == 7) {
+
+			} else {
+			  return false;
+			}
+		  }
+
+		  var i, tabcontent, tablinks;
+		  tabcontent = document.getElementsByClassName("tabcontent");
+		  for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		  }
+		  tablinks = document.getElementsByClassName("tablinks");
+		  for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" active", "");
+		  }
+		  document.getElementById(cityName).style.display = "block";
+		  evt.currentTarget.className += " active";
+	}
+
+  function ChangePermitStaus(status) {
+     var oldStatus = $("#StatusID").val();
+				var dataattr = "";
+				if ($("#sampleinputpanel").is(":hidden") == false && $("#IsSampling").prop("checked") == true) {
+				  if ($("#samplingpurpose").val() == "" || $("#samplingpurpose").val() == null) {
+					alert("Please select the purpose of sampling");
+					return false;
+				  }
+				  if ($("#samplesource").val() == "" || $("#samplesource").val() == null) {
+					alert("Please select the source of sampling");
+					return false;
+				  }
+				  dataattr = "&samplingpurpose=" + $("#samplingpurpose").val() + "&samplesource=" + $("#samplesource").val() + "&OtherSourceOfSample=" + $("#OtherSourceOfSample").val();
+				}
+				var samplingRequired = false;
+				var hazardrequired = false;
+				var moresamplingrequired = false;
+				if (oldStatus == 1 || oldStatus == 3) {
+				  samplingRequired = $("#IsSampling").prop("checked");
+				  moresamplingrequired = $("#IsMoreSampling").prop("checked");
+                }
+    if ((!samplingRequired) && (!moresamplingrequired) && status == "12") {
+      PromptUserForWBRemarks();
+    } else {
+      window.location.href = "/Permit/ChangeFDCStatus/@Model.ID?statusId=" + status + dataattr + "&samplingrequired=" + samplingRequired + "&moresamplingrequired=" + moresamplingrequired;
+    }
+
+    }
+    function PromptUserForWBRemarks() {
+      bootbox.prompt({
+					title: "Final Remarks",
+					inputType: 'textarea',
+                    callback: function (result) {
+                        if (result != null) {
+                            if ($("textarea.bootbox-input.bootbox-input-textarea.form-control").val().trim() !== "") {
+                              window.location.href = "/Permit/ChangeFDCStatus/@Model.ID?statusId=12&samplingRemarks=" + $("textarea.bootbox-input.bootbox-input-textarea.form-control").val().trim() ;
+                            }
+                            else {
+								alert("Please enter final remarks to continue..")
+                            }
+                        }
+                        else {
+                            window.location.reload();
+                        }
+                        return false;
+					}
+				});
+    }
+  </script>
+}

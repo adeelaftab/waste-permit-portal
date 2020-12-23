@@ -1,0 +1,193 @@
+﻿
+@{
+  ViewBag.Title = "Dashboard";
+  var isNotUser = AppUtil.getUserRole() != 3;
+}
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="page-title-box">
+      <h4 class="page-title">Dashboard</h4>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Welcome to Bee'ah Waste Disposal Management Service</li>
+      </ol>
+      @*<div class="state-information d-none d-sm-block">
+            <div class="state-graph">
+                <div id="header-chart-1"></div>
+                <div class="info">Balance AED 2,317</div>
+            </div>
+            <div class="state-graph">
+                <div id="header-chart-2"></div>
+                <div class="info">Item Sold 1230</div>
+            </div>
+        </div>*@
+    </div>
+  </div>
+</div>
+<!-- end row -->
+<div class="row">
+  <div class="col-xl-3 col-md-6">
+    <div class="card mini-stat bg-primary" style="background-color: #007A3E !important">
+      <div class="card-body mini-stat-img">
+        <div class="mini-stat-icon"><i class="mdi mdi-buffer float-right"></i></div>
+        <div class="text-white">
+          <h6 class="text-uppercase mb-3">Total Permits</h6>
+          <h4 class="mb-4">@Html.Raw(ViewBag.TotalPermit)</h4>
+          @*<span class="badge badge-info">0% </span><span class="ml-2">From previous period</span>*@
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="card mini-stat bg-primary" style="background-color: #94989B !important">
+      <div class="card-body mini-stat-img">
+        <div class="mini-stat-icon"><i class="mdi mdi-briefcase-check float-right"></i></div>
+        <div class="text-white">
+          <h6 class="text-uppercase mb-3">PROCESSED PERMITS</h6>
+          <h4 class="mb-4">@Html.Raw(ViewBag.ProcessedPermit)</h4>
+          @*<span class="badge badge-danger">0% </span><span class="ml-2">From previous period</span>*@
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="card mini-stat bg-primary" style="background-color: #CF4520 !important">
+      <div class="card-body mini-stat-img">
+        <div class="mini-stat-icon"><i class="mdi mdi-tag-text-outline float-right"></i></div>
+        <div class="text-white">
+          <h6 class="text-uppercase mb-3">Pending Permits</h6>
+          <h4 class="mb-4">@Html.Raw(ViewBag.PendingPermit)</h4>
+          @*<span class="badge badge-warning">0% </span><span class="ml-2">From previous period</span>*@
+        </div>
+      </div>
+    </div>
+  </div>
+  @{
+    if (Convert.ToInt32(Session[AppVariables.SessionUserRole]) != 3) {
+      <div class="col-xl-3 col-md-6">
+        <div class="card mini-stat bg-primary" style="background-color: #0095C8 !important">
+          <div class="card-body mini-stat-img">
+            <div class="mini-stat-icon"><i class="mdi mdi-coin float-right"></i></div>
+            <div class="text-white">
+              <h6 class="text-uppercase mb-3">Revenue</h6>
+              <h4 class="mb-4">AED @Html.Raw(ViewBag.PermitRevenue)</h4>
+              @*<span class="badge badge-info">0% </span><span class="ml-2">From previous period</span>*@
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  }
+
+</div>
+<!-- end row -->
+<!-- end row -->
+<div class="row">
+  <div class="col-xl-5" id="adminthreedchart">
+    <div class="card m-b-20">
+      <div class="card-body" style="padding-bottom:68px">
+        <!--
+        <h4 class="mt-0 header-title">Total Permits</h4>
+        <div class="row text-center m-t-20">
+            <div class="col-4">
+                <h5 class="">9,463</h5>
+                <p class="text-muted">July</p>
+            </div>
+            <div class="col-4">
+                <h5 class="">6,219</h5>
+                <p class="text-muted">August</p>
+            </div>
+            <div class="col-4">
+                <h5 class="">2,439</h5>
+                <p class="text-muted">September</p>
+            </div>
+        </div>
+        <div id="morris-area-example" class="dashboard-charts morris-charts"></div>
+        -->
+        <div id="threedChart" style="height: 400px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="mt-0 header-title">
+          Latest Permits Requests
+          <a href="/Permit/Index" class="btn btn-primary waves-effect waves-light float-right">View All</a>
+        </h4>
+        <p class="text-muted m-b-30">You can find below latest permits requests</p>
+
+        <table class="table no-padding-table mb-0 table-responsive">
+          <thead>
+            <tr>
+              @if (isNotUser) {
+                <th>Company</th>
+              } else {
+                <th>Permit ID</th>
+              }
+              
+              <th>Apply Date</th>
+              <th>Permit Type</th>
+              <th>Payment Status</th>
+              <th>Permit Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tblLeadBody">
+            @Html.Action("GetTopFivePermit", "Dashboard")
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end row -->
+<script type="text/javascript">
+
+      @if (isNotUser) {
+      <text>var isAdmin = true;</text>
+    } else {
+        <text>var isAdmin = false;</text>
+    }
+</script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>-->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js"></script>
+
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+<!--<script src="/Assets/js/jquery.min.js"></script>
+<script src="/Assets/js/main.js"></script>-->
+
+@section Scripts
+{
+
+  <script type="text/javascript">
+
+
+function sendPermit(ID) {
+  var d = ID;
+            $.post("/Generic/EncryptPara/" + d, function (data) {
+    window.location.href = "@Url.Action("Detail", "Permit")?id=" + data;
+
+  })
+                .fail(function () {
+        alert("Error! please refresh and try again");
+      })
+
+
+        }
+	  
+		
+	  
+	  
+  </script>
+}
+
+@Scripts.Render("~/Assets/dashboards")
+

@@ -1,0 +1,1278 @@
+﻿@model HFZMVC.Models.PermitRequest.PermitRequetDetailModel
+@{
+  ViewBag.Title = "Detail";
+  var Status = Model.StatusID;
+
+
+  int RoleId = AppUtil.getUserRole();
+  int UserId = AppUtil.checkLogin();
+
+  var isUser = !(Model.IsPermitApproval || Model.IsPaymentApproval || Model.IsSamplingRequest || Model.IsHazardRequest || Model.IsHazardApproval);
+
+  var counter = 0;
+  bool isdisplayNextAction = false;
+  string MainClass = "";
+  string ChildClass = "";
+
+  string Informationdisplay = "";
+  string Statusdisplay = "";
+  string Paymentdisplay = "";
+  string Downloaddisplay = "";
+  string Rejectdisplay = "";
+  bool isCompletedPermit = Model.History.Where(e => e.New_Value == "7").Any();
+  string InformationActive = "";
+  string StatusActive = "";
+  string PaymentActive = "";
+  string DownloadActive = "";
+  switch (Status) {
+    case 1:
+      if (Model.IsSamplingRequest) {
+
+        isdisplayNextAction = true;
+      }
+      if (Model.IsHazardRequest) {
+        isdisplayNextAction = true;
+      }
+
+
+      if (Model.IsPermitApproval) {
+        isdisplayNextAction = true;
+      }
+
+
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      break;
+    case 2:
+      if (isUser) {
+        isdisplayNextAction = true;
+      }
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      break;
+    case 4:
+      if (isUser) {
+        isdisplayNextAction = true;
+      }
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      break;
+    case 3:
+      if (Model.IsSamplingRequest) {
+        isdisplayNextAction = true;
+        if (Model.IsHazardRequest) {
+          isdisplayNextAction = true;
+
+        }
+      }
+      if (Model.IsPermitApproval) {
+        isdisplayNextAction = true;
+      }
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+
+      break;
+    case 10:
+      if (isUser) {
+        isdisplayNextAction = true;
+      }
+
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+
+      break;
+
+    case 11:
+
+      isdisplayNextAction = true;
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+
+      break;
+
+    case 15:
+      isdisplayNextAction = true;
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      break;
+
+    case 16:
+      isdisplayNextAction = true;
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      break;
+    case 12:
+
+
+      if (isUser) {
+        isdisplayNextAction = false;
+      }
+      Paymentdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      PaymentActive = "active";
+
+      break;
+    case 13:
+      if (Model.IsPermitApproval) {
+        isdisplayNextAction = false;
+
+      }
+      Paymentdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      PaymentActive = "active";
+      break;
+
+    case 14:
+      if (Model.IsPaymentApproval) {
+        isdisplayNextAction = false;
+      }
+      Paymentdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      PaymentActive = "active";
+      DownloadActive = "";
+      break;
+
+    case 5:
+      isdisplayNextAction = false;
+      Rejectdisplay = "display:block;";
+      InformationActive = "";
+      StatusActive = "";
+      PaymentActive = "";
+      DownloadActive = "";
+      break;
+    case 17:
+      if (isUser) { isdisplayNextAction = true; }
+      Statusdisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      break;
+    default:
+      isdisplayNextAction = false;
+      Downloaddisplay = "display:block;";
+      InformationActive = "active";
+      StatusActive = "active";
+      PaymentActive = "active";
+      DownloadActive = "active";
+      break;
+  }
+}
+<div class="row">
+  <div class="col-sm-12">
+    <div class="page-title-box">
+      <h4 class="page-title">Permits Management (Permit No: @Model.ID) </h4>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0);">Dashoard</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0);">Permits</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card m-b-20">
+      <div class="card-body permits-managment-box">
+
+        <div class="row tab">
+
+
+          <div class="col-sm-2"></div>
+          <div class="col-sm-2"><div class="tabcircle @InformationActive" onclick="openCity(event, 'Information')"> Information </div></div>
+          <div class="col-sm-2"><div class="tabcircle @StatusActive" onclick="openCity(event, 'Status')"> Status </div></div>
+          <div class="col-sm-2"><div class="tabcircle @PaymentActive" onclick="openCity(event, 'Payment')"> Payment </div></div>
+          <div class="col-sm-2"><div class="tabcircle @DownloadActive" onclick="openCity(event, 'Download')"> Download </div></div>
+          <div class="col-sm-2"></div>
+
+        </div>
+
+        <div class="row">
+          @Html.HiddenFor(e => e.StatusID)
+
+          <div class="col-sm-12 tabcontent" style="@Informationdisplay" id="Information">
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <hr>
+                  <h6 class="wizard-title" style="text-align: center;">Please review information below:</h6>
+                  <hr>
+                </div>
+                <div class="col-lg-12">
+                  <div class="card" style="min-height: 100%;">
+                    <div class="card-body charges summary">
+                      <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Company Information</span></h4>
+                      <div class="table-responsive">
+                        <table class="table mb-0">
+                          <tbody>
+                            <tr>
+                              <th scope="row"><i class="ti-zip charges-icons"></i> <p>Company Name</p></th>
+                              <td id="companylabel">@Model.company.CompanyName</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-settings charges-icons"></i> <p>Trade License Number</p></th>
+                              <td id="tradelicenselabel">@Model.company.LicenseNumber</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Manager Name</p></th>
+                              <td id="managerlabel">@Model.company.Name</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-bookmark-alt charges-icons"></i> <p>Phone</p></th>
+                              <td id="phonenumber">@Model.company.PhoneNumber</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i> <p>Email</p></th>
+                              <td id="emaillabel">@Model.company.EmailID</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <hr>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="card" style="min-height: 100%;">
+                    <div class="card-body charges summary">
+                      <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <p><span>Waste Description</span></p></h4>
+                      <div class="table-responsive">
+                        <table class="table mb-0">
+                          <tbody>
+                            <tr>
+                              <th scope="row"><i class="ti-zip charges-icons"></i> <p>Permit No</p></th>
+                              <td>@Model.ID</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-zip charges-icons"></i> <p>Waste Category</p></th>
+                              <td>@Model.WasteCategoryName</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-settings charges-icons"></i><p>Waste Type</p></th>
+                              <td>@Model.WasteTypeName</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-ruler-pencil charges-icons"></i><p>Waste Location</p></th>
+                              @if (String.IsNullOrEmpty(Model.facility_location)) {
+                                <td><a href="https://goo.gl/maps/hfBWQFGYEZ9gjwq59">Open the Map</a></td>
+                              } else {
+                                <td><a target="_blank" href="http://maps.google.com/maps?q=@Model.facility_location">Open the Map</a> </td>
+                              }
+
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-bookmark-alt charges-icons"></i><p>Total Weight / Volume</p></th>
+                              <td>@Model.TotalWeight @Model.UnitOfMeasure</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-bookmark-alt charges-icons"></i><p>Consumed Weight / Volume</p></th>
+                              <td>@Model.ConsumedWeight @Model.UnitOfMeasure</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>Waste Source</p></th>
+                              <td>@Model.SourceProcess</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>Packaging/Storage</p></th>
+                              <td>@Model.Storage</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>Additional Remarks</p></th>
+                              @if (Status == 1) {
+                                <td>@Model.Remarks</td>
+                              } else {
+                                <td><textarea class="form-control" cols="20" id="Remarks" name="Remarks" rows="3">@Model.Remarks</textarea></td>
+                              }
+                            </tr>
+                            <tr style="display:none;">
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>MSDS Attached</p></th>
+                              <td>
+                                @if (String.IsNullOrEmpty(Model.MSDS)) {
+                                  @:none
+                                } else {
+                                  <a href="~/UploadedFiles/Permit/@Model.ID/@Model.MSDS" target="_blank">View File</a>
+                                }
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              @if (!string.IsNullOrEmpty(Model.SourceSamplingName)) {
+                <div class="row">
+                  <hr>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="card" style="min-height: 100%;">
+                      <div class="card-body charges summary">
+                        <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Purpose of Sampling</span></h4>
+                        <div class="table-responsive">
+                          <table class="table mb-0">
+                            <tbody>
+                              <tr>
+                                <th scope="row"><i class="ti-zip charges-icons"></i> <p>Purpose of Sampling</p></th>
+                                <td>@Model.PurposeOfSamplingName</td>
+                              </tr>
+                              <tr>
+                                <th scope="row"><i class="ti-settings charges-icons"></i><p>Source of Sample</p></th>
+                                <td>@Model.SourceSamplingName</td>
+                              </tr>
+                              <tr>
+                                <th scope="row"><i class="ti-ruler-pencil charges-icons"></i><p>Other Source of Sample</p></th>
+                                <td>@Model.OtherSource</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              <div class="row">
+                <hr>
+              </div>
+              @if (Model.PermitImages.Count > 0) {
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="card" style="min-height: 100%;">
+                      <div class="card-body charges summary">
+                        <h4 class="mt-0 header-title chargestitle"><i class="ti-image"></i> <p><span>Permit Photos</span></p></h4>
+                        <div class="table-responsive">
+                          <table id="tblPermitImages" class="table mb-0">
+                            <tbody>
+                              @foreach (var item in Model.PermitImages) {
+
+                                if (counter == 0) {
+                                  @:<tr>
+                                    ;
+
+                                  }
+                                  @:<td><a target="_blank" href="/UploadedFiles/Permit/@Model.ID/@item"><img src="/UploadedFiles/Permit/@Model.ID/@item" /></a> </td>
+
+
+
+
+                                  counter++;
+                                  if (counter == 4) {
+                                  @:</tr>
+                                  counter = 0;
+                                }
+                                if (Model.PermitImages.Count < 4) {
+                                  if (Model.PermitImages.Count == counter) {
+                                    @:</tr>
+                                  }
+                                }
+                              }
+
+
+
+
+
+                              @*<tr>
+                                  <td>  <img src="~/Assets/images/img_office.png" /></td>
+                                  <td><img src="~/Assets/images/users/user-5.jpg" /></td>
+                                  <td> <img src="~/Assets/images/users/user-6.jpg" /></td>
+                                  <td> <img src="~/Assets/images/directory-bg.jpg" /></td>
+                                </tr>*@
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+
+            </div>
+
+          </div>
+
+          <div class="col-sm-12 tabcontent" style="@Statusdisplay" id="Status">
+
+            <div class="timeline">
+              <div class="timeline__group">
+                @if (isdisplayNextAction) {
+                  <div class="timeline__box">
+                    <div class="timeline__date pending">
+                      <span class="timeline__day">Next</span>
+                      <span class="timeline__month">ACTION</span>
+                    </div>
+                    <div class="timeline__post tp-pending">
+                      <div class="timeline__content">
+
+
+                        <div class="action-container">
+                          @switch (Status) {
+                            case 1:
+                              if ((Model.IsSamplingRequest ) ) {
+                                <div class="panel-body" id="sampleinputpanel" style="display:none;">
+                                  <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                      <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                                          <hr>
+                                          <h6 class="wizard-title">Please Confirm the purpose of sampling below:</h6>
+                                          <hr>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                                          <label>Purpose of Sampling</label>
+
+                                          @Html.DropDownListFor(e => e.samplingpurpose,
+                                        (IEnumerable<SelectListItem>)ViewBag.samplingpurpose, "---Select----",
+                                        new { @class = "form-control" }
+                                        )
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                                          <label>Source of Sample</label>
+
+                                          @Html.DropDownListFor(e => e.samplesource,
+                                        (IEnumerable<SelectListItem>)ViewBag.samplesource, "---Select----",
+                                        new { @class = "form-control" }
+                                        )
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12 form-group">
+                                      <label>Other Source of Sample</label>
+                                      <input class="form-control" data-val="true" data-val-length="Other Source of Sample cannot be longer than 200 characters" data-val-length-max="200" data-val-required="Other Source of Sample is required" id="OtherSourceOfSample" name="OtherSourceOfSample" rows="3" value="" type="text">
+                                      <span class="field-validation-valid text-danger" data-valmsg-for="OtherSourceOfSample" data-valmsg-replace="true"></span>
+                                    </div>
+
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="checkbox">
+                                    <label>
+                                      <input id="IsSampling" onchange="$('#sampleinputpanel').toggle();" name="IsSampling" class="chkOption" type="checkbox"> Sampling Required?
+                                    </label>
+                                  </div>
+                                </div>
+                              }
+                              if (Model.IsHazardRequest && Model.IsHazardousWaste) {
+                                <div class="form-group">
+                                  <div class="checkbox">
+                                    <label><input id="IsHazardousRequired" name="IsHazardousRequired" class="chkOption" type="checkbox"> Hazardous Waste Application Required?<span></span></label>
+                                  </div>
+                                </div>
+                              }
+
+
+                              if (Model.IsPermitApproval) {
+                                <div class="btn-group" role="group" aria-label="...">
+                                  <button id="btnSave" type="button" data-id="12" class="btn btn-success"> Approve</button>
+                                  <button id="btnReject" style="margin-left:4px;" data-id="5" type="button" class="btn btn-danger">Reject</button>
+                                </div>
+                              }
+
+                              break;
+                            case 2:
+                            case 4:
+                              if (isUser) {
+                                <a href="/Sampling/Create/@Model.ID" id="btnCreateSample" class="btn btn-primary">Create Sampling</a>
+                              }
+                              break;
+
+                            @*if (isUser)
+                              {
+                                  <text>More Sample Are Required for Permit Request Verification</text>
+
+                              }
+                              else
+                              {
+                                  <button id="btnSave" type="button" data-id="12" class="btn btn-success">Proceed To Payments</button>
+                              }
+                              break;*@
+                            case 3:
+                              if (Model.IsSamplingRequest) {
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ViewSampleApplication">
+                                  View Sampling Application
+                                </button>
+                              }
+
+                              break;
+                            case 10:
+                              if (isUser) {
+                                <a href="/HazardCertificate/Create/@Model.ID" id="btnCreateSample" class="btn btn-primary">Add Hazardous Waste Application</a>
+                              }
+
+                              break;
+
+                            case 11:
+
+                              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                @if (isUser) {
+                                  <span>Submitted Application</span>
+                                } else {
+                                  <span>Review Hazardous Waste Application</span>
+                                }
+
+                              </button>
+
+                              break;
+
+                            case 15:
+
+
+                              if (isUser) {
+                                <a href="/UploadedFiles/HFZContract_@(Model.HazardAppNo).pdf" target="_blank" class="btn btn-primary" type="button">View Hazardous waste approved application</a>
+                                <br /><br />
+                                <p>Your Hazardous Waste Application is approved from Landfil department, Please wait for administrator to review your certificate and process application further. </p>
+                              } else {
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                  <span>Review Hazardous Waste Application</span>
+                                </button>
+                              }
+                              break;
+
+                            case 16:
+
+                              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                @if (isUser) {
+
+                                  <span>Submitted Application</span>
+
+                                } else {
+                                  <span>Review Hazardous Waste Application</span>
+                                }
+
+                              </button>
+                              if (isUser) {
+                                <br /><br />
+                                <p>Your Hazardous Waste Application is rejected by Landfill department. </p>
+                                <p>Remarks: @Model.HazardRemarks</p>
+                              }
+                              break;
+                            case 12:
+
+
+                              if (isUser) {
+                                <a href="/Payments/PermitPayment/@Model.ID" id="btnCreateSample" class="btn btn-primary">Proceed to Payment</a>
+                              }
+
+
+
+                              break;
+                            case 13:
+                              if (Model.IsPermitApproval) {
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Paymentmodel">
+                                  View Payment Request
+                                </button>
+                              }
+                              break;
+
+                            case 14:
+                              if (Model.IsPaymentApproval) {
+                                <div class="btn-group" role="group" aria-label="...">
+                                  <button id="btnSave" type="button" data-id="7" class="btn btn-success">Approve</button>
+                                  <button id="btnReject" style="margin-left:4px;" data-id="5" type="button" class="btn btn-danger">Reject</button>
+                                </div>
+                              }
+                              break;
+                            case 17:
+                              <text>
+
+                                @if (isUser) {
+                                  if (Model.StatusID == 17) {
+                                    <a class="btn btn-primary" href="~/HazardCertificate/Edit/@Model.ID">Edit Hazardous waste application</a>
+                                    <br /><br />
+                                    <div class="form-group">
+                                      <label style="font-weight:bolder;">Remarks:</label>
+                                      <textarea class="form-control disabled" style="font-weight:bold" disabled>@Model.HazardRemarks</textarea>
+                                    </div>
+
+                                  } else {
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+
+                                      <span>Submitted Application</span>
+
+
+                                    </button>
+                                  }
+
+                                }
+                              </text>
+                              break;
+                            default:
+                              <p>No Action Required</p>
+                              break;
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+
+                @foreach (var item in Model.History) {
+                  <div class="timeline__box">
+                    <div class="timeline__date done">
+                      <span class="timeline__day">@item.Created_Timestamp.Value.Day</span>
+                      <span class="timeline__month">@item.Created_Timestamp.Value.ToString("MMMM")</span>
+                    </div>
+                    <div class="timeline__post tp-done">
+                      <div class="timeline__content">
+                        <h6>@item.Created_Timestamp.Value.ToString("d/ M/ yyyy")</h6>
+                        <hr>
+                        <p>
+                          @if (item.New_Value == "1") {
+                            <text> New Permit Created by @item.UserName</text>
+                          } else if (item.New_Value == "3") {
+                            <text>
+                              Sampling Submitted  <br />
+                            </text>
+                            if (item.attachedSampling != null) {
+                              if (item.attachedSampling.ExpiryDate.HasValue) {
+                              <p>
+                                Sampling Expiry Date: @item.attachedSampling.ExpiryDate.Value.ToString("dd-MMM-yyyy")
+                              </p>
+                            }
+                            if (item.attachedSampling.SampleReportFile != null) {
+                              <a href="~/UploadedFiles/@item.attachedSampling.SampleReportFile" class="btn btn-primary" target="_blank">View Sampling Certificate</a>
+                            }
+                          }
+                        } else if (item.New_Value == "11") {
+
+                          <text>Hazardous  waste aplication submitted
+                            @if (Model.StatusID != 11) {
+                              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                @if (isUser) {
+                                  <span>Submitted Application</span>
+                                } else {
+                                  <span>Review Hazardous Waste Application</span>
+                                }
+
+                              </button>
+                            }
+
+                          </text>
+                        } else if (item.New_Value == "17") {
+
+                          <text>Hazardous Waste Application Request for review by Hazardous Waste Administrator
+
+
+                            @if (Model.StatusID != 17) {
+                              <div class="form-group">
+                                <label style="font-weight:bolder;">Remarks:</label>
+                                <textarea class="form-control disabled" disabled>@Model.HazardRemarks</textarea>
+                              </div>
+                            }
+
+
+
+
+                          </text>
+
+
+                        } else if (item.New_Value == "14") {
+                          <text>Payment Received via <b>@Model.PaymentMethod</b> against <a style="font-weight:bold" target="_blank" href="/Payments/Receipt?InvoiceNo=@Model.InvoiceId">@Model.InvoiceId</a> is verfied</text>
+                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Paymentmodel">
+                            View Payment Request
+                          </button>
+                        } else if (item.New_Value == "15") {
+                          if (Model.StatusID == 15) {
+                            <text> Status updated by @item.UserName.ToUpper() to  "@item.Description" </text>
+                          } else {
+
+                            <a href="/UploadedFiles/HFZContract_@(Model.HazardAppNo).pdf" target="_blank" class="btn btn-primary" type="button">View Hazardous waste approved application</a>
+
+
+
+                          }
+                        } else if (item.New_Value == "5") {
+                          <text> Application is rejected by @item.UserName.ToUpper() <br /> <b>Remarks: </b>@Model.RejectionReason </text>
+                        } else {
+                          <text> Status updated by @item.UserName.ToUpper() to  "@item.Description" </text>
+                        }
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  }
+
+
+              </div>
+            </div>
+
+          </div>
+          @{
+            string TitleMessage = "";
+            string ActionCenter = "";
+            string Invoicelink = "";
+            switch (Status) {
+              case 12: //Payment Pending
+                if (isUser) {
+                  TitleMessage = "<h6 class=\"wizard-title\"><center>Your payment Invoice has been generated and is ready to pay.</center></h6>";
+                  ActionCenter = "<a href=\"/Payments/PermitPayment/" + Model.ID + "\" id=\"btnCreateSample\" class=\"btn btn-primary\">Proceed to Payment</a>";
+                  Invoicelink = "/Payments/Invoice?InvoiceNo=" + Model.InvoiceId;
+                } else {
+                  TitleMessage = "<h6 class=\"wizard-title\"><center>Payment Invoice has been generated, waiting for payment.</center></h6>";
+                  ActionCenter = "";
+                  Invoicelink = "/Payments/Invoice?InvoiceNo=" + Model.InvoiceId;
+                }
+
+                break;
+              case 13:
+                if (isUser) {
+                  TitleMessage = "<h6 class=\"wizard-title\"><center>Your payment has been Submiited For Approval.</center></h6>";
+                  ActionCenter = "";
+                  Invoicelink = "/Payments/Invoice?InvoiceNo=" + Model.InvoiceId;
+                } else {
+                  if (Model.IsPermitApproval) {
+                    TitleMessage = "<h6 class=\"wizard-title\"><center>Payment Request is available for approval.</center></h6>";
+                    ActionCenter = "<button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#Paymentmodel\">" +
+                              "View Payment Request" +
+                            "</button>";
+                    Invoicelink = "/Payments/Invoice?InvoiceNo=" + Model.InvoiceId;
+
+                  }
+                }
+                break;
+
+              case 14:
+                if (isUser) {
+                  TitleMessage = "<h6 class=\"wizard-title\"><center>Your payment done by " + Model.PaymentMethod + " has been received and verified, waiting for final approval.</center></h6>";
+                  ActionCenter = "";
+                  Invoicelink = "/Payments/Receipt?InvoiceNo=" + Model.InvoiceId;
+                } else {
+                  if (Model.IsPaymentApproval) {
+                    TitleMessage = "<h6 class=\"wizard-title\"><center>Payment from customer has been received via " + Model.PaymentMethod + " and verified, please verify to proceed.</center></h6>";
+                    ActionCenter = "<div class=\"btn-group\" role=\"group\">" +
+                              "<button id=\"btnSave\" type=\"button\" data-id=\"7\" class=\"btn btn-success\">Approve</button>" +
+                              "<button id=\"btnReject\" style=\"margin-left:4px;\" data-id=\"5\" type=\"button\" class=\"btn btn-danger\">Reject</button>" +
+                            "</div>";
+                    Invoicelink = "/Payments/Receipt?InvoiceNo=" + Model.InvoiceId;
+                  } else {
+                    TitleMessage = "<h6 class=\"wizard-title\"><center>Payment from customer has been received via " + Model.PaymentMethod + " and verified, Waiting for managerial approval.</center></h6>";
+                    ActionCenter = "";
+                    Invoicelink = "/Payments/Receipt?InvoiceNo=" + Model.InvoiceId;
+                  }
+
+                }
+                break;
+              case 7:
+                Invoicelink = "/Payments/Receipt?InvoiceNo=" + Model.InvoiceId;
+                break;
+              default:
+
+                <p></p>
+
+                break;
+            }
+          }
+
+          <div class="col-sm-12 tabcontent" style="@Paymentdisplay" id="Payment">
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <hr>
+                  @Html.Raw(HttpUtility.HtmlDecode(TitleMessage))
+                  <hr>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <center>
+                    @Html.Raw(HttpUtility.HtmlDecode(ActionCenter))
+                  </center>
+                  <br>
+                  <a target="_blank" href="@Invoicelink"><i class="mdi mdi-file-document payment-ref-icon"></i></a>
+                  <center> <a target="_blank" href="@Invoicelink" class="wizard-title status-title">@Model.InvoiceId</a></center>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-sm-12 tabcontent" style="@Downloaddisplay" id="Download">
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <hr>
+                  <h6 class="wizard-title"><center>Your permit request process has been completed successfully<br><br>You can download it via the below button</center></h6>
+                  <hr>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <a href="/Permit/GenerateCertificatePDF/@Model.ID"><i class="dripicons-download approved"></i></a>
+                  <h6 class="wizard-title status-title"><a href="/Permit/GenerateCertificatePDF/@Model.ID">Download</a></h6>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 tabcontent" style="@Rejectdisplay" id="Reject">
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  @if (AppUtil.getUserRole() == 3) {
+                    <hr>
+                    <h6 class="wizard-title"><center>Your permit request process has been Rejected<br><br>Please Contact <a href="https://beeah.ae/en/contact-us"> here </a> for further details.</center></h6>
+                    <hr>
+                  } else {
+                    <hr>
+                    <h6 class="wizard-title"><center>The permit request process has been Rejected By beea'h<br><br>Please Contact <a href="https://beeah.ae/en/contact-us"> here </a> for further details.</center></h6>
+                    <hr>
+                    <h6 class="wizard-title"><b>Reason:</b> @Model.RejectionReason</h6>
+
+                  }
+
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <a href="javascript:;"><i class="dripicons-cross approved" style="background-color:red;box-shadow: 0 0 0px 3px var(--red);"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end col -->
+</div>
+
+
+@if (ViewBag.PaymentDetails != null) {
+  <div class="modal fade" id="Paymentmodel" tabindex="-1" role="dialog" aria-labelledby="PaymentmodelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 80%;max-width: unset;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="PaymentmodelLabel">View Payment Request</h5>
+          <a href="" class="close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+        </div>
+        <div class="modal-body">
+          <section id="detailscontainer">
+            <div class="row">
+              @if (@ViewBag.PaymentDetails.PaymentMethod == "CreditCard" || @ViewBag.PaymentDetails.PaymentMethod == "AccountBalance") {
+                MainClass = "col-xs-12 col-sm-12 col-md-12 col-lg-12";
+                ChildClass = "col-xs-12 col-sm-6 col-md-3 col-lg-3 pull-left form-group";
+              } else {
+                MainClass = "col-xs-12 col-sm-12 col-md-4 col-lg-4";
+                ChildClass = "col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group";
+                <div class="col-md-8">
+                  <div class="panel-body">
+                    <iframe frameborder="0" onload="$('iframe').contents().find('img').css({'width': '100%'});" scrolling="no" width="100%" height="532px" src="~/UploadedFiles/@ViewBag.PaymentDetails.ReferenceFIle"></iframe>
+                  </div>
+                </div>
+              }
+
+              <div class="@MainClass">
+                <div class="@ChildClass">
+                  <label>Transaction Type</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.PaymentMethod">
+                </div>
+                <div class="@ChildClass">
+                  <label>Reference No</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.ReferenceNo">
+                </div>
+                <div class="@ChildClass">
+                  <label>Amount Payable</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.AmountPayable.ToString("0.0")">
+                </div>
+                <div class="@ChildClass">
+                  <label>Amount Paid</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.AmountPaid.ToString("0.0")">
+                </div>
+                <div class="@ChildClass">
+                  <label>Transaction Date</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.TransactionDate.ToString("d/ M/ yyyy")">
+                </div>
+                <div class="@ChildClass">
+                  <label>Remarks</label>
+                  <input type="text" class="form-control" disabled value="@ViewBag.PaymentDetails.Remarks">
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        @if (Status == 13) {
+          <div class="modal-footer">
+            <div class="btn-group" role="group" aria-label="...">
+              <button id="btnSave" type="button" data-id="14" class="btn btn-success">Approve Payment</button>
+              <button id="btnReject" style="margin-left:4px;" data-id="5" type="button" class="btn btn-danger">Reject</button>
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+}
+<!--- View Sample Application --->
+@if (Model.IsSamplingRequest) {
+  @Html.Partial("~/Views/Permit/_SamplingModal.cshtml", Model)
+}
+
+
+@Html.Partial("~/Views/Permit/_HazardModal.cshtml",Model)
+
+
+
+@section scripts{
+  <style>
+  
+    #tblPermitImages img {
+      max-height: 128px;
+      width: auto;
+    }
+
+    .date-picker[readonly] {
+      background-color: #ffffff;
+      opacity: 1;
+    }
+
+    a #detailscontainer {
+    }
+
+    .error {
+      border: solid 2px #FF0000;
+    }
+
+    div#StatusContainer {
+      display: inline-block;
+      position: sticky;
+      top: 0;
+      left: 0px;
+    }
+
+    ul.ulDocList li {
+      margin-bottom: 2px;
+    }
+    /*
+                      .checkbox input[type='checkbox'] {
+                          display: none;
+                          removes original button
+                      }
+
+                      .checkbox label:before {
+                          content: " ";
+                          display: inline-block;
+                          position: relative;
+                          top: 5px;
+                          margin: 0 5px 0 0;
+                          width: 20px;
+                          height: 20px;
+                          border-radius: 11px;
+                          border: 2px solid #3a3a3a;
+                          background-color: transparent;
+                      }
+
+                      .checkbox label {
+                          position: relative;
+                          cursor: pointer;
+                      }
+
+                          .checkbox label input[type='checkbox']:checked + span {
+                              border-radius: 11px;
+                              width: 11px;
+                              height: 11px;
+                              position: absolute;
+                              top: 9px;
+                              left: 4.5px;
+                              display: block;
+                              background-color: #3a3a3a;
+                          }*/
+  </style>
+  <script type="text/javascript">
+
+    var isSampleFileUploaded = false;
+		$(document).ready(function () {
+
+			$('.date-picker').datepicker();
+
+			$(".chkOption").click(function () {
+				var checkedElementId = $(this).attr("id");
+				$.each($(".chkOption"), function (index, element) {
+
+					if (element.id != checkedElementId) {
+            element.checked = false;
+            if (element.id =="IsSampling") {
+              $('#sampleinputpanel').hide();
+            }
+					}
+
+				});
+			});
+
+			// for sammpling inputs
+			$("#samplingpurpose").val(@Model.PurposeOfSampling);
+			$("#samplesource").val(@Model.SourceSampling);
+			$("#OtherSourceOfSample").val('@Model.OtherSource')
+
+      $("#btnSave").click(function () {
+        var status = $(this).data("id");
+        ChangePermitStaus(status);
+
+
+      });
+
+
+      $(".btnSampling").click(function () {
+        var status = $(this).data("id");
+        if (status !== undefined) {
+
+          if (status == "12") {
+
+            if ($("#IsMoreSampling").prop("checked")) {
+              ChangePermitStaus("12");
+            } else {
+              if (!isSampleFileUploaded) {
+                alert("Please upload Sampling certificate!");
+                return;
+              }
+              else if ($("#dtSampleExpiry").val() == "") {
+                alert("Please enter date of Expiry!");
+                return;
+              }
+              else
+                ChangePermitStaus(status);
+
+            }
+
+
+
+          } else {
+            if (status=="18") {
+              if ($("#IsMoreSampling").prop("checked")) {
+                ChangePermitStaus("12");
+              }
+
+              if (!isSampleFileUploaded) {
+                alert("Please upload Sampling certificate!");
+                return;
+              }
+              else if ($("#dtSampleExpiry").val() == "") {
+                alert("Please enter date of Expiry!");
+                return;
+              }
+            }
+            window.location.href = "/Permit/ChangePostPermitStatus/@Model.ID?statusId=" + status;
+          }
+
+        }
+
+
+      })
+
+			@*$("#btnReject").click(function () {
+				var oldStatus = $("#StatusID").val();
+				var status = $(this).data("id");
+				var samplingRequired = false;
+				var hazardrequired = false;
+				var moresamplingrequired = false;
+				if (oldStatus == 1 || oldStatus == 3) {
+					samplingRequired = $("#IsSampling").prop("checked");
+					hazardrequired = $("#IsHazardousRequired").prop("checked");
+					moresamplingrequired = $("#IsMoreSampling").prop("checked");
+				}
+				window.location.href = "/Permit/ChangePermitStatus/@Model.ID?statusId=" + status + "&samplingrequired=" + samplingRequired + "&hazardrequired=" + hazardrequired + "&moresamplingrequired=" + moresamplingrequired;
+
+
+			});*@
+
+			let type = @Model.WasteType;
+			if (type == 3) {
+				hazardrequired = $("#IsHazardousRequired").prop("checked", true);
+			}
+
+		    $(".bootbox-close-button, .bootbox-cancel").click(function () {
+				window.location.reload();
+            });
+            $("#btnReject").click(function () {
+				bootbox.prompt({
+					title: "Rejection Reason",
+					inputType: 'textarea',
+                    callback: function (result) {
+                        if (result != null) {
+                            if ($("textarea.bootbox-input.bootbox-input-textarea.form-control").val().trim() !== "") {
+								window.location.href = "/Permit/ChangePermitStatus/@Model.ID?statusId=5&RejectionReason=" + $("textarea.bootbox-input.bootbox-input-textarea.form-control").val().trim() ;
+                            }
+                            else {
+								alert("Please Enter the reason to continue..")
+                            }
+                        }
+                        else {
+                            window.location.reload();
+                        }
+                        return false;
+					}
+				});
+            });
+
+			///Upload Sampling File
+
+			$("#btnUploadSample").click(function () {
+				if (window.FormData !== undefined) {
+		var fileUpload = $("#fileSample").get(0);
+				var files = fileUpload.files;
+		// Create FormData object
+				var fileData = new FormData();
+
+		// Looping over all files and add it to FormData object
+		for (var i = 0; i < files.length; i++) {
+		  fileData.append(files[i].name, files[i]);
+					}
+					if ($("#dtSampleExpiry").val()=="") {
+						alert("Please enter date of Expiry!");
+						return;
+					}
+					fileData.append('Expirydate', $("#dtSampleExpiry").val());
+		$.ajax({
+		  url: '/Sampling/UploadSampleCert/@Model.ID',
+		  type: "POST",
+		  contentType: false, // Not to set any content header
+		  processData: false, // Not to process data
+		  data: fileData,
+		  success: function (result) {
+        alert(result);
+        isSampleFileUploaded = true;
+		  },
+		  error: function (err) {
+			alert(err.statusText);
+		  }
+		});
+
+
+			} else {
+
+		alert("File upload is not supported,please try thru latest Chrome browser");
+	  }
+			});
+
+		});
+		function openCity(evt, cityName) {
+			var statusID = $("#StatusID").val();
+			if (cityName === "Payment") {
+				if (statusID == 14 || statusID == 12 || statusID == 13 || statusID == 7) {
+
+				} else {
+					return false;
+				}
+			}
+			if (cityName ==="Download") {
+				if ( statusID == 7) {
+
+				} else {
+					return false;
+				}
+			}
+
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablinks");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(" active", "");
+			}
+			document.getElementById(cityName).style.display = "block";
+			evt.currentTarget.className += " active";
+		}
+
+		function UploadSampleFile() {
+			// https://www.c-sharpcorner.com/UploadFile/manas1/upload-files-through-jquery-ajax-in-Asp-Net-mvc/
+			//Code is coppied from following uper link
+
+                      }
+
+    function RequestForEditHazard() {
+      $('#hazardRemarks').removeClass('error');
+      $("#errorHazardRemarks").hide();
+
+      if ($('#hazardRemarks').val() == "") {
+        $("#errorHazardRemarks").show();
+        $('#hazardRemarks').addClass('error')
+      }
+      else {
+        window.location.href =
+          `/Permit/ChangePermitStatus/@Model.ID?statusId=17&hazardRemarks=` + $('#hazardRemarks').val();
+      }
+      //var remarks =
+      //  prompt(`Please enter your remarks below before submit:`);
+      //alert(remarks);
+
+ ///     $("#hazardeditModal").modal('show')
+
+    }
+
+    function ChangePermitStaus(status) {
+      var oldStatus = $("#StatusID").val();
+
+				var dataattr = "";
+				if ($("#sampleinputpanel").is(":hidden") == false && $("#IsSampling").prop("checked") == true) {
+				  if ($("#samplingpurpose").val() == "" || $("#samplingpurpose").val() == null) {
+					alert("Please select the purpose of sampling");
+					return false;
+				  }
+				  if ($("#samplesource").val() == "" || $("#samplesource").val() == null) {
+					alert("Please select the source of sampling");
+					return false;
+				  }
+				  dataattr = "&samplingpurpose=" + $("#samplingpurpose").val() + "&samplesource=" + $("#samplesource").val() + "&OtherSourceOfSample=" + $("#OtherSourceOfSample").val();
+				}
+				console.log(dataattr + "===" + $("#IsSampling").prop("checked"));
+				//return false;
+				var samplingRequired = false;
+				var hazardrequired = false;
+				var moresamplingrequired = false;
+				if (oldStatus == 1 || oldStatus == 3 || oldStatus == 15 || oldStatus == 16) {
+					samplingRequired = $("#IsSampling").prop("checked");
+					hazardrequired = $("#IsHazardousRequired").prop("checked");
+					moresamplingrequired = $("#IsMoreSampling").prop("checked");
+                }
+                if ($("#Remarks").length>0) {
+                    dataattr += "&Remarks=" + $("#Remarks").val().trim();
+      }
+
+      if ((!samplingRequired) && (!hazardrequired) && (!moresamplingrequired) && status=="12") {
+        //add weight bridge remakrs
+        PromptUserForWBRemarks();
+      } else {
+        	window.location.href = "/Permit/ChangePermitStatus/@Model.ID?statusId=" + status + dataattr + "&samplingrequired=" + samplingRequired + "&hazardrequired=" + hazardrequired + "&moresamplingrequired=" + moresamplingrequired;
+      }
+
+    }
+    function PromptUserForWBRemarks() {
+      bootbox.prompt({
+					title: "Final Remarks",
+					inputType: 'textarea',
+                    callback: function (result) {
+                        if (result != null) {
+                            if ($("textarea.bootbox-input.bootbox-input-textarea.form-control").val().trim() !== "") {
+                              window.location.href = "/Permit/ChangePermitStatus/@Model.ID?statusId=12&samplingRemarks=" + $("textarea.bootbox-input.bootbox-input-textarea.form-control").val().trim() ;
+                            }
+                            else {
+								alert("Please enter final remarks to continue..")
+                            }
+                        }
+                        else {
+                            window.location.reload();
+                        }
+                        return false;
+					}
+				});
+    }
+  </script>
+}

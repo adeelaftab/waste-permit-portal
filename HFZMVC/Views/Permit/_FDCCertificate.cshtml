@@ -1,0 +1,320 @@
+﻿@model HFZMVC.Models.PermitRequest.FDCRequestDetailModel
+@{
+
+  Layout = "";
+}
+@*@using Beeah.Domain.Models;*@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>PDF</title>
+  <link href="~/Content/css/print.css" rel="stylesheet" />
+</head>
+
+<style type="text/css">
+
+  body, html {
+    border-style: outset;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    border: none;
+    height: 100%;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-smoothing: antialiased;
+    background: #F8F8F8;
+    border-style: outset;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    border: none;
+    position: relative;
+    height: 100%;
+  }
+
+  .m-b-60 {
+    margin-bottom: 15px;
+  }
+
+  .m-t-150 {
+    margin-top: 30px;
+  }
+
+  .pdf-table {
+    width: 96%;
+    border-spacing: 0;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    margin: 0 auto 40px auto;
+  }
+
+    .pdf-table tr > th, .pdf-table tr > th, .pdf-table tr > td {
+      font-size: 12px;
+      text-align: left;
+      padding: 10px 10px;
+    }
+
+  .vertical-align-top {
+    vertical-align: top;
+  }
+  /* pdf area */
+  .pdf-container {
+    background: #ffffff;
+    max-width: 100%;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0px;
+    border-style: outset;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    border: none;
+  }
+
+  .pdf-header {
+    padding-bottom: 30px;
+    /*text-align: center;*/
+    /*display: inline-block;*/
+    clear: both;
+    width: 95%;
+    margin: 0 auto;
+    display: table;
+  }
+
+    .pdf-header .pdf-logo-left {
+      max-height: 50px;
+      vertical-align: top;
+      /*height: auto;*/
+      float: left;
+    /*margin-top: 20px;*/
+    }
+
+    .pdf-header .pdf-logo-right {
+      max-height: 80px;
+      vertical-align: top;
+      height: auto;
+      float: right;
+    }
+
+  .clearfix:before, .clearfix:after {
+    display: table;
+    content: " ";
+  }
+
+  .clearfix:after {
+    clear: both;
+  }
+
+  .pdf-title-area {
+    text-align: center;
+  }
+
+    .pdf-title-area .pdf-title {
+      vertical-align: middle;
+      padding-top: 20px;
+      font-size: 26px;
+      color: #0095c8;
+      text-transform: uppercase;
+      font-weight: 600;
+      line-height: 40px;
+    }
+
+  .pdf-sub-title {
+    color: #0169ab;
+    font-size: 12px;
+    line-height: 19px;
+    font-weight: 600;
+  }
+
+  .pdf-text {
+    font-size: 12px;
+    line-height: 19px;
+    color: #2e3e4d;
+    font-weight: 400;
+  }
+
+  .pdf-number-area {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 20px;
+    padding-top: 20px;
+  }
+
+    .pdf-number-area .pdf-permit-number {
+      width: 100%;
+      position: relative;
+      min-height: 1px;
+      margin-bottom: 20px;
+    }
+
+    .pdf-number-area .pdf-license-number {
+      width: 100%;
+      position: relative;
+      min-height: 1px;
+      text-align: left;
+    }
+
+  .pdf-panel .pdf-panel-title {
+    background: #f7f7f7;
+    font-size: 16px;
+    color: #2e3e4d;
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .contact-area {
+    display: inline-block;
+    width: 100%;
+  }
+
+    .contact-area .part1 {
+      float: left;
+      width: 50%;
+    }
+
+    .contact-area .part2 {
+      float: right;
+      width: 50%;
+    }
+
+  .mail-to {
+    color: #0169ab;
+  }
+
+  .bar-code {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+    padding-top: 20px;
+  }
+
+  .bar-code-img {
+    max-height: 50px;
+  }
+
+  .text-align-right {
+    text-align: right;
+  }
+
+  .footer-text {
+    font-size: 16px;
+  }
+
+  .footer img {
+    max-width: 100%;
+  }
+</style>
+<body>
+  <div class="pdf-container" style="padding-top: 2px; padding-bottom: 2px;">
+    <div class="pdf-header clearfix">
+      <img class="pdf-logo-left" src="@(AppDomain.CurrentDomain.BaseDirectory.ToString()+ "Assets\\images/beeahlogo.svg")" width="100" alt="" style="float: left;margin-top:0px;">
+      <img class="pdf-logo-right" src="@(AppDomain.CurrentDomain.BaseDirectory.ToString()+"Assets\\images/hfz.jpeg")" width="200" alt="" style="float: right;margin-top:0px;">
+    </div>
+
+    <div class="pdf-title-area" style="background: #78BE20; margin-left: 40px 0; padding: 10px; color: #fff;"> <span class="pdf-title" style="color: #fff;">FDC Permit</span> </div>
+    <div class="pdf-number-area" style="padding:0 40px 40px 40px;">
+      <div class="pdf-permit-number pdf-sub-title">Permit Number:<span class="pdf-text"> @Model.ID</span></div>
+      <div class="pdf-license-number pdf-sub-title">License Number:<span class="pdf-text"> @Model.company.LicenseNumber</span></div>
+    </div>
+    <hr style="opacity: 0.2">
+    <div class="pdf-panel m-b-60">
+      <div class="pdf-panel-title" style="margin: 0px 0px 0px 40px; padding: 0px; color: #0095C8; text-align: left; background: transparent;"><h3>FDC Permit</h3></div>
+      <div>
+        <table class="pdf-table table-bordered">
+          <tbody>
+            <tr>
+              <th width="220">Company License Name:</th>
+              <td>@Model.company.CompanyName</td>
+            </tr>
+            <tr>
+              <th width="220">Address:</th>
+              <td>@Model.company.Address</td>
+            </tr>
+
+
+            <tr>
+              <th width="220">List of Items:</th>
+              <td>@Model.ItemNames </td>
+            </tr>
+
+            <tr>
+              <th width="220">Total Weight / Volume:</th>
+              <td>@Model.TotalWeight @Model.UnitOfMeasure</td>
+            </tr>
+            @if (!String.IsNullOrEmpty(Model.WBRemarks)) {
+              <tr>
+                <th width="220">Admin Remarks:</th>
+                <td>@Model.WBRemarks</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <hr style="opacity: 0.2">
+
+    <div class="pdf-panel m-b-60">
+      <div class="pdf-panel-title" style="margin: 0px 0px 0px 40px; padding: 0px; color: #0095C8; text-align: left; background: transparent;"><h3>Waste Disposal Approval</h3></div>
+      <div style="display:grid;grid-gap:5px;grid-template:1fr 1fr">
+        <div class="first-Column" style="position:relative">
+          <table class="pdf-table table-bordered">
+            <tbody>
+              <tr>
+                <th width="150">Date of Issue:</th>
+                @if (Model.IssueDate.HasValue) {
+                  <td width="250">@Model.IssueDate.Value.ToString("dd-MMM-yyyy")</td>
+                } else {
+                  <td width="250"></td>
+                }
+                @*<th class="vertical-align-top" width="50" rowspan="2">Remarks:</th>
+                <td class="vertical-align-top" rowspan="2">@Model.Remarks</td>*@
+              </tr>
+              <tr>
+                <th width="150">Date of Expiry:</th>
+                @if (Model.ValidTill.HasValue) {
+                  <td width="250">@Model.ValidTill.Value.ToString("dd-MMM-yyyy")</td>
+                } else {
+                  <td width="250"></td>
+                }
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="position:fixed;right:5%;bottom:33%;" class="second-Column">
+          <img style="height:150px;" src="@(AppDomain.CurrentDomain.BaseDirectory.ToString()+"Assets\\images/CertStamp.PNG")" />
+
+
+        </div>
+
+      </div>
+
+    </div>
+    <hr style="opacity: 0.2">
+    <div class="bar-code"> </div>
+    <div class="contact-area m-b-60" style=" margin: 0px 0px 0px 10px; width: calc(100% - 80px);">
+      <p style=" font-size: 12px; color: #999;">
+        1st floor Lagoon Tower, Corniche Road, Sharjah – UAE<br />
+        P.O.Box 20248 Sharjah, UAE
+        <br>
+        <strong>E</strong>: info@beeah.ae  <br /> T: +971 6597 8522, F +971 6 572 9333
+      </p>
+      <p style=" font-size: 12px; color: #999;">
+        Copyright © 2020 Bee'ah
+      </p>
+    </div>
+    <!--<div class="footer"  style=" margin: 0px 40px 40px 40px; width: calc(100% - 80px);">
+    <div class="footer-text">beeah.ae</div>
+    <img src="~/Content/images/header_bg.png" alt=""> </div>-->
+  </div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+﻿@model HFZMVC.Models.PermitRequest.PermitRequestIndexViewModel
+@{
+    ViewBag.Title = "Create";
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Hazard Certificate Management</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashoard</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Hazard Certificate</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<section id="detailscontainer">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="panel-body">
+                <div class="row">
+                    <h4 class="mt-0 header-title chargestitle" style="width: 100%;text-align: center;"> <span><i class="ti-receipt" style="float: unset;vertical-align: -4px;"></i> Permit Information</span></h4>
+                    <div class="col-lg-6">
+                        <div class="card" style="min-height: 100%;">
+                            <div class="card-body charges summary">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row"><i class="ti-zip charges-icons"></i> <p>Permit#</p></th>
+                                                <td id="companylabel">@Model.ID</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><i class="ti-settings charges-icons"></i> <p>Contact Person</p></th>
+                                                <td id="tradelicenselabel">@ViewBag.company.Name</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Email</p></th>
+                                                <td id="managerlabel">@ViewBag.company.EmailID</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card" style="min-height: 100%;">
+                            <div class="card-body charges summary">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row"><i class="ti-zip charges-icons"></i> <p>Company Name</p></th>
+                                                <td id="companylabel">@ViewBag.company.CompanyName</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><i class="ti-settings charges-icons"></i> <p>Contact</p></th>
+                                                <td id="tradelicenselabel">@ViewBag.company.PhoneNumber</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Location</p></th>
+                                                <td id="managerlabel">@ViewBag.company.Address</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="card" style="min-height: 100%;">
+                <div class="card-body charges summary">
+                    @using (Html.BeginForm("SaveData", "HazardCertificate", FormMethod.Post, new { onsubmit = "return checkform();", accept_charset = "utf-8" }))
+                    {
+                        @Html.HiddenFor(e => e.ID)
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>SN</th>
+                                        <th style="min-width:150px;">Name</th>
+                                        <th>Quantity(Tons)</th>
+                                        <th>State<br />(Liquid,Solid,..)</th>
+                                        <th>Container Type<br />(IBC,Drums,....)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><input type="text" name="hazard[0][name]" id="name" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[0][quantity]" id="quantity" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[0][state]" id="state" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[0][ContainerType]" id="ContainerType" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td><input type="text" name="hazard[1][name]" id="name" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[1][quantity]" id="quantity" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[1][state]" id="state" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[1][ContainerType]" id="ContainerType" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td><input type="text" name="hazard[2][name]" id="name" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[2][quantity]" id="quantity" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[2][state]" id="state" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[2][ContainerType]" id="ContainerType" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td><input type="text" name="hazard[3][name]" id="name" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[3][quantity]" id="quantity" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[3][state]" id="state" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[3][ContainerType]" id="ContainerType" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td><input type="text" name="hazard[4][name]" id="name" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[4][quantity]" id="quantity" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[4][state]" id="state" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[4][ContainerType]" id="ContainerType" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td><input type="text" name="hazard[5][name]" id="name" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[5][quantity]" id="quantity" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[5][state]" id="state" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[5][ContainerType]" id="ContainerType" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td><input type="text" name="hazard[6][name]" id="name" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[6][quantity]" id="quantity" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[6][state]" id="state" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[6][ContainerType]" id="ContainerType" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>8</td>
+                                        <td><input type="text" name="hazard[7][name]" id="name" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[7][quantity]" id="quantity" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[7][state]" id="state" class="form-control" /></td>
+                                        <td><input type="text" name="hazard[7][ContainerType]" id="ContainerType" class="form-control" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table mb-0">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" style="width: 280px;">Description of Waste Generation</th>
+                                        <td><textarea id="WasteDescription" name="WasteDescription" class="form-control"></textarea></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Frequency of Disposal</th>
+                                        <td><textarea id="DisposalFrequency" name="DisposalFrequency" class="form-control"></textarea></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Transporter</th>
+                                        <td><textarea id="transporter" name="transporter" class="form-control"></textarea></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="submit" style="float: none;margin: auto;display: block;" class="btn btn-primary">Submit</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<script>
+    function checkform() {
+        return true;
+    }
+</script>

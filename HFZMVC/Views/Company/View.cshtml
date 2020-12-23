@@ -1,0 +1,255 @@
+﻿@model HFZMVC.Models.UserManagement.CompanyView
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Profile</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashoard</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">@Model.Users.CompanyName Profile</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-4 col-md-6">
+        <div class="card directory-card m-b-20" style="min-height: 100%;">
+            <div>
+                <div class="directory-bg text-center">
+                    <div class="directory-overlay"><img class="rounded-circle thumb-lg img-thumbnail" src="~/Assets/images/img_office.png" alt="Generic placeholder image"></div>
+                </div>
+                <div class="directory-content text-center p-4">
+                    <p class="mt-4">Company Information</p>
+                    <h5 class="font-16">@Model.Users.CompanyName</h5>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%">
+                        <span class="pull-left" style="margin-top: 8px;">Status : </span><span class="pull-right" style="margin-top: -7px;">
+                        @{
+                            if (Model.Users.Status == false)
+                            {
+                                <span class="badge badge-danger">Inactive</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-success">Active</span>
+                            }
+                        }
+                        </span>
+                    </p>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">Trade Licence Number : </span><span class="pull-right" style="margin-top: 8px;">@Model.Users.LicenseNumber</span></p>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">VAT Number : </span><span class="pull-right" style="margin-top: 8px;">@Model.Users.VATNumber</span></p>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">UserName : </span><span class="pull-right" style="margin-top: 8px;">@Model.Users.UserName</span></p>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+    <div class="col-xl-4 col-md-6">
+        <div class="card directory-card m-b-20" style="min-height: 100%;">
+            <div>
+                <div class="directory-bg text-center">
+                    <div class="directory-overlay"><img class="rounded-circle thumb-lg img-thumbnail" src="~/Assets/images/img_user.png" alt="Generic placeholder image"></div>
+                </div>
+                <div class="directory-content text-center p-4">
+                    <p class="mt-4">Manager Information</p>
+                    <h5 class="font-16">@Model.Users.Name</h5>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">Phone : </span><span class="pull-right" style="margin-top: 8px;">@Model.Users.PhoneNumber</span></p>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">Email : </span><a href="mailto:@Model.Users.EmailID" class="pull-right" style="margin-top: 8px;">@Model.Users.EmailID</a></p>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">Address : </span><span class="pull-right" style="margin-top: 8px;">@Model.Users.Address</span></p>
+                    <hr>
+                    @{
+                        if (!string.IsNullOrEmpty(Model.Users.Address2))
+                        {
+                            <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">Sec. Address : </span><span class="pull-right" style="margin-top: 8px;">@Model.Users.Address2</span></p>
+                            <hr>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+    <div class="col-xl-4 col-md-6">
+        <div class="card directory-card m-b-20" style="min-height: 100%;">
+            <div>
+                <div class="directory-bg text-center">
+                    <div class="directory-overlay"><img class="rounded-circle thumb-lg img-thumbnail" src="~/Assets/images/img_files.png" alt="Generic placeholder image"></div>
+                </div>
+                <div class="directory-content text-center p-4">
+                  <p class="mt-4">Uploads</p>
+                  <h5 class="font-16">Documents</h5>
+                  <hr>
+                  @if (!String.IsNullOrEmpty( Model.Users.TradeLicenseFile)) {
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">Trade License Document</span><a href="~/UploadedFiles/@Model.Users.TradeLicenseFile" target="_tradelicense" class="pull-right btn btn-primary waves-effect waves-light"><i class="fa fa-download"></i></a></p>
+                    <hr>
+                  }
+
+
+                  @if (!String.IsNullOrEmpty( Model.Users.VATLicenseFile) 
+                          && Model.Users.VATLicenseFile!=" "
+                    ) {
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">Tax License Document</span><a href="~/UploadedFiles/@Model.Users.VATLicenseFile" target="_vatlicense" type="button" class="pull-right btn btn-primary waves-effect waves-light"><i class="fa fa-download"></i></a></p>
+                    <hr>
+                  }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div><hr></div>
+<div class="row">
+    <!-- end col -->
+    <div class="col-xl-4 col-md-6">
+        <div class="card" style="min-height: 100%;">
+            <div class="card-body">
+                <div class="p-3">
+                    <h5 class="font-16">Actions</h5>
+                    <hr>
+                    <a href="~/Company/Edit/@Model.Users.ID" class="btn btn-primary col-md-12 w-md waves-effect waves-light">Edit</a>
+                    <hr>
+                    @{
+                        if (Model.Users.Status == false)
+                        {
+                            <a href="javascript:;" onclick="changestatus(@Model.Users.ID);" class="btn btn-primary col-md-12 w-md waves-effect waves-light">Activate Company</a>
+                            <hr>
+                        }
+                        else
+                        {
+                            <a href="javascript:;" onclick="changestatus(@Model.Users.ID);" class="btn btn-primary col-md-12 w-md waves-effect waves-light">Disable Company</a>
+                            <hr>
+                            <a href="javascript:;" onclick="resetPassword(@Model.Users.ID);" class="btn btn-primary col-md-12 w-md waves-effect waves-light">Reset Password</a>
+                            <hr>
+                            @*<a href="javascript:;" onclick="deletecompany(@Model.Users.ID);" class="btn btn-primary col-md-12 w-md waves-effect waves-light">Delete</a>
+                            <hr>*@
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+    @{ 
+        string pno = Model.Admindetail.PhoneNumber;
+        string eml = Model.Admindetail.EmailID;
+        string cont = "<hr>" +
+                    "<div class=\"alert alert-info\" role=\"alert\">Working Days - Sunday to Thursday - 9 am to 4 pm</div>" +
+                    "<div class=\"alert alert-info\" role=\"alert\">Off Days - Friday to Saturday - Closed</div>";
+        string ctitle = "Technical Support";
+        if ((int)Session[AppVariables.SessionUserId]!=3)
+        {
+            pno = Model.Users.PhoneNumber;
+            eml = Model.Users.EmailID;
+            cont = "";
+            ctitle = "Contact Customer";
+        }
+    }
+    <div class="col-xl-4 col-md-6">
+        <div class="card" style="min-height: 100%;">
+            <div class="card-body">
+                <div class="p-3">
+                    <h5 class="font-16">@ctitle</h5>
+                    @cont
+                    <div class="form-horizontal m-t-30">
+                        <hr>
+                        <div class="form-group row m-t-20">
+                            <div class="text-right" style="display: table; margin: 0 auto;">
+                                <a href="tel:@pno" class="btn btn-primary col-sm-3 w-md waves-effect waves-light" type="submit">Phone</a> &nbsp;
+                                <a href="mailto:@eml" class="btn btn-primary col-sm-3 w-md waves-effect waves-light" type="submit">Email</a> &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+    <div class="col-xl-4 col-md-6">
+        <div class="card directory-card m-b-20" style="min-height: 100%;">
+            <div>
+                <div class="directory-content text-center p-4">
+                    <h5 class="font-16" style="text-align: left;">Permit History</h5>
+                    <hr>
+                    @foreach (var item in Model.permitlist)
+                    {
+                        <p class="text-muted" style="display: table; width: 100%"><a href="/Permit/PermitDetails/@item.ID" class="pull-left" style="margin-top: 8px;">Permit#@item.ID</a><span class="badge badge-info pull-right p-2">@item.statusName</span></p>
+                        <hr>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row --> 
+<script>
+    function changestatus(id) {
+        if (confirm("Are you sure want to continue?")) {
+            $.ajax({
+                url: "/Company/changeStatus/"+id,
+                async: false,
+                type:"POST",            // type of submision
+                dataType:"text",        // what type of data we'll get back
+                success:function(data)
+                {    
+                    if (data == 1) {
+                        alert("Status Has been Changed Successfully..!!!");
+                        location.reload(true);
+                    }
+                    else {
+                        alert("Unable to Change Status..!!!");
+                    }
+                }
+            });
+        } 
+    }
+    function resetPassword(id) {
+        if (confirm("Are you sure want to submit reset password request?")) {
+            $.ajax({
+                url: "/Company/ResetPassword/"+id,
+                async: false,
+                type:"POST",            // type of submision
+                dataType:"text",        // what type of data we'll get back
+                success:function(data)
+                {    
+                    if (data == 1) {
+                        alert("The reset Password request has been Successfully sent on registered email..!!!");
+                    }
+                    else {
+                        alert("Unable to send request..!!!");
+                    }
+                }
+            });
+        } 
+    }
+    function deletecompany(id) {
+        if (confirm("Are you sure want to Delete?")) {
+            $.ajax({
+                url: "/Company/DeleteCompany/"+id,
+                async: false,
+                type:"POST",            // type of submision
+                dataType:"text",        // what type of data we'll get back
+                success:function(data)
+                {    
+                    if (data == 1) {
+                        alert("Company Has been successfully Deleted..!!!");
+                        window.location.href = '/Company/index/';
+                    }
+                    else {
+                        alert("Unable to Delete Company..!!!");
+                    }
+                }
+            });
+        } 
+    }
+</script>

@@ -1,0 +1,166 @@
+﻿@model HFZMVC.Models.PermitRequest.HazardCertificateModel_Certificate
+@{
+  Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <title>GenerateHazardCertificatePDF</title>
+
+  <style>
+    body {
+/*      padding: 5px;*/
+      font-family: Calibri,Arial,'Times New Roman';
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid black;
+    }
+
+    th, td {
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <section id="header">
+    <div>
+      <div style="float:left">
+        <h2>Hazardous Waste Disposal Application</h2>
+      </div>
+
+      <div style="float:right">
+        <img src="@(AppDomain.CurrentDomain.BaseDirectory.ToString()+ "Assets\\images/logo.png")" />
+      </div> 
+      <div style="clear:both;"></div>
+    </div>
+
+
+
+  </section>
+  <section id="title">
+
+    <div >
+      <div style="float:left">
+        <span>Application No: @Model.HazardSAPNo</span>
+      </div>
+      <div style="float:right">
+        <span>Date: @DateTime.Now.ToString("dd/MM/yyyy")</span>
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+  </section>
+  <section id="CompanyDetails">
+    <h4>Application Details</h4>
+    <table style="width:870px;" >
+      <tr>
+        <td><b>Company Name:</b> </td>
+        <td>
+          @Model.Company.CompanyName
+        </td>
+        <td><b>Contact Person Detais:</b> </td>
+        <td>
+          <div>
+            <span>Name:</span>
+            <span>@Model.Company.Name</span>
+          </div>
+          <div>
+            <span>Email:</span>
+            <span>@Model.Company.EmailID</span>
+          </div>
+          <div>
+            <span>Mobile No:</span>
+            <span>@Model.Company.PhoneNumber</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td rowspan="2"><b>Company Contact Details:</b></td>
+        <td rowspan="2">
+          <div><span>Email: </span><span>@Model.Company.EmailID</span></div>
+          <div><span>Phone: </span><span>@Model.Company.PhoneNumber</span></div>
+        </td>
+        <td>
+          <b>Location</b>
+        </td>
+        <td>@Model.Company.Address</td>
+
+      </tr>
+      <tr>
+        <td>
+          <b>Industry</b>
+        </td>
+        <td>@Model.TypeOfIndustry</td>
+      </tr>
+    </table>
+  </section>
+  <section id="WasteDetails">
+    <h4>Waste Details</h4>
+    <table style="width:870px;">
+      <tr>
+        <th>SN.</th>
+        <th>Waste Name</th>
+        <th>Quantity(Tons)</th>
+        <th>State</th>
+        <th>Container Type</th>
+      </tr>
+      @for (int i = 0; i < 15; i++) {
+        if ( (i + 1) <= (Model.hazard.Count)) {
+          <tr>
+            <td>@(i + 1)</td>
+            <td>@Model.hazard[i].name</td>
+            <td>@Model.hazard[i].quantityItem @Model.hazard[i].quantity</td>
+            <td>@Model.hazard[i].state</td>
+            <td>@Model.hazard[i].ContainerType</td>
+          </tr>
+        } else {
+
+          <tr>
+            <td>@(i+1)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        }
+      }
+     
+      <tr>
+        <td colspan="2">
+          <b>Description of Waste Generation:</b>
+        </td>
+        <td colspan="3">@Model.WasteDescription</td>
+      </tr>
+      <tr>
+        <td><b>Frequency: </b></td>
+        <td colspan="2">@Model.DisposalFrequency</td>
+        <td><b>Transporter</b></td>
+        @if (Model.transporter.ToLower() == "other") {
+          <td>@Model.transporterDetails</td>
+        } else {
+          <td>@Model.transporter</td>
+        }
+
+      </tr>
+    </table>
+
+    <ul>
+      <li>Processing time for each application is 4-7 working Days.</li>
+    </ul>
+  </section>
+  <section id="SignaturePart">
+    <br />
+    <div style="float:right">
+      <hr />
+      <span>Applicant Stamp & Signature</span>
+    </div>
+  </section>
+</body>
+</html>

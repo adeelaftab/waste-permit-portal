@@ -1,0 +1,64 @@
+﻿@model HFZMVC.Models.EntityFramework.PermitWasteMapping
+@{
+  ViewBag.Title = "Create";
+}
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="page-title-box">
+
+      @if (ViewBag.section == null) {
+        <h4 class="page-title pull-left">Create Waste type master</h4>
+      }
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-12">
+    <div class="card m-b-20">
+      <div class="card-body permits-managment-box">
+        @using (Html.BeginForm("PWCreate", "MasterData", FormMethod.Post, new { id = "frm", @class = "form-horizontal" })) {
+
+          <div class=" form-group">
+            <label>Data</label>
+            @Html.EditorFor(e => e.WasteType)
+          </div>
+          <div class=" form-group">
+            <label>Waste Category</label>
+            @Html.DropDownListFor(e => e.PermitTypeMasterID, (IEnumerable<SelectListItem>)ViewBag.PermitType, "--Select--")
+          </div>
+
+          <div class=" form-group">
+            <label>Item Code</label>
+            @Html.EditorFor(e => e.ItemCode)
+          </div>
+
+          <div class=" form-group">
+            <label>Item is Hazardous?</label>
+            @Html.EditorFor(e => e.IsHazardous)
+          </div>
+
+
+
+          if (ViewBag.error != null) {
+            <label style="color:red;">@ViewBag.error.ToString()</label>
+          }
+          <div class="col-md-6 form-group">
+            <button type="submit" id="btnCreate"
+                    class="btn btn-success btn-lg waves-effect" style="margin: 0 auto;">
+              Submit
+            </button>
+          </div>
+        }
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>
+

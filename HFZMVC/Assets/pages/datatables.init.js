@@ -1,0 +1,1 @@
+$(document).ready(function () { $("#datatable").DataTable({ "order": [[0, "desc"]] }), $("#datatable-buttons").DataTable({ lengthChange: true, buttons: ["copy", "excel", "pdf"], "order": []}).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")});

@@ -1,0 +1,218 @@
+﻿@model IEnumerable<HFZMVC.Models.EntityFramework.AccountTransaction>
+@{
+    ViewBag.Title = "Wallet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Assets/css/morris.css" rel="stylesheet" type="text/css">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Wallet</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashobard</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Wallet</a></li>
+            </ol>
+            <div class="state-information d-none d-sm-block">
+                <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#AddBalanceModal">
+                    <i class="fa fa-plus-circle"></i> Add Balance
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    @if (TempData["errormessage"] != null)
+    {
+        <label class="alert alert-danger col-md-12">@TempData["message"]</label>
+    }
+
+    else if (TempData["successmessage"] != null)
+    {
+        <label class="alert alert-success col-md-12">@TempData["message"]</label>
+    }
+    <div class="col-xl-4">
+        <div class="card m-b-20">
+            <div class="card-body">
+                <h4 class="mt-0 header-title">Balance</h4>
+                <div class="row text-center m-t-20">
+                    <div class="col-6">
+                        <h5 class="">AED @(ViewBag.Accounts.Balance.ToString("0.0"))</h5>
+                        <p class="text-muted">Available</p>
+                    </div>
+                    <div class="col-6">
+                        <h5 class="">AED @ViewBag.Totalpaid</h5>
+                        <p class="text-muted">Total Spent</p>
+                    </div>
+                </div>
+                <div id="morris-donut-example" class="dashboard-charts morris-charts"></div>
+                <div class="state-information d-none d-sm-block">
+                    <button style="width: 100%; padding: 15px;" type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#AddBalanceModal">
+                        <i class="fa fa-plus-circle"></i> Add Balance
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-8">
+        <div class="card m-b-20">
+            <div class="card-body">
+                <h4 class="mt-0 m-b-30 header-title">Latest Transactions</h4>
+                <div class="table-responsive">
+                    <table class="table table-vertical">
+                        <tbody>
+                            @{
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        
+                                        @*<td>
+                                            @if (item.Status == true)
+                                            {
+
+                                                <div><i class="mdi mdi-checkbox-blank-circle text-success"></i> Confirm</div>
+
+                                            }
+                                            else
+                                            {
+
+                                                <div><i class="mdi mdi-checkbox-blank-circle text-warning"></i>Pending Approval</div>
+
+                                            }
+
+                                        </td>*@
+                                      <td>
+                                        @(item.TransactionType+" Payment")
+                                        @if (item.TransactionType != "Account Topup") {
+                                          @("(Permit No: "+item.PermitID+")")
+                                        }
+                                      </td>
+                                        <td>
+                                            AED @(item.AmountPaid?.ToString("0.0"))
+                                        </td>
+                                        <td>
+                                            @(item.TransactionDate?.ToString("dd/MMM/yyyy"))
+                                        </td>
+                                        <td>
+                                          @if (item.TransactionType != "Account Topup") {
+                                            <a href="/Payments/Invoices" class="btn btn-secondary btn-sm waves-effect waves-light">View</a>
+
+                                          }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="AddBalanceModal" tabindex="-1" role="dialog" aria-labelledby="AddBalanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddBalanceModalLabel">Wallet recharge</h5>
+                <a href="" class="close">
+                    <span aria-hidden="true">&times;</span>
+                </a>
+            </div>
+            <div class="modal-body">
+                <section id="detailscontainer">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="row">
+                                <form id="currenttransactionform" action="" method="post">
+                                    <input type='Hidden' id="currenttransactionID" name='TransactionID' value="" />
+                                </form>
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                                    <label>Enter Amount</label>
+                                    <input class="form-control numberonly text-box single-line" id="amount_entered" maxlength="10" name="amount_entered" placeholder="Enter Amount" value="" autocomplete="off" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <a href="" class="btn btn-danger">Cancel</a>
+                <a href="javascript:;" onclick="Proceedtocreditcard();" class="btn btn-primary">Proceed To Payment</a> <!-- Move To Payments -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<script src="~/Assets/js/morris.min.js"></script>
+<script src="~/Assets/js/raphael-min.js"></script>
+<script>
+    $(document).ready(function () {
+        Morris.Donut({
+            element: "morris-donut-example",
+            data: [
+            
+                {
+                    label: "Waste Permits",
+                    value: @ViewBag.NormalAmount
+                },
+                {
+                    label: "Sampling Permits",
+                    value: @ViewBag.SamplingAmount
+                }
+            ],
+            resize: !0,
+            colors: [ "#78BE20", "#0095C8"]
+        });
+    });
+    $(document).on('keypress', '.numberonly', function () {
+        if (event.which != 8 && event.which != 0 && (event.which < 48 || event.which > 57)) {
+            return false;
+        }
+    });
+    function Proceedtocreditcard() {
+            $("#loader").show();
+            $.ajax({
+                url: "/Payments/GetTransactionID/",
+                async: false,
+                type: "POST",            // type of submision
+                data: {
+                    PermitID: -1,
+                    Amount: $('#amount_entered').val(),
+                    OrderID: "@(DateTimeOffset.UtcNow.ToUnixTimeSeconds()+"-"+AppUtil.checkLogin())",
+                    OrderName: "Topup for Account ID: @ViewBag.Accounts.ID",
+                    OrderInfo: "Topup is Done By @AppUtil.getUserName() "
+                },
+                beforeSend: function () {
+                    $("#loader").show();
+                },
+                error : function (xhr, textStatus, errorThrown) {
+                    $("#loader").hide();
+                },
+                success: function (res) {
+                    $("#loader").hide();
+                    if (isJson(res)) {
+                        var data = JSON.parse(res);
+                        $("#currenttransactionID").val(data.Transaction.TransactionID);
+                        $("#currenttransactionform").attr("action", data.Transaction.PaymentPortal);
+                        $("#currenttransactionform").submit();
+                    }
+                    else {
+                        alert(res);
+                    }
+                }
+            });
+    }
+    function isJson(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+</script>

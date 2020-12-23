@@ -1,0 +1,267 @@
+﻿@model IEnumerable<HFZMVC.Models.UserGroup.UserRoleMappingViewModel>
+@{
+	ViewBag.Title = "UserGroup";
+	var parentMenu = Model.Where(e => e.ParentId == 0).ToList();
+	var childMenus = Model.Where(e => e.ParentId != 0 && e.strPagePath != "menu-title").ToList();
+	int tablecounter = 0;
+}
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="page-title-box">
+			<h4 class="page-title">Edit Roles</h4>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="javascript:void(0);">Dashobard</a></li>
+				<li class="breadcrumb-item"><a href="javascript:void(0);">Access Roles</a></li>
+			</ol>
+		</div>
+	</div>
+</div>
+@using (Html.BeginForm(FormMethod.Post))
+{
+	
+<div class="row">
+	<div class="col-12">
+		<div class="card m-b-20">
+			<div class="card-body">
+				<h4 class="mt-0 header-title">Roles Name</h4>
+				<div class="form-group row">
+					<div class="col-sm-10">
+						<input class="form-control" type="text" placeholder="Type role name here" id="RolenameField" value="@ViewBag.rolename">
+
+					</div>
+				</div>
+				<div class="form-group row">
+
+					<div class="col-sm-12">
+						<table id="UserRoleMappingViewModel" class="table table-bordered mb-0">
+							<thead class="text-center">
+								<tr>
+									<th style="font-weight: bold;">Menu</th>
+									<th style="font-weight: bold;">View</th>
+									<th style="font-weight: bold;">Add</th>
+									<th style="font-weight: bold;">Edit</th>
+									<th style="font-weight: bold;">Delete</th>
+								</tr>
+							</thead>
+							<tbody class="text-center">
+
+								@foreach (var menu in parentMenu)
+								{
+									<tr id="UserRoleMappingViewModel_@tablecounter">
+										<th class="TDparent">
+											<span id="UserRoleMappingViewModel_@(tablecounter)_PageName" style="font-weight:bolder;">@menu.PageName</span>
+											<input type="hidden" value="@menu.MenuId" id="UserRoleMappingViewModel_@(tablecounter)_MenuId" />
+											<input type="hidden" value="@menu.RoleId" id="UserRoleMappingViewModel_@(tablecounter)_RoleId" />
+										</th>
+										<td>
+											<input type="checkbox" id="UserRoleMappingViewModel_@(tablecounter)_isView" switch="none" checked="@(menu.isView.HasValue?menu.isView.Value:false)">
+											<label for="UserRoleMappingViewModel_@(tablecounter)_isView" data-on-label="On" data-off-label="Off"></label>
+										</td>
+										<td>
+										</td>
+										<td>
+										</td>
+										<td>
+										</td>
+										@{tablecounter++;}
+									</tr>
+
+									foreach (var child in childMenus.Where(e => e.ParentId == menu.MenuId))
+									{
+			  <tr id="UserRoleMappingViewModel_@(tablecounter)">
+				<th>
+				  <span id="UserRoleMappingViewModel_@(tablecounter)_PageName">@child.PageName</span>
+				  <input type="hidden" value="@child.MenuId" id="UserRoleMappingViewModel_@(tablecounter)_MenuId" />
+				  <input type="hidden" value="@child.RoleId" id="UserRoleMappingViewModel_@(tablecounter)_RoleId" />
+				</th>
+				<td>
+				  <input type="checkbox" id="UserRoleMappingViewModel_@(tablecounter)_isView" switch="none" checked="@(child.isView.HasValue?child.isView.Value:false)">
+				  <label for="UserRoleMappingViewModel_@(tablecounter)_isView" data-on-label="On" data-off-label="Off"></label>
+				</td>
+				@if (( child.IsPermission.HasValue? !child.IsPermission.Value:true)) {
+
+				  <td>
+					<input type="checkbox" id="UserRoleMappingViewModel_@(tablecounter)_isNew" switch="none" checked="@(child.isNew.HasValue?child.isNew.Value:false)">
+					<label for="UserRoleMappingViewModel_@(tablecounter)_isNew" data-on-label="On" data-off-label="Off"></label>
+				  </td>
+				  <td>
+					<input type="checkbox" id="UserRoleMappingViewModel_@(tablecounter)_isEdit" switch="none" checked="@(child.isEdit.HasValue?child.isEdit.Value:false)">
+					<label for="UserRoleMappingViewModel_@(tablecounter)_isEdit" data-on-label="On" data-off-label="Off"></label>
+				  </td>
+				  <td>
+					<input type="checkbox" id="UserRoleMappingViewModel_@(tablecounter)_isDelete" switch="none" checked="@(child.isDelete.HasValue?child.isDelete.Value:false)">
+					<label for="UserRoleMappingViewModel_@(tablecounter)_isDelete" data-on-label="On" data-off-label="Off"></label>
+				  </td>
+				}
+
+				@{tablecounter++;}
+			  </tr>
+
+									}
+
+
+
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<br /><br />
+				<button type="submit" id="btnsave" class="btn btn-primary btn-lg waves-effect waves-light">Save</button>
+				<label id="lblError" style="display:none;" class="error">Something went wrong! please try again</label>
+			</div>
+		</div>
+	</div>
+	<!-- end col -->
+</div>
+<!-- end row -->
+}
+
+@section styles{
+	<style>
+		.list-group-item .fa {
+			margin-right: 5px;
+		}
+
+		.fa-chevron:before {
+			content: "\f054"; /*right*/
+		}
+
+		.in > .fa-chevron:before {
+			content: "\f078"; /*down*/
+		}
+
+		.list-group.list-group-tree {
+			padding: 0;
+		}
+
+			.list-group.list-group-tree .list-group {
+				margin-bottom: 0;
+			}
+
+			.list-group.list-group-tree > .list-group > .list-group-item {
+				padding-left: 30px;
+			}
+
+			.list-group.list-group-tree > .list-group > .list-group > .list-group-item {
+				padding-left: 45px;
+			}
+
+				.list-group.list-group-tree > .list-group > .list-group > .list-group-item > .list-group-item {
+					padding-left: 60px;
+				}
+
+					.list-group.list-group-tree > .list-group > .list-group > .list-group-item > .list-group-item > .list-group-item {
+						padding-left: 75px;
+					}
+
+						.list-group.list-group-tree > .list-group > .list-group > .list-group-item > .list-group-item > .list-group-item > .list-group-item {
+							padding-left: 90px;
+						}
+
+		.TDparent{
+			text-align:left;
+		}
+	</style>
+}
+
+
+@section scripts{
+	<script type="text/javascript">
+		var MenuObject = {
+			userId: '@ViewBag.userid',
+			listOfMenus: [],
+			menuid: '',
+		}
+
+
+
+
+	</script>
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			@if(ViewBag.error!=null){
+					<text>
+						$("#lblError").show();	
+					</text>
+			}
+	 
+
+			$(".list-group-tree").on('click', "[data-toggle=collapse]", function () {
+				$(this).toggleClass('in')
+				$(this).next(".list-group.collapse").collapse('toggle');
+
+				// next up, when you click, dynamically load contents with ajax - THEN toggle
+				return false;
+			})
+			$("[type=checkbox]").click(function () {
+				var value = $(this).val();
+				if ($(this).is(":checked")) {
+					console.log("yolo");
+				} else {
+					console.log("notchecked");
+				}
+			});
+
+
+			$("form").submit(function (e) {
+				e.preventDefault();
+			//Loop through the Table rows and build a JSON array.
+
+		 $("#btnsave").attr("disabled", true);
+	  $("#btnsave").text("Submitting..");
+				var userroles = new Array();
+				var counter = 0;
+			$("#UserRoleMappingViewModel TBODY TR").each(function () {
+				var row = $(this);
+				var UserRoleMappingViewModel = {};
+				var menuid = "input#UserRoleMappingViewModel_" + counter + "_MenuId";
+				UserRoleMappingViewModel.MenuId = $(menuid).val();
+
+				var roleid = "input#UserRoleMappingViewModel_" + counter + "_RoleId";
+				UserRoleMappingViewModel.RoleId = $(roleid).val();
+
+
+				//UserRoleMappingViewModel.PageName = $("span#UserRoleMappingViewModel_" + counter + "_PageName").html();
+				UserRoleMappingViewModel.isView = $("input#UserRoleMappingViewModel_" + counter + "_isView").is(":checked");
+				UserRoleMappingViewModel.isNew = $("input#UserRoleMappingViewModel_" + counter + "_isNew").is(":checked");
+				UserRoleMappingViewModel.isEdit = $("input#UserRoleMappingViewModel_" + counter + "_isEdit").is(":checked");
+				UserRoleMappingViewModel.isDelete = $("input#UserRoleMappingViewModel_" + counter + "_isDelete").is(":checked");
+				UserRoleMappingViewModel.PageName = $("input#RolenameField").val();
+				userroles.push(UserRoleMappingViewModel);
+				counter++;
+			});
+
+ 
+			//Send the JSON array to Controller using AJAX.
+				if ($("input#RolenameField").val().trim()) {
+					$.ajax({
+					type: "POST",
+					url: "/UserGroup/EditRole",
+					data: JSON.stringify(userroles),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: function () {
+						window.location.href = "/UserGroup/Index";
+					},
+					error:
+						function () {
+							$("#lblError").show();
+				$("#btnsave").attr("disabled", false);
+	  $("#btnsave").val("Save");
+
+						}
+					});
+				}
+				else {
+			alert("Enter Role Name..!!");
+
+				}
+		});//$("Body").onclick
+
+		})
+	</script>
+
+}

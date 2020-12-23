@@ -1,0 +1,175 @@
+﻿@model IEnumerable<HFZMVC.Models.EntityFramework.RoleMaster>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Add New</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashobard</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Users</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card m-b-20">
+            <div class="card-body">
+                @using (Html.BeginForm("Add", "User", FormMethod.Post, new { onsubmit = "return checkformOne();",id = "newuserform", accept_charset = "utf-8" }))
+                {
+                    <div class="inputformfields">
+                        <h5 class="page-title">General Information</h5>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                                <hr>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                                <label>Full Name</label>
+                                <input type="text" class="form-control" id="Name" name="Name" autocomplete="off" required placeholder="Enter Full Name">
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                                <label>Email Address</label>
+                                <input type="email" class="form-control" onchange="checkemail(this);" id="EmailID" name="EmailID" autocomplete="off" required placeholder="Enter Email">
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                                <label>Phone Number</label>
+                                <input type="text" class="form-control numberonly" id="PhoneNumber" name="PhoneNumber" autocomplete="off" required placeholder="Enter Phone">
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                                <label>User Name</label>
+                                <input type="text" class="form-control" id="UserName" onchange="checkusername(this);" name="UserName" autocomplete="off" required placeholder="Enter username">
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                                <label>Password</label>
+                                <input type="password" class="form-control" id="Password" name="Password" autocomplete="off" required placeholder="Enter password">
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                                <label>Access Role</label>
+                                <select id="ID" name="ID" required class="form-control">
+                                    <option>-- Select Role --</option>
+                                    @{ 
+                                        foreach (var item in Model)
+                                        {
+                                            <option value="@item.ID">@item.RoleName</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                <div class="form-group" style="margin: 38px 26px 0px 0px;float: left;">
+                                    <input type="hidden" name="Status" id="Status" value="true" />
+                                    <input checked type="checkbox" onchange="$('#Status').val(this.checked)"> Active
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" id="btnsave" class="btn btn-primary btn-lg waves-effect waves-light">Save</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->
+<script type="text/javascript">
+    $(".numberonly").keypress(function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            return false;
+        }
+    });
+    function checkformOne() {
+        if ($(".bs-example-modal-center input#Name").val().trim() == "") {
+            alert("Name is Required.");
+            return false;
+        }
+        if ($(".bs-example-modal-center input#EmailID").val().trim() == "") {
+            alert("Email is Required.");
+            return false;
+        }
+        else {
+            if (validateEmail($(".bs-example-modal-center input#EmailID").val().trim()) == false) {
+                alert("Invalid Email Address.");
+                return false;
+            }
+            else {
+                if ($(".bs-example-modal-center input#EmailID").hasClass("duplicate")) {
+                    alert("Email Already Exists..!!!");
+                    return false;
+                }
+            }
+        }
+        if ($(".bs-example-modal-center input#PhoneNumber").val().trim() == "") {
+            alert("Phone Number is Required.");
+            return false;
+        }
+        if ($(".bs-example-modal-center input#UserName").val().trim() == "") {
+            alert("UserName is Required.");
+            return false;
+        }
+        else {
+            if ($(".bs-example-modal-center input#UserName").hasClass("duplicate")) {
+                alert("UserName Already Exists..!!!");
+                return false;
+            }
+        }
+        if ($(".bs-example-modal-center input#Password").val().trim() == "") {
+            alert("Password is Required.");
+            return false;
+        }
+        return true;
+    }
+
+    function validateEmail($email) {
+        var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,6})?$/;
+        return ($email.length > 0 && emailReg.test($email));
+    }
+
+    function checkusername(obj) {
+        var UserName = obj.value;
+        $.ajax({
+            url: "/User/checkData",
+            async: false,
+            data: {                  // data that will be sent
+                UserName: UserName,
+                type: "UserName"
+            },
+            type: "POST",            // type of submision
+            dataType: "text",        // what type of data we'll get back
+            success: function (data) {
+                if (data == true) {
+                    alert("UserName Already Exists..!!!");
+                    $(obj).removeClass("duplicate").addClass("duplicate");
+                }
+                else {
+                    $(obj).removeClass("duplicate");
+                }
+            }
+        });
+    }
+
+    function checkemail(obj) {
+        var email = obj.value;
+        $.ajax({
+            url: "/User/checkData",
+            async: false,
+            data: {                  // data that will be sent
+                email: email,
+                type: "email"
+            },
+            type: "POST",            // type of submision
+            dataType: "text",        // what type of data we'll get back
+            success: function (data) {
+                if (data == true) {
+                    alert("Email Already Exists..!!!");
+                    $(obj).removeClass("duplicate").addClass("duplicate");
+                }
+                else {
+                    $(obj).removeClass("duplicate");
+                }
+            }
+        });
+    }
+</script>

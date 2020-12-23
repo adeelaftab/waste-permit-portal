@@ -1,0 +1,596 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
+    <title>Login - Bee'ah Waste Disposal Management Service.</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800" rel="stylesheet">
+    <link href="~/Assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Assets/css/icons.css" rel="stylesheet" type="text/css">
+    <link href="~/Assets/css/style_home.css" rel="stylesheet" type="text/css">
+    <!-- Include SmartWizard CSS -->
+    <link href="~/Assets/css/smart_wizard.css" rel="stylesheet" type="text/css" />
+
+    <!-- Optional SmartWizard theme -->
+    <link href="~/Assets/css/smart_wizard_theme_circles.css" rel="stylesheet" type="text/css" />
+
+    <style>
+      .required {
+         color:red;
+         font-size:0.8em;
+      }
+      #smartwizard .sw-toolbar-top {
+        display: none !important;
+      }
+
+        table i {
+            float: left;
+            margin: 4px 10px 0 0;
+        }
+
+        table p {
+            margin: 0;
+        }
+
+        .sw-theme-circles > ul.step-anchor > li > a i {
+            font-size: 25px !important;
+            float: none;
+            display: table;
+            margin: 6px auto;
+        }
+
+        .sw-theme-circles > ul.step-anchor > li.done > a:hover {
+            color: #f5f5f5;
+        }
+
+        #step-3 tbody tr td,
+        #step-3 tbody tr th,
+        #step-3 tbody tr th p,
+        #step-3 h6, #step-3 h4.header-title,
+        #step-3 h4.header-title span,
+        #exampleModal .modal-header h5,
+        #exampleModal .modal-header button.close span {
+            color: #616161 !important;
+        }
+
+        #step-3 h4.header-title {
+            font-size: 1.5rem;
+            margin-bottom: .5rem;
+            font-family: inherit;
+            font-weight: 500;
+            line-height: 1.2;
+            color: inherit;
+        }
+
+        .signupform .sw-theme-circles > ul.step-anchor > li {
+            margin-left: 40px;
+        }
+
+        .signupform label {
+            color: #495057;
+        }
+		@@media screen and (max-width: 767px) {
+			
+			        #step-3 tbody tr td,
+        #step-3 tbody tr th,
+        #step-3 tbody tr th p,
+        #step-3 h6, #step-3 h4.header-title,
+        #step-3 h4.header-title span,
+        #exampleModal .modal-header h5,
+        #exampleModal .modal-header button.close span {
+            color: black !important;
+			display: flex;
+        }
+					#step-3 h4.header-title span{
+			font-size: 20px;
+		}
+		}
+    </style>
+</head>
+
+<body bgcolor="#29c017" style="    background-color: #29c017">
+  
+  <div class="main sign-in-main">
+    <section class="content-area">
+      <div class="rt-block-bg"></div>
+      <div class="rt-block-bg-fix-scroll"></div>
+      <div class="rt-block">
+        <a href="#" class="logo">Beeah Logo</a>
+        <h2>Login</h2>
+        <p class="top-para">Welcome back to HFZ Portal</p>
+        <div class="form-area">
+          @if (ViewBag.Error != null) {
+            <label style="color: red;text-shadow: 1px 0px white;">@ViewBag.Error</label>
+          }
+          @using (Html.BeginForm("Login", "User", FormMethod.Post, new { accept_charset = "utf-8" })) {
+            <div class="field user-name">
+              <input type="text" id="Username" name="Username" data-rule-required="true" placeholder="Username or Email" autocomplete="off" required />
+              <span class="validate-img"></span>
+            </div>
+            <div class="field pass-word">
+              <input type="password" id="Password" name="Password" data-rule-required="true" placeholder="Password" autocomplete="off" required />
+              <span class="validate-img"></span>
+            </div>
+
+            if (ViewBag.Success != null) {
+              <label style="color: green;background: white;">@ViewBag.Success</label>
+            }
+            <div><input type="submit" value="Login" /></div>
+          }
+
+        </div>
+        <a href="/User/forgetpassword" class="forget-pwd-link">Forgot your password ?</a>
+        <div class="sign-link">
+          <span>Need an account?</span>
+          <a href="javascript:;" class="sign-up" data-toggle="modal" data-target="#exampleModal">
+            Sign Up
+          </a>
+          @*<a href="/User/register" class="sign-up">Sign Up</a>*@
+        </div>
+        <hr />
+          @*<div style="display:none;">
+            <a href="/User/SAPConnect" > Connect to SAP</a>
+          </div>*@
+      </div>
+      <div class="lt-block">
+        <div class="lt-content">
+          <div class="whiteoverlay"></div>
+          <a href="#" class="logo">Beeah Logo</a>
+          <span class="top-msg">Introducing Bee'ah Waste Disposal Management Service</span>
+          <h1>Hamriyah Free<br /> Zone Sharjah</h1>
+        </div>
+        <footer class="footer">
+          <div class="footer-content">
+            <p>Copyrights © @DateTime.Now.Year, Beeah. All Rights Reserved.</p>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </div>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Create New Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body signupform">
+          @if (ViewBag.signupError != null) {
+            <label style="color: red;text-shadow: 1px 0px white;">@ViewBag.signupError</label>
+          }
+          @using (Html.BeginForm("Register", "User", FormMethod.Post, new { enctype = "multipart/form-data", accept_charset = "utf-8" })) {
+            <!-- Smart Wizard HTML -->
+            <div id="smartwizard">
+              <ul>
+                <li><a href="#step-1"><i style="font-size: 40px" class="fa fa-info-circle"></i><small>General Information</small></a></li>
+                <li><a href="#step-2"><i style="font-size: 40px" class="fa fa-sitemap "></i><small>Company Information</small></a></li>
+                <li><a onclick="loadsummery();" href="#step-3"><i style="font-size: 40px" class="fa fa-clipboard-list"></i><small>Summary</small></a></li>
+              </ul>
+
+              <div class="inputformfields">
+                <div id="step-1" class="">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                      <hr>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label>Full Name <span class="required">*</span></label>
+                      <input class="form-control" type="text" id="Name" name="Name" autocomplete="off" required />
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label>Company Name <span class="required">*</span></label>
+                      <input class="form-control" type="text" id="CompanyName" name="CompanyName" autocomplete="off" required />
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label>Email Address<span class="required">*</span></label>
+                      <input class="form-control" type="text" onchange="checkemail(this);" id="EmailID" name="EmailID" autocomplete="off" required />
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label>Phone Number<span class="required">*</span></label>
+                      <input class="form-control numberonly" type="text" id="PhoneNumber" name="PhoneNumber" autocomplete="off" required />
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label>User Name<span class="required">*</span></label>
+                      <input class="form-control" type="text" id="UserName" onchange="checkusername(this);" name="UserName" autocomplete="off" required />
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label>Password<span class="required">*</span></label>
+                      <input class="form-control" type="password" id="Password" name="Password" autocomplete="off" required />
+                    </div>
+                  </div>
+                </div>
+                <div id="step-2" class="">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                      <hr>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label>Office Address <span class="required">*</span></label>
+                      <input class="form-control" type="text" id="Address" name="Address" autocomplete="off" required />
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label>Trade License Number<span class="required">*</span></label>
+                      <input class="form-control numberonly" type="text" id="TradelicenseNo" name="TradelicenseNo" autocomplete="off" required />
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label for="CompanyLicenseFile">Company License<span class="required">*</span></label>
+                      <input class="form-control" for="CompanyLicenseFile" type="text" id="CompanyLicenseNo" disabled autocomplete="off" />
+                      <div class="uploaddocument-btn"><i class="fa fa-upload"></i><input type="file" onchange="checkfile(this);" name="CompanyLicenseFile" id="CompanyLicenseFile" required></div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label>VAT Number<span class="required">*</span></label>
+                      <input class="form-control numberonly" type="text" id="VatlicenseNo" name="VatlicenseNo" autocomplete="off" required />
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label for="VatCertificateFile">VAT Certificate</label>
+                      <input class="form-control" type="text" for="VatCertificateFile" id="VatCertificate" disabled autocomplete="off" />
+                      <div class="uploaddocument-btn"><i class="fa fa-upload"></i><input type="file" onchange="checkfile(this);" name="VatCertificateFile" id="VatCertificateFile" required></div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                      <label>Second Address</label>
+                      <input class="form-control" type="text" id="Address2" name="Address2" autocomplete="off" />
+                    </div>
+                  </div>
+                </div>
+                <div id="step-3" class="">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                      <hr>
+                      <h6 class="wizard-title">Please review your submitted information below:</h6>
+                      <hr>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="card" style="min-height: 100%;">
+                        <div class="card-body charges summary">
+                          <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>General Information</span></h4>
+                          <div class="table-responsive">
+                            <table class="table mb-0">
+                              <tbody>
+                                <tr>
+                                  <th scope="row"><i class="ti-zip charges-icons"></i> <p>Full Name</p></th>
+                                  <td id="Namelabel"></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row"><i class="ti-settings charges-icons"></i> <p>Company Name</p></th>
+                                  <td id="CompanyNamelabel"></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Email Address</p></th>
+                                  <td id="EmailIDlabel"></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row"><i class="ti-bookmark-alt charges-icons"></i> <p>Phone number</p></th>
+                                  <td id="PhoneNumberlabel"></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row"><i class="ti-files charges-icons"></i> <p>User Name</p></th>
+                                  <td id="UserNamelabel"></td>
+                                </tr>
+                                @*<tr>
+                                      <th scope="row"><i class="ti-files charges-icons"></i> <p>password</p></th>
+                                      <td id="Passwordlabel"></td>
+                                  </tr>*@
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="card-body charges summary">
+                          <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Company Information</span></h4>
+                          <div class="table-responsive">
+                            <table class="table mb-0">
+                              <tbody>
+                                <tr>
+                                  <th scope="row"><i class="ti-zip charges-icons"></i> <p>Office Address</p></th>
+                                  <td id="Addresslabel"></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row"><i class="ti-settings charges-icons"></i> <p>Trade License Number</p></th>
+                                  <td id="TradelicenseNolabel"></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Company License</p></th>
+                                  <td id="CompanyLicenseFilelabel"></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>VAT License Number</p></th>
+                                  <td id="VatlicenseNolabel"></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row"><i class="ti-bookmark-alt charges-icons"></i> <p>VAT Certificate</p></th>
+                                  <td id="VatCertificateFilelabel"></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row"><i class="ti-files charges-icons"></i> <p>Second Address</p></th>
+                                  <td id="Address2label"></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!--- End  -->
+  <!-- jQuery  -->
+  <script src="~/Assets/js/jquery.min.js"></script>
+  <script src="~/Assets/js/bootstrap.bundle.min.js"></script>
+  <script src="~/Assets/js/jquery.slimscroll.js"></script>
+  <script src="~/Assets/js/waves.min.js"></script>
+  <script src="../plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+  <!-- Include SmartWizard JavaScript source -->
+  <script type="text/javascript" src="~/Assets/js/jquery.smartWizard.min.js"></script>
+  <!-- App js -->
+  <script src="~/Assets/js/app.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      @if(TempData["SuccessLogin"] != null){
+<text>
+      alert('@TempData["SuccessLogin"]')
+    </text>
+
+      }
+
+
+      if (window.location.href.indexOf('#exampleModal') != -1) {
+        $('#exampleModal').modal('show');
+      }
+
+      $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection, stepPosition) {
+        if (stepDirection == "forward" && stepNumber == 0) {
+          return checkformOne(); //UserData
+        }
+        else if (stepDirection == "forward" && stepNumber == 1) {
+          return checkformtwo(); //CompanyData
+        }
+
+
+
+      });
+      // Step show event
+      $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection, stepPosition) {
+        //alert("You are on step "+stepNumber+" now");
+        loadsummery();
+        if (stepPosition === 'first') {
+          $("#prev-btn").addClass('disabled');
+          $(".finishbtn").hide();
+        } else if (stepPosition === 'final') {
+          $("#next-btn").addClass('disabled');
+          $(".finishbtn").show();
+        } else {
+          $(".finishbtn").hide();
+          $("#prev-btn").removeClass('disabled');
+          $("#next-btn").removeClass('disabled');
+        }
+      });
+
+      // Toolbar extra buttons
+      var btnFinish = $('<button></button>').text('Finish')
+        .addClass('btn btn-success finishbtn')
+        .css("display", "none")
+        .on('click', function () {
+          //alert('Registration Successful, A verification email will be sent to registered email.');
+          //$('#exampleModal').modal('hide');
+        });
+      var btnCancel = $('<button></button>').text('Cancel')
+        .addClass('btn btn-danger')
+        .on('click', function () { $('#smartwizard').smartWizard("reset"); $('#smartwizard input').val('').change(); });
+
+
+      // Smart Wizard 1
+      $('#smartwizard').smartWizard({
+        selected: 0,
+        theme: 'circles',
+        transitionEffect: 'fade',
+        showStepURLhash: false,
+        toolbarSettings: {
+          toolbarPosition: 'both',
+          toolbarExtraButtons: [btnFinish, btnCancel]
+        }
+      });
+
+    });
+
+    function checkformOne() {
+      if ($("#step-1 input#Name").val().trim() == "") {
+        alert("Name is Required.");
+        return false;
+      }
+      if ($("#step-1 input#CompanyName").val().trim() == "") {
+        alert("Company Name is Required.");
+        return false;
+      }
+      if ($("#step-1 input#EmailID").val().trim() == "") {
+        alert("Email is Required.");
+        return false;
+      }
+      else {
+        if (validateEmail($("#step-1 input#EmailID").val().trim()) == false) {
+          alert("Invalid Email Address.");
+          return false;
+        }
+        else {
+          if ($("#step-1 input#EmailID").hasClass("duplicate")) {
+            alert("Email Already Exists..!!!");
+            return false;
+          }
+        }
+      }
+      if ($("#step-1 input#PhoneNumber").val().trim() == "") {
+        alert("Phone Number is Required.");
+        return false;
+      }
+      if ($("#step-1 input#UserName").val().trim() == "") {
+        alert("UserName is Required.");
+        return false;
+      }
+      else {
+        if ($("#step-1 input#UserName").hasClass("duplicate")) {
+          alert("UserName Already Exists..!!!");
+          return false;
+        }
+      }
+      if ($("#step-1 input#Password").val().trim() == "") {
+        alert("Password is Required.");
+        return false;
+      }
+      return true;
+    }
+
+    function checkformtwo() {
+      if ($("#step-2 input#Address").val().trim() == "") {
+        alert("Address is Required.");
+        return false;
+      }
+      if ($("#step-2 input#TradelicenseNo").val().trim() == "") {
+        alert("Trade license No is Required.");
+        return false;
+      }
+      if ($("#step-2 input#CompanyLicenseFile").val().split('\\').pop().trim() == "") {
+        alert("Company License File is Required.");
+        return false;
+      }
+      if ($("#step-2 input#VatlicenseNo").val().trim() == "") {
+        alert("VAT No is Required.");
+        return false;
+      }
+      if ($("#step-2 input#VatCertificateFile").val().split('\\').pop().trim() == "") {
+        alert("VAT Certificate File is Required.");
+        return false;
+      }
+      /*if ($("#step-2 input#Address2").val().trim() == "") {
+          alert("Address2 is Required.");
+          return false;
+      }*/
+      return true;
+    }
+
+
+    $(".numberonly").keypress(function (e) {
+      if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        return false;
+      }
+    });
+
+    function validateEmail($email) {
+      var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,6})?$/;
+      return ($email.length > 0 && emailReg.test($email));
+    }
+
+    function loadsummery() {
+      $(".inputformfields").find("input").each(function (index, field) {
+        let type = $(this).attr('type');
+        if (type != "file") {
+          let val = $(this).val();
+          let id = $(this).attr('id');
+          $("#" + id + "label").html(val);
+        }
+        else {
+          let file = $(this).val().split('\\').pop();
+          let id = $(this).attr('id');
+          if (id == "VatCertificateFile") {
+            console.log(file);
+            $("#VatCertificate").val(file);
+          }
+          if (id == "CompanyLicenseFile") {
+            $("#CompanyLicenseNo").val(file);
+          }
+          $("#" + id + "label").html(file);
+        }
+
+
+      });
+    }
+
+    function checkusername(obj) {
+      if ($('#exampleModal').is(':visible')) {
+        var UserName = obj.value;
+        $.ajax({
+          url: "/User/checkData",
+          async: false,
+          data: {                  // data that will be sent
+            UserName: UserName,
+            type: "UserName"
+          },
+          type: "POST",            // type of submision
+          dataType: "text",        // what type of data we'll get back
+          success: function (data) {
+            if (data == true) {
+              alert("UserName Already Exists..!!!");
+              $(obj).removeClass("duplicate").addClass("duplicate");
+            }
+            else {
+              $(obj).removeClass("duplicate");
+            }
+          }
+        });
+      }
+    }
+    function checkemail(obj) {
+      if ($('#exampleModal').is(':visible')) {
+        var email = obj.value;
+        $.ajax({
+          url: "/User/checkData",
+          async: false,
+          data: {                  // data that will be sent
+            email: email,
+            type: "email"
+          },
+          type: "POST",            // type of submision
+          dataType: "text",        // what type of data we'll get back
+          success: function (data) {
+            if (data == true) {
+              alert("Email Already Exists..!!!");
+              $(obj).removeClass("duplicate").addClass("duplicate");
+            }
+            else {
+              $(obj).removeClass("duplicate");
+            }
+          }
+        });
+      }
+    }
+
+    function checkfile(v) {
+      let file = $(v).val().split('\\').pop().trim();
+      let id = $(v).attr('id');
+      var regex = /(?:\.([^.]+))?$/;
+      var ext = regex.exec(file)[1].toLocaleLowerCase();
+      if (ext == "pdf" || ext == "jpg" || ext == "png") {
+        if (id == "VatCertificateFile") {
+          console.log(file);
+          $("#VatCertificate").val(file);
+        }
+        if (id == "CompanyLicenseFile") {
+          $("#CompanyLicenseNo").val(file);
+        }
+      }
+      else {
+        alert("File with extension \"" + ext + "\" is not allowed. Only PDF, JPG and PNG formate are acceptable.");
+        $(v).val(null);
+      }
+    }
+  </script>
+</body>
+
+</html>
+
+

@@ -1,0 +1,114 @@
+﻿@{
+
+    var userName = "";
+    if (Session[AppVariables.SessionFullName] != null)
+    {
+        userName = Session[AppVariables.SessionFullName].ToString();
+    }
+    var userRoleType = 0;
+    if (Session[AppVariables.SessionUserRole] != null)
+    {
+        userRoleType = (int)Session[AppVariables.SessionUserRole];
+    }
+}
+
+		<script>
+	
+	$(window).resize(function(){
+			if ($(window).width() <= 767) {  
+				$('body').addClass('enlarged');
+			}     
+		});
+	
+	</script>
+
+<!-- Top Bar Start -->
+<div class="topbar">
+    <!-- LOGO -->
+    <div class="topbar-left">
+        <a href="/Dashboard/Index" class="logo">
+            <span>
+                <img src="~/Assets/images/beeah-logo.svg" alt="" height="50">
+            </span>
+            <i>
+                <img src="~/Assets/images/logo-sm.svg" alt="" height="22">
+            </i>
+        </a>
+    </div>
+    <nav class="navbar-custom">
+        <ul class="navbar-right d-flex list-inline float-right mb-0">
+            @{
+                if (userRoleType == 3)
+                {
+                    <li class="dropdown notification-list d-none d-sm-block">
+                        <form role="search" class="app-search">
+                            <div class="btn-group m-b-10">
+                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">New Request &nbsp;<i class="fas fa-angle-down newrequest-arrow"></i></button>
+                                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    <a class="dropdown-item" href="/Permit/CreateFDC">Food Destruction Certificate</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/Permit/Create">New Permit Request</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/Sampling/Create">New Sampling Request</a>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                    <li>&nbsp;&nbsp;&nbsp;</li>
+                    @*<li class="dropdown notification-list d-none d-sm-block">
+                            <form role="search" class="app-search">
+                                <div class="btn-group m-b-10">
+                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">New Payment &nbsp;<i class="fas fa-angle-down newrequest-arrow"></i></button>
+                                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <a class="dropdown-item" href="/Payments/CardPayment">Card</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="/Payments/ManualPayment">Cheque</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="/Payments/MoneyTransfer">Money Transfer</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>*@
+
+                }
+            }
+            @{
+                if (AppUtil.getUserRole() == 3)
+                {
+                    @Html.Action("Notifications", "App")
+                }
+            }
+
+            <li class="dropdown notification-list">
+                <div style="display: block;height: 100%;vertical-align: middle;margin-top: 25px"> <b>Welcome,@userName </b> </div>
+            </li>
+            <li class="dropdown notification-list">
+                <div class="dropdown notification-list nav-pro-img">
+                    <a class="dropdown-toggle nav-link arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="~/Assets/images/img_user.png" alt="user" class="rounded-circle">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                        <!-- item-->
+                        @{
+                            if (userRoleType == 3)
+                            {
+                                <a class="dropdown-item" href="/Company/Profile"><i class="mdi mdi-account-circle m-r-5"></i> Profile</a>
+                                <a class="dropdown-item" href="/Accounts/Wallet"><i class="mdi mdi-wallet m-r-5"></i> My Wallet</a>
+                            }
+                            else
+                            {
+                                <a class="dropdown-item" href="/User/Profile"><i class="mdi mdi-account-circle m-r-5"></i> Profile</a>
+                            }
+                        }
+                        @*<a class="dropdown-item d-block" href="#"><span class="badge badge-success float-right">11</span><i class="mdi mdi-settings m-r-5"></i> Settings</a>
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-lock-open-outline m-r-5"></i> Lock screen</a>*@
+                        <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="/User/Logout"><i class="mdi mdi-power text-danger"></i> Logout</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <img src="~/Assets/images/hfzlogo-d.png" style="margin-left: 1%;" class="hfzlogo">
+        <button style="float: left;" class="button-menu-mobile open-left waves-effect"><i class="mdi mdi-menu"></i></button>
+    </nav>
+</div>
+<!-- Top Bar End -->

@@ -1,0 +1,83 @@
+﻿@model HFZMVC.Models.EntityFramework.User
+@{
+    string check = "";
+    string chkval = "false";
+    if (Model.Status == true)
+    {
+        check = "checked";
+        chkval = "true";
+    }
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-title-box">
+            <h4 class="page-title">User Profile Management</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Profile</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card m-b-20">
+            <div class="card-body">
+                @using (Html.BeginForm("UpdateProfile", "User", FormMethod.Post, new { accept_charset = "utf-8" }))
+                {
+                    @Html.TextBoxFor(e => e.CreatedOn, new { style = "width:100% ; display:none;", @class = "form-control", id = "CreatedOn" })
+                    @Html.TextBoxFor(e => e.CreatedBy, new { style = "width:100% ; display:none;", @class = "form-control", id = "CreatedBy" })
+              <div class="inputformfields">
+                <h5 class="page-title">General Information</h5>
+                @if (TempData["message"] !=null) {
+                  switch (TempData["message"]) {
+                  
+                    case "1":
+                      <label style="color:green;">Success! Your information is updated.</label>
+                      break;
+                  case "2":
+                      <label style="color:red;">Error,Something wong!</label>
+                      break;
+                  default:
+                    break;
+                }
+                }
+                
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                    <hr>
+                    <input type="hidden" name="ID" id="ID" value="@Model.ID" />
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                    <label>Full Name</label>
+                    @Html.TextBoxFor(e => e.Name, new { style = "width:100%", @class = "form-control", placeholder = "User Full Name", id = "Name", name = "Name", autocomplete = "off" })
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                    <label>Email Address</label>
+                    @Html.TextBoxFor(e => e.EmailID, new { style = "width:100%", @class = "form-control", placeholder = "Enter Email", name = "EmailID", id = "EmailID", autocomplete = "off" })
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                    <label>Phone Number</label>
+                    @Html.TextBoxFor(e => e.PhoneNumber, new { style = "width:100%", @class = "form-control", placeholder = "Enter Email", name = "EmailID", id = "EmailID", autocomplete = "off" })
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                    <label>User Name</label>
+                    @Html.TextBoxFor(e => e.UserName, new { @readonly = "readonly", style = "width:100%", @class = "form-control", placeholder = "Enter UserName", name = "UserName", id = "UserName", autocomplete = "off" })
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                    <label>Password</label>
+                    @Html.PasswordFor(e => e.Password, new { style = "width:100%", @class = "form-control", placeholder = "Enter Password", name = "Password", id = "Password", autocomplete = "off" })
+                  </div>
+                </div>
+                <button type="submit" id="btnsave" class="btn btn-primary btn-lg waves-effect waves-light">Save</button>
+              </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->

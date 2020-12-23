@@ -1,0 +1,444 @@
+﻿@model HFZMVC.Models.PermitRequest.HazardCertificateEditModel
+@{
+  ViewBag.Title = "Edit";
+  var hazardItemCounter = 0;
+  var hazardmsdsCounter = 0;
+  var hazardimageCounter = 0;
+
+}
+
+
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="page-title-box">
+      <h4 class="page-title">Hazardous Waste Application</h4>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0);">Dashoard</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0);">Permit</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+@using (Html.BeginForm("Edit", "HazardCertificate", FormMethod.Post, new { onsubmit = "return checkform();", accept_charset = "utf-8" })) {
+  @Html.HiddenFor(e => e.PermitId)
+<div id="permitimagesform">
+  @foreach (var item in Model.HPhotos) {
+
+    <input type="hidden" name="HPhotos[@hazardimageCounter].Id" id="HPhotos[@hazardimageCounter].Id" value="@item.Id" />
+    <input type="hidden" name="HPhotos[@hazardimageCounter].FilePath" id="HPhotos[@hazardimageCounter].FilePath" value="@item.FilePath" />
+    <input type="hidden" name="HPhotos[@hazardimageCounter].IsDeleted" id="HPhotos[@hazardimageCounter].IsDeleted" value="false" />
+    <input type="hidden" id="HPhotos_@item.Id" value="@hazardimageCounter" />
+    {
+      hazardimageCounter++;
+    }
+  }
+</div>
+  <div id="permitmsdsform">
+    @foreach (var item in Model.HMSDS) {
+
+      <input type="hidden" name="HMSDS[@hazardmsdsCounter].Id" id="HMSDS[@hazardmsdsCounter].Id" value="@item.Id" />
+      <input type="hidden" name="HMSDS[@hazardmsdsCounter].FilePath" id="HMSDS[@hazardmsdsCounter].FilePath" value="@item.FilePath" />
+      <input type="hidden" name="HMSDS[@hazardmsdsCounter].IsDeleted" id="HMSDS[@hazardmsdsCounter].IsDeleted" value="false" />
+      <input type="hidden" id="HMSDS_@item.Id" value="@hazardmsdsCounter" />
+      {
+        hazardmsdsCounter++;
+      }
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card" style="min-height: 100%;">
+        <div class="card-body charges">
+          <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Permit Information</span></h4>
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <tbody>
+                <tr>
+                  <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> Permit ID</th>
+                  <td>@Model.PermitId</td>
+                </tr>
+
+                <tr>
+                  <th scope="row"><i class="ti-settings charges-icons"></i> Contact Person</th>
+                  <td>@ViewBag.company.Name</td>
+                </tr>
+                <tr>
+                  <th scope="row"><i class="ti-settings charges-icons"></i> Contact</th>
+                  <td>@ViewBag.company.PhoneNumber</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card" style="min-height: 100%;">
+        <div class="card-body charges">
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <tbody>
+                <tr>
+                  <th scope="row"><i class="ti-zip charges-icons"></i> Company Name</th>
+                  <td>@ViewBag.company.CompanyName</td>
+                </tr>
+                <tr>
+                  <th scope="row" style="border-top: 0;"><i class="ti-ruler-pencil charges-icons"></i> Email</th>
+                  <td style="border-top: 0;">@ViewBag.company.EmailID</td>
+                </tr>
+
+
+                <tr>
+                  <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> Location</th>
+                  <td>@ViewBag.company.Address</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <br>
+      <div class="page-title-box">
+        <h4 class="page-title pull-left">The Waste Details</h4>
+        <h4 class="page-title pull-right">Application Number #@Model.HazardSAPNo</h4>
+      </div>
+    </div>
+
+
+    <div class="col-lg-12">
+
+      <div class="col-lg-12" style="padding: 30px 20px; background: #fff; display: table;">
+
+        <div class="form-group" style="width: 50%; float: left;">
+          <label class="col-lg-12 control-label">Type of industry</label>
+          <div class="col-lg-12">
+            @Html.DropDownListFor(e=>e.TypeOfIndustry,(IEnumerable<SelectListItem>)ViewBag.TypeOfIndustryList, new { @class = "form-control" })
+            @*<select id="TypeOfIndustry" name="TypeOfIndustry" class="form-control">
+              <option value="op1">Option 1</option>
+              <option value="op2">Option 2</option>
+              <option value="op3">Option 3</option>
+              <option value="op4">Option 4</option>
+              <option value="op5"> Option 5</option>
+              <option value="op6">Option 6</option>
+            </select>*@
+          </div>
+        </div>
+        <div class="form-group" style="width: 50%; float: left;">
+          <label class="col-lg-12 control-label">Frequency of disposal</label>
+          <div class="col-lg-12">
+            @Html.DropDownListFor(e => e.DisposalFrequency, (IEnumerable<SelectListItem>)ViewBag.DisposalFrequencyList, new { @class = "form-control" })
+            @*<select name="DisposalFrequency" id="DisposalFrequency" class="form-control">
+              <option value="Once">Once</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Quarterly">Quarterly</option>
+              <option value="Every 6 months">Every 6 months</option>
+              <option value="Annually">Annually</option>
+            </select>*@
+          </div>
+        </div>
+        <div class="form-group" style="width: 50%; float: left;">
+          <label class="col-lg-12 control-label">Transporter</label>
+          <div class="col-lg-12">
+            <label class="form-control pull-left" style="width: 50%">
+
+              @Html.RadioButtonFor(e => e.transporter, "Bee’ah") Bee’ah
+            </label>
+            <label class="form-control pull-left" style="width: 50%;">
+              @Html.RadioButtonFor(e => e.transporter, "Other") Other
+              @Html.TextBoxFor(e => e.transporterDetails, new { @class = "form-control transportername", @placeholder = "Transporter Name" })
+
+            </label>
+          </div>
+        </div>
+        @*Wrong requirement might not need the following containder  *@
+        <div style="visibility:hidden;" class="form-group" style="width: 50%; float: left;">
+          <label class="col-lg-12 control-label">Container Type</label>
+          <div class="col-lg-12">
+            <input class="form-control" type="text" placeholder="Container Type">
+          </div>
+        </div>
+        <div class="form-group" style="width: 100%; float: left;">
+          <label class="col-lg-12 control-label">Description of waste generation</label>
+          <div class="col-lg-12">
+            @Html.TextAreaFor(e => e.WasteDescription, new { @class = "form-control", rows = "4", placeholder = "Description of how the waste is generated" })
+
+          </div>
+        </div>
+        <div class="form-group" style="width: 100%; float: left;">
+          <div class="col-lg-12">
+            <style>
+              table.noborder td {
+                border: 0;
+              }
+            </style>
+            <table class="table noborder no-padding-table mb-0 table-responsive">
+              <thead class="thead-default">
+                <tr>
+                  <th>S.No</th>
+                  <th class="text-left" style="padding: 10px;">Name</th>
+                  <th class="text-left" style="padding: 10px;">Quantity / Unit Of Measure</th>
+                  <th class="text-left" style="padding: 10px;">State</th>
+                  <th class="text-left" style="padding: 10px;">Container Type</th>
+                </tr>
+              </thead>
+              <tbody id="tblHazardItems" >
+                @for (int i = 0; i < 15; i++) {
+
+                  if ((i+1) <=Model.hazard.Count ) {
+                    <tr id="hazard_@i">
+                      <td>@(i+1)</td>
+                      <td>
+                        <input id="hazard[@i][name]" name="hazard[@i][name]" class="form-control" required type="text" value="@Model.hazard[i].name" placeholder="Waste Name">
+                      </td>
+                      <td>
+                        <input class="form-control" type="text" required placeholder="Waste Quantity" id="hazard[@i][quantityItem]" name="hazard[@i][quantityItem]" value="@Model.hazard[i].quantityItem" style="width: 50%; float: left;">
+                        <select id="hazard[@i][quantity]" name="hazard[@i][quantity]" class="form-control" style="width: 50%">
+                          <option @(Model.hazard[i].quantity == "KG" ? "selected" : "") value="KG">KG</option>
+                          <option @(Model.hazard[i].quantity == "TON" ? "selected" : "") value="TON">TON</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="hazard[@i][state]" name="hazard[@i][state]" class="form-control">
+                          <option @(Model.hazard[i].state == "Liquid" ? "selected" : "") value="Liquid">Liquid</option>
+                          <option @(Model.hazard[i].state == "Solid" ? "selected" : "") value="Solid">Solid</option>
+                          <option @(Model.hazard[i].state == "Semi-Solid" ? "selected" : "") value="Semi-Solid">Semi-Solid</option>
+                          <option @(Model.hazard[i].state == "Gas" ? "selected" : "") value="Gas">Gas</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="hazard[@i][ContainerType]" name="hazard[@i][ContainerType]" class="form-control">
+                          <option @(Model.hazard[i].ContainerType == "TypeDrums/Barrels" ? "selected" : "") value="Drums/Barrels">Drums/Barrels</option>
+                          <option @(Model.hazard[i].ContainerType == "Jerrycans" ? "selected" : "") value="Jerrycans">Jerrycans</option>
+                          <option @(Model.hazard[i].ContainerType == "Buckets" ? "selected" : "") value="Buckets">Buckets</option>
+                          <option @(Model.hazard[i].ContainerType == "Cans" ? "selected" : "") value="Cans">Cans</option>
+                          <option @(Model.hazard[i].ContainerType == "Boxes" ? "selected" : "") value="Boxes">Boxes</option>
+                          <option @(Model.hazard[i].ContainerType == "IBC" ? "selected" : "") value="IBC">IBC</option>
+                          <option @(Model.hazard[i].ContainerType == "Bags/Jumbo Bags" ? "selected" : "") value="Bags/Jumbo Bags">Bags/Jumbo Bags</option>
+                          <option @(Model.hazard[i].ContainerType == "Loose/NA" ? "selected" : "") value="Loose/NA">Loose/NA</option>
+
+                          
+                        </select>
+                      </td>
+                    </tr>
+                  } else {
+              <tr id="hazard_@i">
+                <td>@(i+1)</td>
+                <td>
+                  <input id="hazard[@i][name]" name="hazard[@i][name]" class="form-control" type="text" value="">
+                </td>
+                <td>
+                  <input class="form-control" type="text" id="hazard[@i][quantityItem]" name="hazard[@i][quantityItem]" value="" style="width: 50%; float: left;">
+                  <select id="hazard[@i][quantity]" name="hazard[@i][quantity]" class="form-control" style="width: 50%">
+                    <option value=""></option>
+                    <option value="KG">KG</option>
+                    <option value="TON">TON</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hazard[@i][state]" name="hazard[@i][state]" class="form-control">
+                    <option value=""></option>
+                    <option value="Liquid">Liquid</option>
+                    <option value="Solid">Solid</option>
+                    <option value="Semi-Solid">Semi-Solid</option>
+                    <option value="Gas">Gas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hazard[@i][ContainerType]" name="hazard[@i][ContainerType]" class="form-control">
+                    <option value=""></option>
+                    <option value="Drums/Barrels">Drums/Barrels</option>
+                    <option value="Jerrycans">Jerrycans</option>
+                    <option value="Buckets">Buckets</option>
+                    <option value="Cans">Cans</option>
+                    <option value="Boxes">Boxes</option>
+                    <option value="IBC">IBC</option>
+                    <option value="Bags/Jumbo Bags">Bags/Jumbo Bags</option>
+                    <option value="Loose/NA">Loose/NA</option>
+                  </select>
+                </td>
+              </tr>
+
+
+                  }
+
+                }
+
+              </tbody>
+            </table>
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-lg-6" style="margin-top: 30px;">
+      <div class="card">
+        <div class="card-body charges">
+          <h4 class="mt-0 header-title chargestitle"><i class="ti-image"></i> <span>Upload Hazardous Waste Photos</span></h4>
+          <div class="grid-x grid-padding-x">
+            <div class="small-10 small-offset-1 medium-8 medium-offset-2 cell">
+              <p>
+                <label for="upload_imgs" class="button hollow">Select Your Images +</label>
+                <input class="show-for-sr" onchange="UploadPermitFiles()" type="file" id="upload_imgs" name="upload_imgs" multiple="">
+              </p>
+              <ul style="list-style:none;" class="fileList" id="ulHPhotos">
+                @foreach (var item in Model.HPhotos) {
+                  <li id="li_HPhotos_@item.Id">
+                    <a target="_blank" href="/UploadedFiles/Hazard/@Model.PermitId/@item.FilePath" class="btn btn-primary">View Photo</a>
+                    <a href="javascript:void(0)" onclick="deleteFile('@item.Id','hphoto')" style="text-decoration:underline;color:blue">x Remove</a>
+                  </li>
+
+
+                }
+              </ul>
+            
+              @*<div class="quote-imgs-thumbs quote-imgs-thumbs--hidden" id="img_preview" aria-live="polite"></div>*@
+              @*<p>
+      <input class="btn btn-primary" type="submit" name="submit" value="Upload Images" style="width: 100%;">
+    </p>*@
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6" style="margin-top: 30px;">
+      <div class="card">
+        <div class="card-body charges">
+          <h4 class="mt-0 header-title chargestitle"><i class="ti-file"></i> <span>Upload Material Safety Data Sheet</span></h4>
+          <div class="grid-x grid-padding-x">
+            <div class="small-10 small-offset-1 medium-8 medium-offset-2 cell">
+              <p>
+                <label for="upload_imgs" class="button hollow">Select Your file</label>
+                <input class="show-for-sr" type="file" onchange="UploadMSDSFiles()" id="upmsds" name="upmsds" >
+              </p>
+              <ul style="list-style:none;" class="fileList" id="ulHazardMSDS">
+                @foreach (var item in Model.HMSDS) {
+                  <li id="li_HMSDS_@item.Id"> 
+                    <a target="_blank" href="/UploadedFiles/Hazard/@Model.PermitId/@item.FilePath"  class="btn btn-primary">View File</a>
+                    <a href="javascript:void(0)"  onclick="deleteFile('@item.Id','msds')" style="text-decoration:underline;color:blue">x Remove</a>
+                  </li>
+               
+
+                }
+              </ul>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12" style="margin-top: 30px;">
+      <div class="card">
+        <div class="card-body charges" style="display: flex; align-items: center;">
+          <label><input id="chkAcceptTerms" type="checkbox">&nbsp;&nbsp;I accept <a href="/HazardCertificate/HazardousGuidelines" target="_blank">Hazardous Waste Guidelines</a></label>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12" style="margin-top: 30px;">
+      @if (TempData["errorlist"] != null) {
+        <div id="validationErrors" >
+          <p> The following errors were found, please correct them and re-submit the form:</p>
+          <ul id="ulErorlist">
+            @foreach (var item in (IEnumerable<string>)TempData["errorlist"]) {
+              <li>@item</li>
+            }
+          </ul>
+        </div>
+      } else {
+        <div id="validationErrors" style="display:none;">
+          <p> The following errors were found, please correct them and re-submit the form:</p>
+          <ul id="ulErorlist">
+          </ul>
+        </div>
+      }
+
+
+      <div class="form-group">
+        <label class="col-md-12 control-label"></label>
+        <div class="col-md-12" id="dvPreSubmitControl">
+          <input type="submit" class="btn btn-primary" value="Submit">
+          <span></span>
+          <input type="reset" class="btn btn-default" value="Cancel">
+        </div>
+        <div id="dvSubmitControl" style="display:none;">
+          <span> <img class="loading-image" src="~/Assets/images/loader.gif" alt="loading" /> Submitting......</span>
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+}
+
+
+@section Scripts{
+
+  <style>
+
+    .errorForm {
+    border-bottom:1px solid red;
+    
+    }
+    ul.fileList li{
+      margin-bottom:2px;
+    }
+    #validationErrors {
+      color: red;
+      font-weight: bold;
+    }
+
+    .quote-imgs-thumbs {
+      background: #eee;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+      margin: 1.5rem 0;
+      padding: 0.75rem;
+    }
+
+    .quote-imgs-thumbs--hidden {
+      display: none;
+    }
+
+    .img-preview-thumb {
+      background: #fff;
+      border: 1px solid #777;
+      border-radius: 0.25rem;
+      box-shadow: 0.125rem 0.125rem 0.0625rem rgba(0, 0, 0, 0.12);
+      margin-right: 1rem;
+      max-width: 140px;
+      padding: 0.25rem;
+    }
+
+    .transportername {
+      position: absolute;
+      top: -10px;
+      width: 30%;
+      right: 15px;
+      background: #f2f3f5;
+      padding: 10px;
+    }
+    
+  </style>
+  <script type="text/javascript">
+    var hazardMSDSCoutner =@hazardmsdsCounter;
+    var hazardImageCounter=@hazardimageCounter;
+  </script>
+
+  <script src="~/Scripts/HazardCertificate/EditHazarForm.js?@DateTime.Now.Ticks"></script>
+
+
+
+
+}

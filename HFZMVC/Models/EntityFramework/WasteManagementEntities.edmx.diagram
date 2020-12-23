@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="dbdc7ee929d44e27bf081b215645c172" Name="Diagram1" ZoomLevel="85">
+        <EntityTypeShape EntityType="WasteManageModel.Account" Width="1.5" PointX="12.625" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.Email" Width="1.5" PointX="12.625" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.EmailAttachment" Width="1.5" PointX="17.875" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.eMenu_Master" Width="1.5" PointX="12.625" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.FDCPermit" Width="1.5" PointX="14.875" PointY="23.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.LocationMaster" Width="1.5" PointX="12.625" PointY="23.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.MasterItem" Width="1.5" PointX="12.625" PointY="27.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.NormalPermit" Width="1.5" PointX="14.875" PointY="34.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.PurposeOfSamplingMaster" Width="1.5" PointX="12.625" PointY="44.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.RoleMaster" Width="1.5" PointX="12.625" PointY="47.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.RoleMenuMapping" Width="1.5" PointX="14.875" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.SourceOfSampleMaster" Width="1.5" PointX="12.625" PointY="51.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.UserRoleMapping" Width="1.5" PointX="17.875" PointY="32" IsExpanded="true" />
+        <EntityTypeShape EntityType="WasteManageModel.User" Width="1.5" PointX="10.375" PointY="16.25" IsExpanded="true" />
+        <AssociationConnector Association="WasteManageModel.FK_Accounts_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_Accounts_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_Accounts_Users2" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_Email_Users2" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_Email_Users3" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_EmailAttachment_Email" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_EmailAttachment_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_EmailAttachment_Users3" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_eMenu_Master_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_eMenu_Master_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_eMenu_Master_Users2" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_eMenu_Master_Users3" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_RoleMenuMapping_eMenu_Master" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_FDCPermit_LocationMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_LocationMaster_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_LocationMaster_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_MasterItems_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_MasterItems_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_PurposeOfSamplingMaster_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_PurposeOfSamplingMaster_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_RoleMaster_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_RoleMaster_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_RoleObjectMapping_RoleMaster_RoleID" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_UserRoleMapping_RoleMaster_RoleID" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_RoleMenuMapping_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_RoleMenuMapping_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_SourceOfSampleMaster_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_SourceOfSampleMaster_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_UserRoleMapping_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_UserRoleMapping_Users2" ManuallyRouted="false" />
+        <AssociationConnector Association="WasteManageModel.FK_UserRoleMapping_Users3" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="WasteManageModel.CreditCard" Width="1.5" PointX="0.75" PointY="0.75" />
+        <AssociationConnector Association="WasteManageModel.CardAccountRelation" />
+        <EntityTypeShape EntityType="WasteManageModel.AccountTransaction" Width="1.5" PointX="22.125" PointY="21" />
+        <EntityTypeShape EntityType="WasteManageModel.Invoice" Width="1.5" PointX="23.125" PointY="28" />
+        <AssociationConnector Association="WasteManageModel.FK_AccountTransactions_Accounts" />
+        <AssociationConnector Association="WasteManageModel.FK_AccountTransactions_Invoices" />
+        <AssociationConnector Association="WasteManageModel.FK_AccountTransactions_Users" />
+        <AssociationConnector Association="WasteManageModel.FK_AccountTransactions_Users1" />
+        <AssociationConnector Association="WasteManageModel.FK_Invoices_Users" />
+        <AssociationConnector Association="WasteManageModel.FK_Invoices_Users1" />
+        <EntityTypeShape EntityType="WasteManageModel.AppLog" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="WasteManageModel.ClientDocumentDetail" Width="1.5" PointX="3.75" PointY="3.75" />
+        <EntityTypeShape EntityType="WasteManageModel.DocumentTypeMaster" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="WasteManageModel.PermitWasteMapping" Width="1.5" PointX="17" PointY="19" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitWasteMapping_Users" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitWasteMapping_Users1" />
+        <EntityTypeShape EntityType="WasteManageModel.PermitTypeMaster" Width="1.5" PointX="12.625" PointY="18.75" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitTypeMaster_Users" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitTypeMaster_Users1" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitWasteMapping_PermitTypeMaster_PermitTypeMasterID" />
+        <EntityTypeShape EntityType="WasteManageModel.Entity" Width="1.5" PointX="8.125" PointY="21.875" />
+        <EntityTypeShape EntityType="WasteManageModel.PackagingStorageMaster" Width="1.5" PointX="12.625" PointY="31.875" />
+        <EntityTypeShape EntityType="WasteManageModel.PermitDocumentDetail" Width="1.5" PointX="6.375" PointY="3.75" />
+        <EntityTypeShape EntityType="WasteManageModel.PermitRequest" Width="1.5" PointX="17.875" PointY="36.125" />
+        <EntityTypeShape EntityType="WasteManageModel.SamplingRequest" Width="1.5" PointX="20.125" PointY="28.375" />
+        <EntityTypeShape EntityType="WasteManageModel.StatusMaster" Width="1.5" PointX="12.625" PointY="35.375" />
+        <AssociationConnector Association="WasteManageModel.FK_AccountTransactions_PermitRequest" />
+        <AssociationConnector Association="WasteManageModel.FK_Users_Entity" />
+        <AssociationConnector Association="WasteManageModel.FK_Invoices_PermitRequest" />
+        <AssociationConnector Association="WasteManageModel.FK_PackagingStorageMaster_Users" />
+        <AssociationConnector Association="WasteManageModel.FK_PackagingStorageMaster_Users1" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitRequest_PurposeOfSamplingMaster" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitRequest_SourceOfSampleMaster" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitRequest_StatusMaster" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitRequest_Users" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitRequest_Users1" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitRequest_Users2" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitRequest_Users3" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitRequest_Users4" />
+        <AssociationConnector Association="WasteManageModel.FK_SamplingDetails_PermitRequest_PermitID" />
+        <AssociationConnector Association="WasteManageModel.FK_SamplingRequests_Users" />
+        <AssociationConnector Association="WasteManageModel.FK_SamplingRequests_Users1" />
+        <AssociationConnector Association="WasteManageModel.FK_StatusMaster_Users" />
+        <AssociationConnector Association="WasteManageModel.FK_StatusMaster_Users1" />
+        <EntityTypeShape EntityType="WasteManageModel.PermitItem" Width="1.5" PointX="20.125" PointY="33.875" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitItems_MasterItems" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitItems_PermitRequest" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitItems_Users" />
+        <AssociationConnector Association="WasteManageModel.FK_PermitItems_Users1" />
+        <EntityTypeShape EntityType="WasteManageModel.HazardContractItem" Width="1.5" PointX="3.375" PointY="7.75" />
+        <EntityTypeShape EntityType="WasteManageModel.AppTask" Width="1.5" PointX="5.375" PointY="7.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

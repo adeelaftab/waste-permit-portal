@@ -1,0 +1,359 @@
+﻿@model HFZMVC.Models.SamplingRequest.CreateSamplingViewModel
+@{
+  ViewBag.Title = "Sampling Request";
+  bool displayError = false;
+  bool displaySuccess = false;
+  if (TempData["message"]!=null) {
+    switch (TempData["message"]) {
+      case "1":
+        displaySuccess = true;break;
+      case "2":
+        displayError = true;break;
+      default:
+        break;
+    }
+  }
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Permits Management</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashoard</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Permits</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("Create", "Sampling", FormMethod.Post, new { @id = "frmSampling" }))
+{
+
+    <div class="row">
+        <div class="col-md-8">
+            <div id="smartwizard">
+                <ul>
+                    <li>
+                        <a href="#step-1">
+                            <i style="font-size: 40px" class="fa fa-info-circle"></i><br />
+                            <small>Request Information</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#step-4">
+                            <i style="font-size: 40px" class="fa fa-clipboard-list"></i><br />
+                            <small>Summary</small>
+                        </a>
+                    </li>
+                </ul>
+                <div>
+                    <div id="step-1" class="">
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group" style="margin-bottom: 0;">
+                              <hr>
+                              <h6 class="wizard-title">New Lab Analysis & Sampling Request:</h6>
+                              <hr>
+                            </div>
+                            @if (displayError) {
+                              <label style="color:red"> Error! Something went wrong,please refresh the page and try resubmiiting your applicaiton.</label>
+                            }
+
+                            <div class="col-sm-12">
+                              <div class="btn-group mo-mb-2 wt-btn">
+                                @Html.DropDownListFor(e => e.PermitId, (IEnumerable<SelectListItem>)ViewBag.PermitList,
+                               "--Assosiated Permit No---",
+                               new { @class = "form-control", style = @"color: white;background: silver;padding: 2px;font-size: 1.1em;" }
+                               )
+                              </div>
+                            </div>
+                          </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <hr><br>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                                    <label>Sampling Address</label>
+                                    @Html.TextAreaFor(e => Model.SamplingAddress, new
+                                    {
+                                        @class = "form-control",
+                                        cols = "20",
+                                        rows = "3",
+                                        @onchange = "$('#SamplingAddressLabel').html(this.value);"
+                                    })
+                                    @*<textarea readonly class="form-control" cols="20"  id="WasteDescription" name="WasteDescription" rows="3"></textarea>*@
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <hr><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-xs-12 col-sm-4 col-md-4 ">
+                                <div class="form-group">
+                                  <label>Purpose of Sampling</label>
+                                  
+                                  @Html.DropDownListFor(e => e.samplingpurpose,
+                                      (IEnumerable<SelectListItem>)ViewBag.samplingpurpose, "---Select----",
+                                      new { @class = "form-control" }
+                                      )
+                                  @*<input type="text" class="form-control" id="samplingpurpose" readonly name="samplingpurpose" value="@Model.samplingpurpose" />*@
+                                </div>
+                              </div>
+                              <div class="col-xs-12 col-sm-4 col-md-4">
+                                <label>Source of Sampling</label>
+                                @Html.DropDownListFor(e => e.samplesource,
+                                      (IEnumerable<SelectListItem>)ViewBag.samplesource, "---Select----",
+                                      new { @class = "form-control" }
+                                      )
+                                @*<input type="text" id="samplesource" class="form-control" readonly name="samplesource" value="@Model.samplesource" />*@
+                              </div>  
+                              <div class="col-xs-12 col-sm-4 col-md-4">
+                                <label>Other Source of Sample</label>
+                                <input type="text" id="OtherSourceOfSample" class="form-control"  name="OtherSourceOfSample" value="@Model.OtherSourceOfSample" />
+                              </div>
+                             
+                            </div>
+                            <div class="row">
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                                    <label>Waste Description</label>
+                                    @Html.TextAreaFor(e => Model.WasteDescription, new
+                                    {
+                                        @class = "form-control",
+                                        cols = "20",
+                                        rows = "3"
+                                    })
+                                    @*<textarea readonly class="form-control" cols="20"  id="WasteDescription" name="WasteDescription" rows="3"></textarea>*@
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div id="step-4" class="">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                                    <hr>
+                                    <h6 class="wizard-title">Please review your submitted information below:</h6>
+                                    <hr>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="card" style="min-height: 100%;">
+                                        <div class="card-body charges">
+                                            <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Request Information</span></h4>
+                                            <div class="table-responsive">
+                                                <table class="table mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th scope="row"><i class="ti-zip charges-icons"></i> Associated Permit No</th>
+                                                            <td id="permitIdLabel">@Model.permitIdLabel</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row"><i class="ti-home charges-icons"></i>Sampling Address</th>
+                                                            <td id="SamplingAddressLabel">@Model.SamplingAddress</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row"><i class="ti-settings charges-icons"></i>Waste Description</th>
+                                                            <td id="WasteDescriptionLabel">@Model.WasteDescriptoinLabel</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr>
+                            </div>
+
+                            <div class="row">
+                                <button type="button" id="btncheckOut" class="btn btn-success btn-lg waves-effect " style="margin: 0 auto;">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card" style="min-height: 100%;">
+                <div class="card-body charges">
+                    <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Charges</span></h4>
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <tbody>
+                                <tr>
+                                    <th scope="row"><i class="ti-zip charges-icons"></i> Sample Fees</th>
+                                    <td>AED</td>
+                                    <td>
+                                        <input readonly data-ServiceFee="@Model.SampleFees" value="@(Model.SampleFees?.ToString("0.0"))" type="text" name="SampleFees" id="SampleFees" class="form-control fees" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><i class="ti-settings charges-icons"></i> Service Fees</th>
+                                    <td>AED</td>
+                                    <td>
+                                        <input readonly class="form-control fees" type="text" id="ServiceFee" name="ServiceFee" value="@(Model.ServiceFee?.ToString("0.0"))" data-ServiceFee="@(Model.ServiceFee?.ToString("0.0"))" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> R&amp;D Fees</th>
+                                    <td>AED</td>
+                                    <td>
+                                        <input readonly class="form-control fees" type="text" id="rdfee" name="rdfee" value="@(Model.rdfee?.ToString("0.0"))" data-rdfee="@(Model.rdfee?.ToString("0.0"))" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><i class="ti-bookmark-alt charges-icons"></i> VAT</th>
+                                    <td>AED</td>
+                                    <td>
+                                        <input readonly class="form-control fees" type="text" id="vat" name="vat" value="@(Model.vat?.ToString("0.0"))" data-vat="@(Model.vat?.ToString("0.0"))" />
+                                    </td>
+                                </tr>
+                                <tr class="totalcharges">
+                                    <th scope="row"><i class="ti-files charges-icons"></i> Total</th>
+                                    <td>AED</td>
+                                    <td>
+                                        <input readonly type="text" value="@(Model.grandtotal?.ToString("0.0"))" id="grandtotal" name="grandtotal" class="form-control fees" data-grandtotal="@(Model.grandtotal?.ToString("0.0"))" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end col -->
+    </div>
+
+
+}
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#smartwizard1').smartWizard({
+                theme: 'circles',
+            });
+          //Execute on load to get details
+          if ($("#PermitId").val()!="") {
+            getPermitDetails();
+          }     
+            $("#PermitId").change(getPermitDetails);
+            
+            function loadsummery() {
+                $('#smartwizard').find('input, textarea').each(function (index, field) {
+                    let id = $(this).attr('id');
+                    let val = $(this).val();
+                    //alert("#" + id + "Label: " + val);
+                    $("#" + id + "Label").html(val);                
+                });
+            }
+            $("#smartwizard").on("leaveStep", function () {
+                loadsummery();
+            });
+
+
+
+            $("#btncheckOut").click(function () {
+              if ($("#samplingpurpose").val() == "" || $("#samplingpurpose").val() ==0) {
+                alert("Please select sampling purpose!");
+                return;
+              }
+              if ($("#samplesource").val() == "" || $("#samplingpurpose").val() == 0) {
+                alert("Please select source of sampling!");
+                return;
+              }
+
+
+                $("#frmSampling").submit();
+            })
+
+
+
+
+
+
+        });
+
+
+      function getPermitDetails() {
+        ///
+        //aJAX Calling
+        ///
+
+        $.ajax(
+          {
+            method: "GET",
+            url: '/Permit/GetWasteDescription/' + $("#PermitId").val(),
+            success: function (data) {
+              if (data.PermitType == undefined) {
+                alert(data);
+              } else {
+
+                $("#WasteDescriptoinLabel").html(data.PermitType);
+                $("#WasteDescription").val(data.PermitType);
+                $("#permitIdLabel").html($("#PermitId").val());
+                $('#samplingpurpose').val(data.SourceSample);
+                $('#samplesource').val(data.PurposeOfSample);
+                $('#OtherSourceOfSample').val(data.OtherSource);
+                if (data.IsHazard !== undefined) {
+                  if (data.IsHazard == true) {
+                    $("#SampleFees").val("1360.0");
+                    
+                  } else {
+                    $("#SampleFees").val("800.0");
+                  }
+                  updatebill();
+                }
+              }
+
+            },
+            error: function (data) {
+              alert("Something went wrong");
+            }
+
+          }
+        )
+      }
+
+      function updatebill() {
+        var samplefee = $("#SampleFees").val();
+        console.log(samplefee);
+        if ($("#SampleFees").val() == "" || $("#SampleFees").val() == "0" || $("#SampleFees").val() == 0) {
+          $("#ServiceFee, #rdfee, #vat, #grandtotal").val("00.0"); return false;
+        }
+        var servicefee = $("#ServiceFee").val();
+
+        var rdfee = $("#rdfee").val();
+        
+
+        var grandtotal = +samplefee + +servicefee + +rdfee;
+        var vat = 5;
+        var tvat = (grandtotal * vat) / 100;
+        $("#vat").val(tvat);
+        grandtotal = grandtotal + tvat;
+        $('#grandtotal').val(grandtotal + '.00');
+
+      }
+    </script>
+
+}

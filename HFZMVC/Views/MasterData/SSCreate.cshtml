@@ -1,0 +1,58 @@
+﻿@model HFZMVC.Models.EntityFramework.SourceOfSampleMaster
+@{
+  ViewBag.Title = "SSCreate";
+}
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="page-title-box">
+
+      @if (ViewBag.section == null) {
+        <h4 class="page-title pull-left">Create Source of Sample</h4>
+      }
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-12">
+    <div class="card m-b-20">
+      <div class="card-body permits-managment-box">
+        @using (Html.BeginForm("SSCreate", "MasterData", FormMethod.Post, new { id = "frm", @class = "form-horizontal" })) {
+          <div class="col-md-6 form-group">
+            <label>Data</label>
+            @Html.EditorFor(e => e.SourceOfSample)
+          </div>
+          <div class="col-md-6 form-group">
+            Is Active?
+
+            @Html.EditorFor(E => E.status)
+          </div>
+
+          <div class="col-md-6 form-group typeContainer" id="dvMasterItem" style="display:none;">
+            <label>Item Code</label>
+            <input type="text" class="form-control" name="ItemCode" id="ItemCode" value="" />
+            <label>Amount</label>
+            <input type="number" class="form-control" name="Amount" id="Amount" value="0" />
+          </div>
+          if (ViewBag.error != null) {
+            <label style="color:red;">@ViewBag.error.ToString()</label>
+          }
+          <div class="col-md-6 form-group">
+            <button type="submit" id="btnCreate"
+                    class="btn btn-success btn-lg waves-effect" style="margin: 0 auto;">
+              Submit
+            </button>
+          </div>
+        }
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>
+

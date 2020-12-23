@@ -1,0 +1,69 @@
+﻿@model IEnumerable<HFZMVC.Models.EntityFramework.eMenu_Master>
+@{
+    if (Session[AppVariables.SessionUsername] != null)
+    {
+        var userName = "";
+        if (Session[AppVariables.SessionUsername] != null)
+        {
+            userName = Session[AppVariables.SessionUsername].ToString();
+        }
+        var userRoleType = 0;
+        if (Session[AppVariables.SessionUserRole] != null)
+        {
+            userRoleType = (int)Session[AppVariables.SessionUserRole];
+        }
+        var parentMenu = Model.Where(e => e.nParentID == 0).ToList();
+        var childMenu = Model.Where(e => e.nParentID != 0).ToList();
+
+
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="left side-menu">
+            <div class="slimscroll-menu" id="remove-scroll">
+                <!--- Sidemenu -->
+                <div id="sidebar-menu">
+                    <!-- Left Menu Start <li class="menu-title">Main Menu</li>-->
+                    <ul class="metismenu" id="side-menu">
+
+                        @foreach (var item in parentMenu)
+                        {
+                            if (childMenu.Where(e => e.nParentID == item.nMenuID && e.strPagePath == "menu-title").Count() > 0)
+                            {
+                                string label = childMenu.Where(e => e.nParentID == item.nMenuID && e.strPagePath == "menu-title").First().strPageName;
+                                <li class="menu-title">@label</li>
+                            }
+                            if (childMenu.Where(e => e.nParentID == item.nMenuID && e.strPagePath != "menu-title").Count() > 0)
+                            {
+                                <li class="has-submenu">
+                                    <a href="javascript:void(0);" class="waves-effect">
+                                        <i class="@item.strImagePath"></i> <span>@item.strPageName<span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span></span>
+                                    </a>
+                                    <ul class="submenu">
+                                        @foreach (var child in childMenu.Where(e => e.nParentID == item.nMenuID).ToList())
+                                        {
+                                            <li><a href="@child.strPagePath">@child.strPageName</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="has-submenu">
+                                    <a href="@item.strPagePath"><i class="@item.strImagePath"></i> <span>@item.strPageName</span></a>
+
+                                </li>
+                            }
+
+
+                        }
+                    </ul>
+                </div>
+                <!-- Sidebar -->
+                <div class="clearfix"></div>
+            </div>
+            <!-- Sidebar -left -->
+        </div>
+        <!-- Left Sidebar End -->
+    }
+
+}
+

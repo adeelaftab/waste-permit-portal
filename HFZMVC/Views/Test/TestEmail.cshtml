@@ -1,0 +1,33 @@
+﻿
+@{
+  ViewBag.Title = "TestEmail";
+}
+
+<h2>Test Email</h2>
+<br />
+@if (ViewBag.Error != null) {
+  <h3>Error!!------ @ViewBag.Error</h3>
+}
+
+
+@using (Html.BeginForm("TestEmail", "Test", FormMethod.Post)) {
+  <div class="form-group">
+    <label>
+      Email Body
+    </label>
+    <textarea id="Message" name="Message" class="form-control">
+
+    </textarea>
+  </div>
+
+  <div class="form-group">
+    <label>
+      To
+    </label>
+    <input type="text" id="To" name="To" class="form-control" />
+
+    
+  </div>
+
+  <button class="btn btn-primary" type="submit"> Save</button>
+}

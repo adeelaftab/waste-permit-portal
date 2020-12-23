@@ -1,0 +1,163 @@
+﻿@model HFZMVC.Models.PermitRequest.PermitRequetDetailModel
+  @{ 
+    var Status = Model.StatusID;
+    bool isCompletedPermit = Model.History.Where(e => e.New_Value == "7").Any();
+  }
+
+<div class="modal fade" id="ViewSampleApplication" tabindex="-1" role="dialog" aria-labelledby="ViewSampleApplicationLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="width: 80%;max-width: unset;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ViewSampleApplicationLabel">Sampling Request</h5>
+
+        <a href="" class="close">
+          <span aria-hidden="true">&times;</span>
+        </a>
+      </div>
+      @if (ViewBag.SampleDetails != null) {
+        <div class="modal-body">
+          <section id="detailscontainer">
+            <div class="row">
+              <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                <label>Sample No:</label>
+                <input type="text" class="form-control" disabled value="@ViewBag.SampleDetails.ID">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-2 col-lg-3 form-group">
+                <label>Sample Description:</label>
+                <input type="text" class="form-control" disabled value="@ViewBag.SampleDetails.SamplingDescription">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-2 col-lg-3 form-group">
+                <label>Sampling Address:</label>
+                <input type="text" class="form-control" disabled value="@ViewBag.SampleDetails.SamplingAddress">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                <label>Request Date:</label>
+                <input type="text" class="form-control" disabled value="@ViewBag.SampleDetails.RequestDate.ToString("dddd, d/ M/ yyyy")">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                <label>Recieved Date:</label>
+                <input type="text" class="form-control" disabled value="@ViewBag.SampleDetails.RecievedDate.ToString("dddd, d/ M/ yyyy")">
+              </div>
+            </div>
+            @if (@ViewBag.SamplePaymentDetails.PaymentMethod == "CreditCard" || @ViewBag.SamplePaymentDetails.PaymentMethod == "AccountBalance") {
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <div class="alert alert-info alert-dismissable">
+                    <i class="fa fa-coffee"></i>
+                    The payment of amount <strong>@ViewBag.SamplePaymentDetails.AmountPaid.ToString("0.0")</strong> has been done via <strong>@ViewBag.SamplePaymentDetails.PaymentMethod</strong> against Transaction ID: <strong>@ViewBag.SamplePaymentDetails.ReferenceNo</strong>.
+                  </div>
+                </div>
+              </div>
+            } else {
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="panel-body">
+                    <iframe frameborder="0" onload="$('iframe').contents().find('img').css({'width': '100%'});" scrolling="no" width="100%" height="532px" src="~/UploadedFiles/@ViewBag.SamplePaymentDetails.ReferenceFIle"></iframe>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                    <label>Transaction Type</label>
+                    <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.PaymentMethod">
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                    <label>Reference No</label>
+                    <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.ReferenceNo">
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                    <label>Amount Payable</label>
+                    <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.AmountPayable.ToString("0.0")">
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                    <label>Amount Paid</label>
+                    <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.AmountPaid.ToString("0.0")">
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                    <label>Transaction Date</label>
+                    <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.TransactionDate.ToString("dddd, d/ M/ yyyy")">
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-group">
+                    <label>Remarks</label>
+                    <input type="text" class="form-control" disabled value="@ViewBag.SamplePaymentDetails.Remarks">
+                  </div>
+                </div>
+              </div>
+            }
+            @if (Status == 3) {
+              <hr />
+              <div class="row">
+
+                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                  <label style="font-weight:bold;">Upload Sample Certificate:</label>
+                  <input type="file" id="fileSample" class="form-control" />
+                  @*@if (ViewBag.SampleDetails.SampleReportFile != null) {
+                      <a href="~/UploadedFiles/@ViewBag.SampleDetails.SampleReportFile" target="_blank">View Uploaded Certificate</a>
+                    }*@
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                  <label>Select Expiry Date:</label>
+                  <input type="text" id="dtSampleExpiry" readonly="readonly" class="form-control date-picker" name="name" value="" />
+                  @*@if (ViewBag.SampleDetails.ExpiryDate != null) {
+                      <input type="text" id="dtSampleExpiry" readonly="readonly" class="form-control date-picker" name="name" value="@ViewBag.SampleDetails.ExpiryDate.ToString("MM/dd/yyyy")" />
+                    } else {
+
+                    }*@
+
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2 form-group">
+                  <button id="btnUploadSample" style="margin-top:42px;" class="btn btn-primary">Upload File</button>
+                </div>
+              </div>
+
+            }
+
+          </section>
+        </div>
+      }
+
+      <div class="modal-footer">
+        <div class="col-md-12">
+          <div class="col-md-6 pull-left">&nbsp;</div>
+          <div class="col-md-2 pull-left ">
+            <div class="form-group">
+              <div class="checkbox">
+                <label>
+                  <input id="IsMoreSampling" name="IsMoreSampling" type="checkbox" class="chkOption"> More Sampling Required?
+                </label>
+              </div>
+            </div>
+          </div>
+          @*<div class="col-md-2 pull-left " style="padding: 0;">
+                @if (Model.IsHazardRequest)
+                {
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input id="IsHazardousRequired" name="IsHazardousRequired" type="checkbox" class="chkOption"> Hazard Certificate Required?
+                            </label>
+                        </div>
+                    </div>
+
+                }
+            </div>*@
+          <div class="col-md-2 pull-left ">
+            @if (Model.IsPermitApproval) {
+              if (isCompletedPermit) {
+                <div class="btn-group" role="group" aria-label="...">
+                  <button type="button" data-id="18" class="btn btn-success btnSampling">Proceed</button>
+                  <button style="margin-left:4px;" data-id="19" type="button" class="btn btn-danger btnSampling">Reject</button>
+                </div>
+              } else {
+                <div class="btn-group" role="group" aria-label="...">
+                  <button type="button" data-id="12" class="btn btn-success btnSampling">Proceed</button>
+                  <button id="btnReject" style="margin-left:4px;" data-id="5" type="button" class="btn btn-danger">Reject</button>
+                </div>
+              }
+
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

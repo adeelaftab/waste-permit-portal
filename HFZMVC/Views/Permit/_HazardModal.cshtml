@@ -1,0 +1,293 @@
+﻿@model HFZMVC.Models.PermitRequest.PermitRequetDetailModel
+@{
+
+  var Status = Model.StatusID;
+  var transporter = "";
+  if (!String.IsNullOrEmpty(Model.transporter)) {
+    transporter = Model.transporter.ToLower() == "other" ?
+        Model.transporterDetails : Model.transporter;
+  }
+}
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="width: 80%;max-width: unset;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Review Hazardous Waste Application</h5>
+
+        <a href="" class="close">
+          <span aria-hidden="true">&times;</span>
+        </a>
+      </div>
+      <div class="modal-body">
+        <section id="detailscontainer">
+          <div class="row">
+
+            <div class="col-md-12">
+              <div class="panel-body">
+                @if ((Status == 16 || Status == 15) && Model.IsPermitApproval) {
+                  <div class="row">
+                    <div class="col-lg-6">
+                      @if (Status == 16) {
+                        <h4 class="mt-0 header-title chargestitle" style="color:red;width: 100%;text-align: center;"> Hazardous Waste Application Has Been rejected from hazard waste administrator <br /> <b>Remarks:</b>@Model.HazardRemarks</h4>
+
+
+                      } else if (Status == 15) {
+                        <h4 class="mt-0 header-title chargestitle" style="color:green;width: 100%;text-align: center;"> Hazardous Waste Application Has Been Accepted from hazard waste administrator </h4>
+                      }
+                    </div>
+                  </div>
+                }
+                <div class="row">
+                  <h4 class="mt-0 header-title chargestitle" style="width: 100%;text-align: center;"> <span><i class="ti-receipt" style="float: unset;vertical-align: -4px;"></i> Permit Information</span></h4>
+                  <div class="col-lg-6">
+                    <div class="card" style="min-height: 100%;">
+                      <div class="card-body charges summary">
+                        <div class="table-responsive">
+                          <table class="table mb-0 pi-table">
+                            <tbody>
+                              <tr>
+                                <th scope="row"><i class="ti-zip charges-icons"></i> <p>Permit#</p></th>
+                                <td id="companylabel">@Model.ID</td>
+                              </tr>
+                              @if (!String.IsNullOrEmpty(Model.HazardAppNo)) {
+
+                                <tr>
+                                  <th scope="row"><i class="ti-zip charges-icons"></i> <p>Hazardous Waste Application #</p></th>
+                                  <td id="companylabel">@Model.HazardAppNo</td>
+                                </tr>
+                              }
+                              <tr>
+                                <th scope="row"><i class="ti-settings charges-icons"></i> <p>Contact Person</p></th>
+                                <td id="tradelicenselabel">@Model.company.Name</td>
+                              </tr>
+                              <tr>
+                                <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Email</p></th>
+                                <td id="managerlabel">@Model.company.EmailID</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="card" style="min-height: 100%;">
+                      <div class="card-body charges summary">
+                        <div class="table-responsive">
+                          <table class="table mb-0 pi-table">
+                            <tbody>
+                              <tr>
+                                <th scope="row"><i class="ti-zip charges-icons"></i> <p>Company Name</p></th>
+                                <td id="companylabel">@Model.company.CompanyName</td>
+                              </tr>
+                              <tr>
+                                <th scope="row"><i class="ti-settings charges-icons"></i> <p>Contact</p></th>
+                                <td id="tradelicenselabel">@Model.company.PhoneNumber</td>
+                              </tr>
+                              <tr>
+                                <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Location</p></th>
+                                <td id="managerlabel">@Model.company.Address</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="card" style="min-height: 100%;">
+                <div class="card-body summary p-0 pt-4">
+
+                  <div class="table-responsive">
+                    <table class="table mb-0 nqsctable">
+                      <thead>
+                        <tr>
+                          <th>SN</th>
+                          <th style="min-width:150px;">Name</th>
+                          <th>Quantity </th>
+                          <th>State<br />(Liquid,Solid,..)</th>
+                          <th>Container Type<br />(IBC,Drums,....)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @{
+                          if (ViewBag.hazards != null) {
+                            var hazardCounter = 0;
+                            foreach (var item in (IEnumerable<HFZMVC.Models.PermitRequest.HazardItems>)ViewBag.hazards) {
+                              { hazardCounter++; }
+                              <tr>
+                                <td>@(hazardCounter)</td>
+                                <td><input type="text" value="@item.name" disabled id="name" class="form-control" /></td>
+                                <td><input type="text" value="@item.quantityItem @item.quantity" disabled id="quantity" class="form-control" /></td>
+                                <td><input type="text" value="@item.state" disabled id="state" class="form-control" /></td>
+                                <td><input type="text" value="@item.ContainerType" disabled id="ContainerType" class="form-control" /></td>
+                              </tr>
+                            }
+                          }
+
+                        }
+                      </tbody>
+                    </table>
+                    <table class="table mb-0 dft-table">
+                      <tbody>
+                        <tr>
+                          <th scope="row" style="width: 280px;">Description of Waste Generation</th>
+                          <td><textarea id="WasteDescription" disabled class="form-control">@Model.WasteDescription</textarea></td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Frequency of Disposal</th>
+                          <td><textarea readonly id="DisposalFrequency" name="DisposalFrequency" class="form-control">@Model.DisposalFrequency</textarea></td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Transporter</th>
+                          <td>
+                            
+                       <textarea id="transporter" readonly name="transporter" class="form-control">@transporter</textarea>
+                          
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    @if (ViewBag.hazardsdetail != null) {
+                      <table class="table mb-0 rhwa-btm-opt">
+                        <thead>
+                          <tr>
+                            <th>Hazardous waste application Photos</th>
+                            <th>Hazardous waste application MSDS file</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          <tr>
+                            <td>
+                              <ul class="ulDocList">
+                                @foreach (var item in ViewBag.hazardsdetail.HPhotos) {
+
+                                  <li><a href="~/UploadedFiles/Hazard/@Model.ID/@item" target="_blank" class="btn btn-primary">View Photo</a></li>
+                                }
+
+                              </ul>
+                            </td>
+                            <td>
+                              <ul class="ulDocList">
+                                @foreach (var item in ViewBag.hazardsdetail.HMSDS) {
+
+                                  <li><a href="~/UploadedFiles/Hazard/@Model.ID/@item" target="_blank" class="btn btn-primary">View File</a></li>
+                                }
+                              </ul>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              @if ((Status == 16 || Status == 15) && Model.IsPermitApproval) {
+                <div class="col-lg-12">
+                  <div class="col-lg-12">
+
+                    <div class="panel-body" id="sampleinputpanelpopup" style="display:block;">
+                      <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                          <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                              <hr>
+                              <h6 class="wizard-title">Please Confirm the purpose of sampling below:</h6>
+                              <hr>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                              <label>Purpose of Sampling</label>
+
+                              @Html.DropDownListFor(e => e.samplingpurpose,
+                            (IEnumerable<SelectListItem>)ViewBag.samplingpurpose, "---Select----",
+                            new { @class = "form-control" }
+                            )
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                              <label>Source of Sample</label>
+
+                              @Html.DropDownListFor(e => e.samplesource,
+                            (IEnumerable<SelectListItem>)ViewBag.samplesource, "---Select----",
+                            new { @class = "form-control" }
+                            )
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 form-group">
+                          <label>Other Source of Sample</label>
+                          <input class="form-control" data-val="true" data-val-length="Other Source of Sample cannot be longer than 200 characters" data-val-length-max="200" data-val-required="Other Source of Sample is required" id="OtherSourceOfSample" name="OtherSourceOfSample" rows="3" value="" type="text">
+                          <span class="field-validation-valid text-danger" data-valmsg-for="OtherSourceOfSample" data-valmsg-replace="true"></span>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label>
+                          <input id="IsSampling" checked onchange="$('#sampleinputpanelpopup').toggle();" name="IsSampling" class="chkOption" type="checkbox"> Sampling Required?
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+        </section>
+      </div>
+      <div class="modal-footer">
+        @if (Model.IsHazardApproval) {
+          @*this part is shifted to SAP*@
+          @*<button id="btnSave" style="margin-left:4px;" type="button" data-id="16" class="btn btn-danger"> Reject</button>*@
+          @*<a href="javascript:void(0)" data-toggle="modal" data-target="#hazardeditModal" class="btn btn-secondary">Request for Edit</a>*@
+          @*<a href="/Permit/ChangePermitStatus/@Model.ID?statusId=15" class="btn btn-primary">Approve</a>*@
+          <!-- Move To Payments -->
+          <br />
+
+        }
+        @if ((Status == 16 || Status == 15) && Model.IsPermitApproval) {
+          <button id="btnReject" style="margin-left:4px;" data-id="5" type="button" class="btn btn-danger">Reject</button>
+          <button id="btnSave" type="button" data-id="12" class="btn btn-success"> Approve</button>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@* Modal for Hazard Remarks *@
+<div class="modal fade" id="hazardeditModal" tabindex="-1" role="dialog" aria-labelledby="hazardeditModal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h4 class="modal-title" id="myModal-label">Request for edit</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Pleasse enter your remarks </label>
+          <br />
+          <small>(Applicant will see this remarks for reference to update Hazardous Waste Application)</small>
+          <textarea id="hazardRemarks" class="form-control"></textarea>
+          <label style="color:red;display:none;" id="errorHazardRemarks">Please enter your remarks</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick="window.location.reload();">Cancel</button>
+        <button type="button" onclick="RequestForEditHazard()" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>

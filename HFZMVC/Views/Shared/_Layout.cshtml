@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
+  <title>@ViewBag.Title</title>
+  <meta content="Admin Dashboard" name="description">
+  <meta content="Themesbrand" name="author">
+  <link rel="short
+cut icon" href="~/Assets/images/favicon.ico">
+  @Styles.Render("~/Assets/css")
+
+  @Scripts.Render("~/Assets/javascripts")
+
+
+
+
+  <style type="text/css">
+	#threedChart {
+	  height: 400px;
+	  min-width: 310px;
+	  max-width: 800px;
+	  margin: 0 auto;
+	}
+  </style>
+  @RenderSection("styles", false)
+
+</head>
+<body class="enlarged">
+	<!-- Begin page -->
+	<div id="wrapper">
+		@Html.Partial("_Header")
+		@Html.Action("UserMenu", "App")
+		<!-- ============================================================== -->
+		<!-- Start right Content here -->
+		<!-- ============================================================== -->
+		<div class="content-page">
+			<!-- Start content -->
+			<div class="content">
+        <div class="container-fluid">
+
+          @RenderBody()
+          <div class="loading hidden">
+            <div class='uil-ring-css' style='transform:scale(0.79);'>
+              <div></div>
+            </div>
+          </div>
+        </div>
+				<!-- container-fluid -->
+
+
+			</div>
+			<!-- content -->
+
+		</div>
+		<!-- content-page -->
+		@Html.Partial("_Footer")
+	</div>
+	<!-- ============================================================== -->
+	<!-- End Right content here -->
+	<!-- ============================================================== -->
+	<!-- END wrapper -->
+	<div id="loader" style="position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	background: #ffffff9e;
+	width: 100%;
+	height: 100%;
+	display: none;"> <img style="position: absolute; top: 25%; left: 40%;" src="~/Assets/images/loader.gif" /></div>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#side-menu").metisMenu();
+			//For all tooltips
+			$('[data-toggle="tooltip"]').tooltip();
+
+			$('#smartwizard').smartWizard({
+				theme: 'circles',
+			});
+
+      $('.date-picker').datepicker();
+		});
+	</script>
+	<script>
+		var _Timeout = null;
+
+		$(document).ready(function () {
+			$(".companyinfo-next").click(function () {
+				$(".wastedescription-div").show();
+				$(".companyinfo-div").hide();
+				$(".waste-description").removeClass('deactiveprogress');
+				$(".waste-description").addClass('activeprogress');
+				$(".no-one").hide();
+				$(".no-two").show();
+
+			});
+
+			$(".wastedescription-prev").click(function () {
+				$(".wastedescription-div").hide();
+				$(".companyinfo-div").show();
+				$(".waste-description").addClass('deactiveprogress');
+				$(".waste-description").removeClass('activeprogress');
+				$(".no-one").show();
+				$(".no-two").hide();
+
+			});
+
+			$(".wastedescription-next").click(function () {
+				$(".purposesample-div").show();
+				$(".wastedescription-div").hide();
+				$(".purpose-sampling").removeClass('deactiveprogress');
+				$(".purpose-sampling").addClass('activeprogress');
+				$(".no-two").hide();
+				$(".no-three").show();
+			});
+
+			$(".purposesample-prev").click(function () {
+				$(".purposesample-div").hide();
+				$(".wastedescription-div").show();
+				$(".purpose-sampling").addClass('deactiveprogress');
+				$(".purpose-sampling").removeClass('activeprogress');
+				$(".no-three").hide();
+				$(".no-two").show();
+			});
+
+			$(".purposesample-next").click(function () {
+				$(".disclaimer-div").show();
+				$(".purposesample-div").hide();
+				$(".disclaimer").removeClass('deactiveprogress');
+				$(".disclaimer").addClass('activeprogress');
+				$(".no-three").hide();
+				$(".no-four").show();
+			});
+
+			$(".disclaimer-prev").click(function () {
+				$(".disclaimer-div").hide();
+				$(".purposesample-div").show();
+				$(".disclaimer").addClass('deactiveprogress');
+				$(".disclaimer").removeClass('activeprogress');
+				$(".no-four").hide();
+				$(".no-three").show();
+			});
+
+			$(".checkoutbtn").click(function () {
+				$("#smartwizard").hide();
+				$(".creditcard").show();
+			});
+
+			$(".cancelcheckout").click(function () {
+				$("#smartwizard").show();
+				$(".creditcard").hide();
+			});
+			
+			$(".button-menu-mobile").click(function () {
+				$("body").toggleClass('enlarged');
+			});
+			
+			_StartCheckTimer();
+
+		});
+
+
+    function _StartCheckTimer () {
+      
+      if (_Timeout) window.clearTimeout();
+      _Timeout = window.setTimeout(_CheckLoginAjax, 15 * 1000);
+		};
+
+		function _CheckLoginAjax () {
+      $.ajax({
+        url: '/User/Check?' + Math.random(),
+        success: function (data) {
+          if (data == '0')
+            top.location.href = '/';
+        },
+        complete: function (data) {
+          _StartCheckTimer();
+        }
+      });
+		}
+
+
+		function toggleLoading() {
+      var loadingOverlay = document.querySelector('.loading');
+      document.activeElement.blur();
+
+      if (loadingOverlay.classList.contains('hidden')) {
+        loadingOverlay.classList.remove('hidden');
+      } else {
+        loadingOverlay.classList.add('hidden');
+      }
+
+		}
+	</script>
+
+	@RenderSection("scripts", false)
+	
+<div id="turn"> <p>Please rotate your device! </p></div> 
+
+</body>
+</html>
+
+
+
+

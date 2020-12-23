@@ -1,0 +1,23 @@
+﻿@model IEnumerable<String>
+@{
+  Layout = null;
+  var permitId = ViewBag.Id;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GenerateHazardPDFView</title>
+</head>
+<body>
+    
+
+@foreach (var item in Model) {
+  <img style="border:1px solid black;max-width:80%;" src="@(AppDomain.CurrentDomain.BaseDirectory.ToString()+ "UploadedFiles\\Hazard/"+permitId+"/"+item)" alt="Alternate Text" />
+  <br />
+}
+
+</body>
+</html>

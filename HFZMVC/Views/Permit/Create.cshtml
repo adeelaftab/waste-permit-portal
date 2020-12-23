@@ -1,0 +1,1037 @@
+﻿@model HFZMVC.Models.PermitRequest.CreateEditPermitRequestModel
+@{
+  ViewBag.Title = "Permit Request";
+
+
+}
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="page-title-box">
+      <h4 class="page-title">Permits Management</h4>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0);">Dashoard</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0);">Permits</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+@using (Html.BeginForm("Create", "Permit", FormMethod.Post, new { onsubmit = "return checkform()", enctype = "multipart/form-data", accept_charset = "utf-8" })) {
+
+  <div  id="permitimagesform">  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+
+
+      <div id="smartwizard">
+
+        <ul>
+          <li>
+            <a href="#step-1">
+              <i style="font-size: 40px" class="fa fa-info-circle"></i><br />
+              <small>Company Information</small>
+            </a>
+          </li>
+          <li>
+            <a href="#step-2" >
+              <i style="font-size: 40px" class="fa fa-truck "></i><br />
+              <small>Waste Description</small>
+            </a>
+          </li>
+          <li>
+                <a href="#step-3">
+                    <i style="font-size: 40px" class="fa fa-file-image"></i><br />
+                    <small>Upload Photos</small>
+                </a>
+            </li>
+          <li>
+            <a href="#step-4"   >
+              <i style="font-size: 40px" class="fa fa-clipboard-list "></i><br />
+              <small>Submission Summary</small>
+            </a>
+          </li>
+
+
+        </ul>
+        <div>
+          <div id="step-1" class="">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <hr>
+                  <h6 class="wizard-title">Please fill your comapny information below:</h6>
+                  <hr>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                  <label>Company Name</label>
+                  @Html.TextBoxFor(e => e.company.CompanyName, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                  <label>Trade License Number</label>
+                  @Html.TextBoxFor(e => e.company.LicenseNumber, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                  <label>Applicant Name</label>
+                  @Html.TextBoxFor(e => e.company.Name, new { @class = "form-control companyname" })
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                  <label>Phone</label>
+                  @Html.TextBoxFor(e => e.company.PhoneNumber, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                  <label>Email</label>
+                  @Html.TextBoxFor(e => e.company.EmailID, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                 
+
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                  <label>Process flow diagram</label><br />
+                  @if (!String.IsNullOrEmpty(Model.ProcessFlowChartUploadedFromClient)) {
+                    <a class="btn btn-primary" href="~/UploadedFiles/@Model.ProcessFlowChartUploadedFromClient">View File</a>
+                  }
+
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 form-group">
+                  <label>Online Waste Treatment</label><br />
+                  @if (!String.IsNullOrEmpty(Model.OnsiteWasteTreamentUploadedFromClient)) {
+                    <a class="btn btn-primary" href="~/UploadedFiles/@Model.OnsiteWasteTreamentUploadedFromClient">View File</a>
+                  }
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="step-2" class="">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <hr>
+                  <h6 class="wizard-title">Please fill the waste description information below:</h6>
+                  <hr>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                      <label>Waste Category</label>
+                      <div class="">
+                        <div class="ui-select">
+                          <select id="WasteCategory" onchange="setcharges(this);" name="WasteCategory" class="form-control">
+                            <option value="">Select Waste Category</option>
+                            @{
+                              foreach (var item in ViewBag.WasteCategory) {
+                                string[] arr = item.Value.Split('~');
+
+                                <option data-price="@arr[0]" value="@arr[1]">@item.Text</option>
+                              }
+                            }
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                      <label>Waste Type</label>
+                      <select id="WasteTypeId" name="WasteTypeId" class="form-control">
+                        <option value="">Select Waste Category first</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <hr>
+                  <br>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                      <label>
+                        Waste Location
+
+                      </label><br />
+                      <input onfocus="geolocate();" readonly  class="form-control text-box single-line" id="facility_location" maxlength="10" name="facility_location" placeholder="Latitude, Longitude" value="" autocomplete="off" type="text">
+                      <div class="uploaddocument-btn" onclick="$('.detectlocation').toggle();"><i class="ti-target"></i><span>Open the map</span></div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 form-group">
+                      <label>Total Weight (kg\ton)</label>
+                      <input class="floatNum form-control text-box single-line" maxlength="10" id="TotalWeight" name="TotalWeight" placeholder="Total Weight (kg\ton)" value="" type="text">
+                      <input type="hidden" name="total_weight_unit" value="" id="total_weight_unit" />
+                      <div class="btn-group m-b-10 uom">
+                        <button type="button" id="total_weight_unit_btn" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Unit of Measure</button>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 33px, 0px);">
+                          <a class="dropdown-item" onclick="$('#total_weight_unit').val('KG');$('#total_weight_unit_btn').html('Unit of Measure (KG)');$('#UnitOfMeasure').val('KG');" href="javascript:;">KG</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" onclick="$('#total_weight_unit').val('TON'); $('#total_weight_unit_btn').html('Unit of Measure (TON)'); $('#UnitOfMeasure').val('TON');" href="javascript:;">TON</a>
+                          @Html.HiddenFor(e => e.UnitOfMeasure)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row detectlocation">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+
+                      <label>Please select your exact location in the Hamriyah Free Zone from the map below.</label>
+                      <div style="min-height:350px;" id="map"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12">
+                    <hr><br>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12" style="margin-top: 50px;">
+                  <div class="row">
+
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 form-group">
+                      <label>Packaging/Storage</label>
+                      @Html.DropDownListFor(e => e.Storage, (IEnumerable<SelectListItem>)ViewBag.PackagingStorage, "--Select--", new { @class = "form-control" })
+                      @*<textarea class="form-control" cols="20" data-val="true" data-val-length="Packaging/Storage cannot be longer than 500 characters" data-val-length-max="500" data-val-required="Packaging/Storage is required" id="Storage" name="Storage" rows="3"></textarea>*@
+                      <span class="field-validation-valid text-danger" data-valmsg-for="Storage" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 form-group">
+                      <label class="control-label" for="SourceProcess">Waste Source</label>
+                      <textarea class="form-control" cols="20" data-val="true" data-val-length="Waste Source cannot be longer than 500 characters" data-val-length-max="500" data-val-required="Waste Source is required" id="SourceProcess" name="SourceProcess" rows="3"></textarea>
+                      <span class="field-validation-valid text-danger" data-valmsg-for="SourceProcess" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 form-group">
+                      <div class="form-group" style="display:none;">
+                        <label>Upload (MSDS)</label>
+                        <input type="file" class="form-control" name="msdsFile" id="msdsFile" value="" onchange="UploadMSDS()" />
+                        <input type="hidden" id="MSDS" name="MSDS" value="" />
+
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <label>Additional Remarks</label>
+                  <textarea class="form-control" cols="20" data-val="true" data-val-length="Additional Remarks cannot be longer than 500 characters" data-val-length-max="500" id="Remarks" name="Remarks" rows="3"></textarea>
+                  <span class="field-validation-valid text-danger" data-valmsg-for="Remarks" data-valmsg-replace="true"></span>
+                </div>
+               
+              </div>
+            </div>
+          </div>
+          <div id="step-3" class="">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                          <div class="form-group">
+                            <label >
+                              Upload Photos
+                            </label>
+                            <input class="form-control" type="file" onchange="UploadPermitFies()" name="PermitFiles" id="PermitFiles" value=""  multiple  accept="image/*"/>
+                          </div>
+
+                        </div>
+                       
+                       
+                    </div>
+                  <br />
+                  <div id="dvpermitImages" class="row">
+
+                    @*
+                      Test Stub
+                      <div class="col-lg-3">
+                      <div class="image-container">
+                        <div class="image-part">
+                          <img src="~/Assets/images/img_office.png" />
+                         
+                        </div>
+                        <div class="image-menu">
+                          <button class="btn btn-danger">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-3">
+                      <div class="image-container">
+                        <div class="image-part">
+
+                          <img src="~/Assets/images/users/user-5.jpg" />
+                        </div>
+                        <div class="image-menu">
+                          <button class="btn btn-danger">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-3">
+                      <div class="image-container">
+                        <div class="image-part">
+
+                          <img src="~/Assets/images/users/user-6.jpg" />
+                        </div>
+                        <div class="image-menu">
+                          <button class="btn btn-danger">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-3">
+                      <div class="image-container">
+                        <div class="image-part">
+
+
+                          <img src="~/Assets/images/directory-bg.jpg" />
+                        </div>
+                        <div class="image-menu">
+                          <button class="btn btn-danger">Delete</button>
+                        </div>
+                      </div>
+                    </div>*@
+                  </div>
+                </div>
+            </div>
+          <div id="step-4" class="">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                  <hr>
+                  <h6 class="wizard-title">Please review your submitted information below:</h6>
+                  <hr>
+                </div>
+                <div class="col-lg-12">
+                  <div class="card" style="min-height: 100%;">
+                    <div class="card-body charges summary">
+                      <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Company Information</span></h4>
+                      <div class="table-responsive">
+                        <table class="table mb-0">
+                          <tbody>
+                            <tr>
+                              <th scope="row"><i class="ti-zip charges-icons"></i> <p>Company Name</p></th>
+                              <td>@Model.company.CompanyName</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-settings charges-icons"></i> <p>Trade License Number</p></th>
+                              <td>@Model.company.LicenseNumber</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> <p>Manager Name</p></th>
+                              <td>@Model.company.Name</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-bookmark-alt charges-icons"></i> <p>Phone</p></th>
+                              <td>@Model.company.PhoneNumber</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i> <p>Email</p></th>
+                              <td>@Model.company.EmailID</td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <hr>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="card" style="min-height: 100%;">
+                    <div class="card-body charges summary">
+                      <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Waste Description</span></h4>
+                      <div class="table-responsive">
+                        <table class="table mb-0">
+                          <tbody>
+                            <tr>
+                              <th scope="row"><i class="ti-zip charges-icons"></i> <p>Waste Category</p></th>
+                              <td id="WasteCategorylabel">Municipal Solid Waste</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-settings charges-icons"></i><p>Waste Type</p></th>
+                              <td id="WasteTypeIdlabel">Municipal Solid Waste</td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-ruler-pencil charges-icons"></i><p>Waste Location</p></th>
+
+                              <td id="facility_locationlabel"><a href="https://goo.gl/maps/hfBWQFGYEZ9gjwq59">Open the Map</a></td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-bookmark-alt charges-icons"></i><p>Total Weight / Volume</p></th>
+                              <td id="TotalWeightlabel">50 </td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>Waste Source</p></th>
+                              <td id="SourceProcesslabel"></td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>Packaging/Storage</p></th>
+                              <td id="Storagelabel"></td>
+                            </tr>
+                            <tr>
+                              <th scope="row"><i class="ti-files charges-icons"></i><p>Additional Remarks</p></th>
+                              <td id="Remarkslabel"></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <hr>
+              </div>
+              @*<div class="row">
+        <div class="col-lg-12">
+            <div class="card" style="min-height: 100%;">
+                <div class="card-body charges summary">
+                    <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Purpose of Sampling</span></h4>
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <tbody>
+                                <tr>
+                                    <th scope="row"><i class="ti-zip charges-icons"></i> <p>Purpose of Sampling</p></th>
+                                    <td>Private- Gov</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><i class="ti-settings charges-icons"></i><p>Source of Sample</p></th>
+                                    <td>Effluent/Sewage</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><i class="ti-ruler-pencil charges-icons"></i><p>Other Source of Sample</p></th>
+                                    <td><a href="https://goo.gl/maps/hfBWQFGYEZ9gjwq59">Lorem Ipsum</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <hr>
+    </div>*@
+              <div class="row">
+                <div class="col-md-12 col-xs-12 form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input style="margin: 0 10px 10px 0; float: left;" data-val="true" data-val-range="You must agree with the Disclaimer" data-val-range-max="True" data-val-range-min="True" data-val-required="The Disclaimer field is required." id="IsDisclaimerCertified" name="IsDisclaimerCertified" value="true" type="checkbox">
+                      <input name="IsDisclaimerCertified" value="false" type="hidden">
+                      I certify that my answers are true and complete to the best of my knowledge <span class="field-validation-valid text-danger" data-valmsg-for="IsDisclaimerCertified" data-valmsg-replace="true"></span>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input style="margin: 0 10px 10px 0; float: left;" data-val="true" data-val-range="You must agree with the Terms and Conditions" data-val-range-max="True" data-val-range-min="True" data-val-required="Disclaimer is required" id="IsIAgreeTermsAndCondition" name="IsIAgreeTermsAndCondition" value="true" type="checkbox">
+                      <input name="IsIAgreeTermsAndCondition" value="false" type="hidden">
+                      I agree to the <a href="/User/Terms" target="_blank">Terms and Conditions</a> and <a href="/User/Privacy" target="_blank">Privacy Policy</a>. <span class="field-validation-valid text-danger" data-valmsg-for="IsIAgreeTermsAndCondition" data-valmsg-replace="true"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-12 col-xs-12 form-group"></div>
+                <div class="col-md-6 col-xs-12 form-group">
+                  <label>Applicant Name</label>
+                  <input class="form-control text-box single-line companyname" id="ApplicantName" name="ApplicantName" value="@Model.company.Name" type="text">
+                  <span class="field-validation-valid text-danger" data-valmsg-for="ApplicantName" data-valmsg-replace="true"></span>
+                </div>
+                <div class="col-md-6 col-xs-12 form-group">
+                  <label>Date</label>
+                  <label class="form-control" for="">@DateTime.Today.ToString("dd/MM/yyyy")</label>
+                </div>
+              </div>
+              <div id="submitButton" class="row">
+                <button type="submit" class="btn btn-success btn-lg waves-effect" style="margin: 0 auto;">Submit</button>
+              </div>
+              <div id="dvSubmitControl" style="display:none;">
+                <span> <img class="loading-image" src="~/Assets/images/loader.gif" alt="loading" /> Submitting......</span>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card pricedetailsection">
+        <div class="card-body charges">
+          <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Charges</span></h4>
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <tbody>
+                <tr>
+                  <th scope="row"><i class="ti-zip charges-icons"></i> Permit Fees</th>
+                  <td>AED</td>
+                  <td>
+                    <input readonly type="text" name="permitfees" value="0.0" id="permitfees" class="fees" />
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row"><i class="ti-settings charges-icons"></i> Service Fees</th>
+                  <td>AED</td>
+                  <td>
+                    <input readonly class="fees" type="text" id="servicefee" name="servicefee" value="@ViewBag.servicecharges"
+                           data-servicefee="@ViewBag.servicecharges" />
+
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> R&amp;D Fees</th>
+                  <td>AED</td>
+                  <td>
+                    <input readonly class="fees" type="text" id="rdfee" name="rdfee" value="@ViewBag.r_dcharges" data-rdfee="@ViewBag.r_dcharges" />
+
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row"><i class="ti-bookmark-alt charges-icons"></i> VAT</th>
+                  <td>AED</td>
+                  <td>
+                    <input readonly class="fees" type="text" id="vat" name="vat" value="@ViewBag.vatcharges" data-vat="@ViewBag.vatcharges" />
+                  </td>
+                </tr>
+                <tr class="totalcharges">
+                  <th scope="row"><i class="ti-files charges-icons"></i> Total</th>
+                  <td>AED</td>
+                  <td>
+                    <input readonly type="text" value="0.0" id="grandtotal" name="grandtotal"
+                           class="fees" data-grandtotal="0.0" />
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end col -->
+  </div>
+  
+  <!-- end row -->
+}
+
+<style>
+  .image-container{
+
+    width:100%;
+  }
+  .image-part {
+    padding: 2px;
+    height: 150px;
+    min-width: 200px;
+  }
+    .image-part > img {
+      max-height: 128px;
+      width: 100%;
+    }
+  .card.pricedetailsection.fixed {
+    top: 95px;
+    position: fixed;
+  }
+
+  .date-picker[readonly] {
+    background-color: #ffffff;
+    opacity: 1;
+  }
+
+  .fancyupload {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  #smartwizard .nav-tabs .nav-item {
+    margin-bottom: -1px;
+    width: 20%;
+    margin-bottom: 40px;
+    margin-left:4%;
+  }
+
+  .fees {
+    padding: 0px;
+    border: 0px;
+  }
+</style>
+
+<script>
+  $(window).on("scroll", function (e) {
+    var sticky = $('.pricedetailsection');
+    var scroll = $(window).scrollTop();
+
+    if (scroll > 50) sticky.addClass('fixed');
+    else sticky.removeClass('fixed');
+  });
+  var map, infoWindow, marker;
+  var imageidCounter = 0;
+  var permitImages = [];
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      //, 
+      center: { lat: 25.462498, lng: 55.4812781 },
+      zoom: 15
+    });
+
+    map.addListener('click', function (mapsMouseEvent) {
+      // Close the current InfoWindow.
+      if (marker !== undefined) {
+        marker.setMap(null);
+      }
+
+      // Create a new InfoWindow.
+      var pos = mapsMouseEvent.latLng;
+      marker = new google.maps.Marker({ position: pos, map: map });
+      $("#facility_location").val(pos.lat().toFixed(5) + ", " + pos.lng().toFixed(5));
+      map.setCenter(pos);
+    });
+  }
+
+  
+
+
+
+  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+   
+    if (browserHasGeolocation) {
+      if (marker !== undefined) {
+        marker.setMap(null);
+      }
+      marker = new google.maps.Marker({ position: pos, map: map });
+      $("#facility_location").val(pos.lat().toFixed(5) + ", " + pos.lng().toFixed(5));
+      map.setCenter(pos);
+
+    } else {
+      console.log("Browser doesn't support geolocation!");
+    }
+    
+  }
+  $(document).ready(function () {
+
+    $(".companyname").change(function () {
+
+      $('.companyname').val($(this).val());
+
+    })
+
+    $('#itemslist').select2({
+      placeholder: 'Select Items'
+    });
+    $('#origin_country').select2({
+      placeholder: 'Select Country'
+    });
+    $('.date-picker').datepicker();
+    $(document).on('keypress', '.floatNum', function () {
+      if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+        event.preventDefault();
+      }
+    });
+    $(document).on('click', '.btn', function () {
+      if ($('#step-4').is(':visible')) {
+        $('#sw-btn-next').hide();
+      }
+      if ($('#step-1').is(':visible')) {
+        $('#sw-btn-prev').hide();
+      }
+    });
+
+    function loadsummery() {
+      $('#smartwizard').find('input, textarea').each(function (index, field) {
+        let type = $(this).attr('type');
+        let id = $(this).attr('id');
+        if (id == 'facility_location') {
+          let val = $(this).val();
+          $("#" + id + "label").html('<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=' + val + '">Open the Map</a>');
+        }
+        else if (type != "file") {
+          let val = $(this).val();
+          let id = $(this).attr('id');
+          $("#" + id + "label").html(val);
+        }
+        else {
+          //let file = field.files[0].name;
+          //let id = $(this).attr('id');
+          //if (id == "VatCertificateFile") {
+          //    $("#VatCertificate").val();
+          //}
+          //$("#" + id + "label").html(file);
+        }
+
+
+      });
+      $('#smartwizard').find('select').each(function (index, field) {
+        let id = $(this).attr('id');
+        $("#" + id + "label").html($("#" + id + " option:selected").text());
+      });
+    }
+    $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection, stepPosition) {
+      //alert("You are on step "+stepNumber+" now");
+      loadsummery();
+      if (stepPosition === 'first') {
+        $("#prev-btn").addClass('disabled');
+        $(".finishbtn").hide();
+      } else if (stepPosition === 'final') {
+        $("#next-btn").addClass('disabled');
+        $(".finishbtn").show();
+      } else {
+        $(".finishbtn").hide();
+        $("#prev-btn").removeClass('disabled');
+        $("#next-btn").removeClass('disabled');
+      }
+    });
+    $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection, stepPosition) {
+      loadsummery();
+      if (stepDirection == "forward" && stepNumber == 1) {
+        return checkformOne(); //UserData
+      }
+
+      else if (stepDirection == "forward" && stepNumber == 2) {
+        return checkformtwo(); //CompanyData
+      }
+      else if (stepDirection == "forward" && stepNumber == 3) {
+        return checkformImages();
+      }
+    });
+  });
+  function checkformImages() {
+    if (permitImages.length==0) {
+      alert("Please upload photos before continue to next stage..!!");
+      return false;
+    }
+  }
+  function checkformOne() {
+    //return true;
+
+
+    if ($('#WasteCategory').val() == "") {
+      alert("Please select Waste Category before continue to next stage..!!");
+      return false;
+    }
+    if ($('#WasteTypeId').val() == "") {
+      alert("Please select Waste Type before continue to next stage..!!");
+      return false;
+    }
+    if ($('#facility_location').val() == null || $('#facility_location').val() == "") {
+      alert("Please select/Add location before continue to next stage..!!");
+      return false;
+    }
+    if ($('#TotalWeight').val() == null || $('#TotalWeight').val() == "") {
+      alert("Please add TotalWeight before continue to next stage..!!");
+      return false;
+    }
+    if ($('#UnitOfMeasure').val() == null || $('#UnitOfMeasure').val() == "") {
+      alert("Please select unit of measure before continue to next stage..!!");
+      return false;
+    }
+    if ($('#SourceProcess').val() == "") {
+      alert("Waste Source is required..!!");
+      return false;
+    }
+    if ($('#Storage').val() == "") {
+      alert("Packaging/Storage is required..!!");
+      return false;
+    }
+    return true;
+  }
+
+
+  function checkformtwo() {
+
+    return true;
+  }
+  function geolocate() {
+    if ($("#facility_location").val()!="") {
+      return;
+    }
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        $("#facility_location").val(position.coords.latitude.toFixed(5) + ", " + position.coords.longitude.toFixed(5));
+         marker = new google.maps.Marker({ position: pos, map: map });
+        map.setCenter(pos);
+      }, function () {
+        handleLocationError(true, null, map.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+    }
+  }
+    //if ("geolocation" in navigator) { //check geolocation available
+    //  //try to get user current location using getCurrentPosition() method
+    //  navigator.geolocation.getCurrentPosition(function (position) {
+    //    $("#facility_location").val(position.coords.latitude.toFixed(5) + ", " + position.coords.longitude.toFixed(5));
+    //  });
+    //} else {
+    //  console.log("Browser doesn't support geolocation!");
+    //}
+  
+  function setcharges(v) {
+    let val = $(v).val();
+    var total = 0;
+    if (val) {
+      total = $(v).find(":selected").data('price');
+      $.ajax({
+        url: "/Permit/GetTypeD/" + val,
+        async: false,
+        type: "GET",            // type of submision
+        dataType: "text",        // what type of data we'll get back
+        success: function (data) {
+          if (data == 0) {
+            alert("Data form error for loading dropdown..!!");
+          }
+          else {
+            $("#WasteTypeId").html(data);
+          }
+        }
+      });
+    }
+    else {
+      $("#WasteTypeId").html('<option value="">Select Waste Category first</option>');
+    }
+    $("#permitfees").val(total);
+    updatebill();
+  }
+  function updatebill() {
+    var permitfee = $("#permitfees").val();
+    console.log(permitfee);
+    if ($("#permitfees").val() == "" || $("#permitfees").val() == "0" || $("#permitfees").val() == 0) {
+      $("#servicefee, #rdfee, #vat, #permitfees, #grandtotal").val("00.0"); return false;
+    }
+    var servicefee = $("#servicefee").attr("data-servicefee");
+    $("#servicefee").val(servicefee);
+
+    var rdfee = $("#rdfee").attr("data-rdfee");
+    $("#rdfee").val(rdfee);
+
+    var grandtotal = +permitfee + +servicefee + +rdfee;
+    var vat = $("#vat").attr("data-vat").replace(/[^0-9.\s]/gi, '');
+    var tvat = (grandtotal * vat) / 100;
+    $("#vat").val(tvat);
+    grandtotal = grandtotal + tvat;
+    $('#grandtotal').val(grandtotal + '.00');
+
+  }
+  function checkfile(v) {
+    let file = $(v).val().split('\\').pop().trim();
+    let id = $(v).attr('id');
+    var regex = /(?:\.([^.]+))?$/;
+    var ext = regex.exec(file)[1].toLocaleLowerCase();
+    if (ext == "pdf" || ext == "jpg" || ext == "png") {
+      if (id == "inspection_form") {
+        $("#filenamedisplay").val(file);
+      }
+    }
+    else {
+      $("#filenamedisplay").val("");
+      alert("File with extension \"" + ext + "\" is not allowed. Only PDF, JPG and PNG formate are acceptable.");
+      $(v).val(null);
+    }
+  }
+  function checkform() {
+    if ($("#IsDisclaimerCertified").is(":checked") == false) {
+      alert("Please check the certification of data provided..!!");
+      return false;
+    }
+
+    if ($("#IsIAgreeTermsAndCondition").is(":checked") == false) {
+      alert("Terms and conditions agreement required..!!");
+      return false;
+    }
+
+    if ($("#ApplicantName").val() == false) {
+      alert("Please provide your name before proceed..!!");
+      return false;
+    }
+    if (permitImages.length==0) {
+      alert("Please upload photos..!!");
+      return false;
+    }
+    $("#submitButton").hide();
+    $("#dvSubmitControl").show();
+    return true;
+  }
+
+  function UploadPermitFies() {
+    // Checking whether FormData is available in browser  
+    if (window.FormData !== undefined) {
+
+      var fileUpload = $("#PermitFiles").get(0);
+      var files = fileUpload.files;
+
+      // Create FormData object  
+      var fileData = new FormData();
+
+      // Looping over all files and add it to FormData object  
+      for (var i = 0; i < files.length; i++) {
+        let file = files[i].name.split('\\').pop().trim();
+        
+        var regex = /(?:\.([^.]+))?$/;
+        var ext = regex.exec(file)[1].toLocaleLowerCase();
+        console.log(ext);
+        if (ext == "jpg" || ext == "jpeg" ||  ext == "png") {
+          fileData.append(files[i].name, files[i]);
+        }
+        else {
+          alert("File with extension \"" + ext + "\" is not allowed. Only JPG and PNG format are acceptable.");
+          return;
+        }
+       
+      }
+
+      // Adding one more key to FormData object  
+      if (permitImages.length>20) {
+        alert("Please upload 15 image per Permit!");
+      }
+
+      $.ajax({
+        url: '/Permit/UploadPermitFiles',
+        type: "POST",
+        contentType: false, // Not to set any content header  
+        processData: false, // Not to process data  
+        data: fileData,
+        success: function (result) {
+          if (result.includes("error")) {
+            alert(result);
+          } else {
+           
+            var generatedHtml = '';
+            
+            for (var i = 0; i < result.length; i++) {
+              imageidCounter++;
+              permitImages.push(result[i]);
+              generatedHtml += `<div id="image_` + imageidCounter +`" class="col-lg-3">
+                      <div class="image-container">
+                        <div class="image-part">
+                          <img src="/UploadedFiles/Temp/`+ result[i] +`" />
+                         
+                        </div>
+                        <div class="image-menu">
+                          <button type="button"   class="btn btn-danger" onclick="deleteimage('image_` + imageidCounter + `','` + result[i] +`')" >Delete</button>
+                        </div>
+                      </div>
+                    </div>`;
+             
+            }
+            $("#dvpermitImages").append(generatedHtml);
+            PopulateImageHiddenForm();
+            $("#PermitFiles").val();
+          }
+         
+        },
+        error: function (err) {
+          alert(err.statusText);
+        }
+      });
+    } else {
+      alert("FormData is not supported.");
+    } 
+
+    $("#PermitFiles").val(null);
+  }
+
+  function UploadMSDS() {
+    // Checking whether FormData is available in browser  
+    if (window.FormData !== undefined) {
+
+      var fileUpload = $("#msdsFile").get(0);
+      var files = fileUpload.files;
+
+      // Create FormData object  
+      var fileData = new FormData();
+
+      // Looping over all files and add it to FormData object  
+      for (var i = 0; i < files.length; i++) {
+        let file = files[i].name.split('\\').pop().trim();
+
+        var regex = /(?:\.([^.]+))?$/;
+        var ext = regex.exec(file)[1].toLocaleLowerCase();
+        console.log(ext);
+        if (ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "pdf" ) {
+          fileData.append(files[i].name, files[i]);
+        }
+        else {
+          alert("File with extension \"" + ext + "\" is not allowed. Only PDF,JPG and PNG format are acceptable.");
+          return;
+        }
+
+      }
+
+    
+
+      $.ajax({
+        url: '/Permit/UploadPermitFiles',
+        type: "POST",
+        contentType: false, // Not to set any content header  
+        processData: false, // Not to process data  
+        data: fileData,
+        success: function (result) {
+          if (result.includes("error")) {
+            alert(result);
+          } else {
+
+           
+
+            for (var i = 0; i < result.length; i++) {
+              $("#MSDS").val(result[i]);
+
+            }
+           
+          }
+
+        },
+        error: function (err) {
+          alert(err.statusText);
+        }
+      });
+    } else {
+      alert("FormData is not supported.");
+    }
+
+    $("#PermitFiles").val(null);
+  }
+
+
+
+
+  function deleteimage(imageid,imagename) {
+    
+    if (imagename != "" && imagename !== undefined) {
+      var valueIndex = permitImages.indexOf(imagename);
+      if (valueIndex > -1) {
+        permitImages.splice(valueIndex, 1);
+        PopulateImageHiddenForm();
+        $("#" + imageid).remove();
+      }
+    }
+   
+   
+  }
+  function PopulateImageHiddenForm() {
+    $("#permitimagesform").html('');
+    let counter = 0;
+    for (var i = 0; i < permitImages.length; i++) {
+
+      $("#permitimagesform").append('<input type="hidden" name="PermitImages" id="PermitImages_' + counter + '" value="' + permitImages[i] + '" />');
+      counter++;
+    }
+  }
+</script>
+
+@section scripts{
+
+  <script defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPxHUjUNxPxc9QQKDn-dsfXUKJyAS0j_0&callback=initMap">
+  </script>
+
+
+  
+
+}

@@ -1,0 +1,144 @@
+﻿@model HFZMVC.Models.EntityFramework.User
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Profile</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashoard</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">@Model.Name Profile</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-6 col-md-6">
+        <div class="card directory-card m-b-20" style="min-height: 100%;">
+            <div>
+                <div class="directory-bg text-center">
+                    <div class="directory-overlay"><img class="rounded-circle thumb-lg img-thumbnail" src="~/Assets/images/img_office.png" alt="Generic placeholder image"></div>
+                </div>
+                <div class="directory-content text-center p-4">
+                    <p class="mt-4">User Information</p>
+                    <h5 class="font-16">@Model.Name</h5>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%">
+                        <span class="pull-left" style="margin-top: 8px;">Status : </span><span class="pull-right" style="margin-top: -7px;">
+                            @{
+                                if (Model.Status == false)
+                                {
+                                    <span class="badge badge-danger">Inactive</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success">Active</span>
+                                }
+                            }
+                        </span>
+                    </p>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">Phone : </span><span class="pull-right" style="margin-top: 8px;">@Model.PhoneNumber</span></p>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">Email : </span><a href="mailto:@Model.EmailID" class="pull-right" style="margin-top: 8px;">@Model.EmailID</a></p>
+                    <hr>
+                    <p class="text-muted" style="display: table; width: 100%"><span class="pull-left" style="margin-top: 8px;">Address : </span><span class="pull-right" style="margin-top: 8px;">@Model.Address</span></p>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+    <div class="col-xl-6 col-md-6">
+        <div class="card directory-card m-b-20" style="min-height: 100%;">
+            <div>
+                <div class="directory-bg text-center">
+                    <div class="directory-overlay"><img class="rounded-circle thumb-lg img-thumbnail" src="~/Assets/images/img_actions.png" alt="Generic placeholder image"></div>
+                </div>
+                <div class="directory-content text-center p-4">
+                    <p class="mt-4">Actions</p>
+                    <hr style="margin-top: 3.15rem;">
+                    <a href="~/User/Edit/@Model.ID" class="btn btn-primary col-md-12 w-md waves-effect waves-light">Edit</a>
+                    <hr>
+                    @{
+                        if (Model.Status == false)
+                        {
+                            <a href="javascript:;" onclick="changestatus(@Model.ID);" class="btn btn-primary col-md-12 w-md waves-effect waves-light">Activate User</a>
+                            <hr>
+                        }
+                        else
+                        {
+                <a href="javascript:;" onclick="changestatus(@Model.ID);" class="btn btn-primary col-md-12 w-md waves-effect waves-light">Disable User</a>
+                            <hr>
+                            <a href="javascript:;" onclick="resetPassword(@Model.ID);" class="btn btn-primary col-md-12 w-md waves-effect waves-light">Reset Password</a>
+                            <hr>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+<script>
+    function changestatus(id) {
+        if (confirm("Are you sure want to continue?")) {
+            $.ajax({
+                url: "/Company/changeStatus/"+id,
+                async: false,
+                type:"POST",            // type of submision
+                dataType:"text",        // what type of data we'll get back
+                success:function(data)
+                {    
+                    if (data == 1) {
+                        alert("Status Has been Changed Successfully..!!!");
+                        location.reload(true);
+                    }
+                    else {
+                        alert("Unable to Change Status..!!!");
+                    }
+                }
+            });
+        } 
+    }
+    function resetPassword(id) {
+        if (confirm("Are you sure want to submit reset password request?")) {
+            $.ajax({
+                url: "/Company/ResetPassword/"+id,
+                async: false,
+                type:"POST",            // type of submision
+                dataType:"text",        // what type of data we'll get back
+                success:function(data)
+                {    
+                    if (data == 1) {
+                        alert("The reset Password request has been Successfully sent on registered email..!!!");
+                    }
+                    else {
+                        alert("Unable to send request..!!!");
+                    }
+                }
+            });
+        } 
+    }
+    function deletecompany(id) {
+        if (confirm("Are you sure want to Delete?")) {
+            $.ajax({
+                url: "/Company/DeleteCompany/"+id,
+                async: false,
+                type:"POST",            // type of submision
+                dataType:"text",        // what type of data we'll get back
+                success:function(data)
+                {    
+                    if (data == 1) {
+                        alert("User Has been successfully Deleted..!!!");
+                        window.location.href = '/Company/index/';
+                    }
+                    else {
+                        alert("Unable to Delete User..!!!");
+                    }
+                }
+            });
+        } 
+    }
+</script>

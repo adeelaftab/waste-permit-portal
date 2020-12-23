@@ -1,0 +1,24 @@
+﻿@model IEnumerable<HFZMVC.Models.PermitRequest.PermitRequestIndexViewModel>
+
+<li class="dropdown notification-list">
+    <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+        <i class="ti-bell noti-icon"></i> 
+        <span style="" class="badge badge-pill badge-danger noti-icon-badge">@Model.Count()</span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg">
+        <!-- item-->
+        <h6 class="dropdown-item-text">Notifications (@Model.Count())</h6>
+        <div class="slimscroll notification-item-list">
+            @foreach(var item in Model){
+                <!-- item-->
+                <a href="/Permit/Detail/@item.ID" class="dropdown-item notify-item active">
+                    <div class="notify-icon bg-success"><i class="mdi mdi-checkbox-marked-outline"></i></div>
+                    <p class="notify-details">Permit#@item.ID: @item.Status</p>
+                </a>
+                <!-- item-->
+            }
+            <!-- item-->
+        </div>
+        <!-- All--><a href="/Permit/Index" class="dropdown-item text-center text-primary">View all <i class="fi-arrow-right"></i></a>
+    </div>
+</li>

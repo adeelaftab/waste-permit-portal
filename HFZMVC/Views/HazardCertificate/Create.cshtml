@@ -1,0 +1,354 @@
+﻿@model HFZMVC.Models.PermitRequest.HazardCertificateModel
+@{
+  ViewBag.Title = "Create";
+
+
+}
+
+
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="page-title-box">
+      <h4 class="page-title">Hazardous Waste Application</h4>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0);">Dashoard</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0);">FDC</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+@using (Html.BeginForm("SaveData", "HazardCertificate", FormMethod.Post, new { onsubmit = "return checkform();", accept_charset = "utf-8" })) {
+ @Html.HiddenFor(e=>e.PermitId)
+  <div id="permitimagesform">  </div>
+  <div id="permitmsdsform">  </div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card" style="min-height: 100%;">
+        <div class="card-body charges">
+          <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Permit Information</span></h4>
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <tbody>
+                <tr>
+                  <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> Permit ID</th>
+                  <td>@Model.PermitId</td>
+                </tr>
+
+                <tr>
+                  <th scope="row"><i class="ti-settings charges-icons"></i> Contact Person</th>
+                  <td>@ViewBag.company.Name</td>
+                </tr>
+                <tr>
+                  <th scope="row"><i class="ti-settings charges-icons"></i> Contact</th>
+                  <td>@ViewBag.company.PhoneNumber</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card" style="min-height: 100%;">
+        <div class="card-body charges">
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <tbody>
+                <tr>
+                  <th scope="row"><i class="ti-zip charges-icons"></i> Company Name</th>
+                  <td>@ViewBag.company.CompanyName</td>
+                </tr>
+                <tr>
+                  <th scope="row" style="border-top: 0;"><i class="ti-ruler-pencil charges-icons"></i> Email</th>
+                  <td style="border-top: 0;">@ViewBag.company.EmailID</td>
+                </tr>
+
+
+                <tr>
+                  <th scope="row"><i class="ti-ruler-pencil charges-icons"></i> Location</th>
+                  <td>@ViewBag.company.Address</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <br>
+      <div class="page-title-box">
+        <h4 class="page-title pull-left">The Waste Details</h4>
+        <h4 class="page-title pull-right">Application Number #000000</h4>
+      </div>
+    </div>
+
+
+    <div class="col-lg-12">
+
+      <div class="col-lg-12" style="padding: 30px 20px; background: #fff; display: table;">
+
+        <div class="form-group" style="width: 50%; float: left;">
+          <label class="col-lg-12 control-label">Type of industry</label>
+          <div class="col-lg-12">
+            <select id="TypeOfIndustry" name="TypeOfIndustry" class="form-control">
+              <option value="Accommodation and food service activities">Accommodation and food service activities</option>
+              <option value="Administrative and support service activities">Administrative and support service activities</option>
+              <option value="Agriculture & Farms Industry">Agriculture & Farms Industry</option>
+              <option value="Arts, entertainment and recreation">Arts, entertainment and recreation</option>
+              <option value="Cargo & Transportation"> Cargo & Transportation</option>
+              <option value="Chemicals and pharmaceutical Industry">Chemicals and pharmaceutical Industry</option>
+              <option value="Construction and demolition">Construction and demolition</option>
+              <option value="Education">Education</option>
+              <option value="Electronic products">Electronic products</option>
+              <option value="Energy Industry">Energy Industry</option>
+              <option value="Financial and insurance activities">Financial and insurance activities</option>
+              <option value="Food & Beverages products Industry">Food & Beverages products Industry</option>
+              <option value="Health Care Industry">Health Care Industry</option>
+              <option value="HVAC Industry">HVAC Industry</option>
+              <option value="Information and communication">Information and communication</option>
+              <option value="Maintenance and technical Activites">Maintenance and technical Activites</option>
+              <option value="Manufacturing Industry">Manufacturing Industry</option>
+              <option value="Marine services">Marine services</option>
+              <option value="Metals and metal works Industry">Metals and metal works Industry</option>
+              <option value="Mining and Quarrying">Mining and Quarrying</option>
+              <option value="Oil & Gas">Oil & Gas</option>
+              <option value="Paints Industry">Paints Industry</option>
+              <option value="Petroleum and lubricants industry">Petroleum and lubricants industry</option>
+              <option value="Plastics Industry">Plastics Industry</option>
+              <option value="Printing press">Printing press</option>
+              <option value="Public admin and defence, compulsory social security">Public admin and defence, compulsory social security</option>
+              <option value="Pulp & Paper Industry">Pulp & Paper Industry</option>
+              <option value="Textiles Industry">Textiles Industry</option>
+              <option value="Vehicles service and repairing">Vehicles service and repairing</option>
+              <option value="Water Treatment Industry">Water Treatment Industry</option>
+              <option value="Wood Industry">Wood Industry</option>
+              <option value="Other Services">Other Services</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="width: 50%; float: left;">
+          <label class="col-lg-12 control-label">Frequency of disposal</label>
+          <div class="col-lg-12">
+            <select name="DisposalFrequency" id="DisposalFrequency" class="form-control">
+              <option value="Once">Once</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Quarterly">Quarterly</option>
+              <option value="Every 6 months">Every 6 months</option>
+              <option value="Annually">Annually</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="width: 50%; float: left;">
+          <label class="col-lg-12 control-label">Transporter <span id="spTransporterRequired" style="display:none;" class="required">*</span></label>
+          <div class="col-lg-12">
+            <label class="form-control pull-left" style="width: 50%">
+
+              @Html.RadioButtonFor(e => e.transporter, "Bee’ah") Bee’ah
+            </label>
+            <label class="form-control pull-left" style="width: 50%;">
+              @Html.RadioButtonFor(e => e.transporter, "Other") Other
+              @Html.TextBoxFor(e => e.transporterDetails, new { @class = "form-control transportername", @placeholder = "Transporter Name" })
+
+            </label>
+          </div>
+        </div>
+        @*Wrong requirement might not need the following containder  *@
+        <div style="visibility:hidden;" class="form-group" style="width: 50%; float: left;">
+          <label class="col-lg-12 control-label">Container Type</label>
+          <div class="col-lg-12">
+            <input class="form-control" type="text" placeholder="Container Type">
+          </div>
+        </div>
+        <div class="form-group" style="width: 100%; float: left;">
+          <label class="col-lg-12 control-label">Description of waste generation</label>
+          <div class="col-lg-12">
+            @Html.TextAreaFor(e => e.WasteDescription, new { @class = "form-control", rows = "4", placeholder = "Description of how the waste is generated" })
+
+          </div>
+        </div>
+        <div class="form-group" style="width: 100%; float: left;">
+          <div class="col-lg-12">
+            <style>
+              table.noborder td {
+                border: 0;
+              }
+            </style>
+            <table class="table noborder no-padding-table mb-0 table-responsive">
+              <thead class="thead-default">
+                <tr>
+                  <th class="text-left" style="padding: 10px;">Name</th>
+                  <th class="text-left" style="padding: 10px;">Quantity / Unit Of Measure</th>
+                  <th class="text-left" style="padding: 10px;">State</th>
+                  <th class="text-left" style="padding: 10px;">Container Type</th>
+                </tr>
+              </thead>
+              <tbody id="tblHazardItems">
+                <tr id="hazard_0">
+                  <td>
+                    <input id="hazard[0][name]" name="hazard[0][name]" class="form-control" required type="text" placeholder="Waste Name">
+                  </td>
+                  <td>
+                    <input class="form-control" type="text" required placeholder="Waste Quantity" id="hazard[0][quantityItem]" name="hazard[0][quantityItem]" style="width: 50%; float: left;">
+                    <select id="hazard[0][quantity]" name="hazard[0][quantity]" class="form-control" style="width: 50%">
+                      <option value="KG">KG</option>
+                      <option value="TON">TON</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="hazard[0][state]" name="hazard[0][state]" class="form-control">
+                      <option value="Liquid">Liquid</option>
+                      <option value="Solid">Solid</option>
+                      <option value="Semi-Solid">Semi-Solid</option>
+                      <option value="Gas">Gas</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="hazard[0][ContainerType]" name="hazard[0][ContainerType]" class="form-control">
+                      <option value="Drums/Barrels">Drums/Barrels</option>
+                      <option value="Jerrycans">Jerrycans</option>
+                      <option value="Buckets">Buckets</option>
+                      <option value="Cans">Cans</option>
+                      <option value="Boxes">Boxes</option>
+                      <option value="IBC">IBC</option>
+                      <option value="Bags/Jumbo Bags">Bags/Jumbo Bags</option>
+                      <option value="Loose/NA">Loose/NA</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="float:right;">
+              <button type="button" id="btnMoreRows" class="btn btn-secondary">+Add More</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-lg-6" style="margin-top: 30px;">
+      <div class="card">
+        <div class="card-body charges">
+          <h4 class="mt-0 header-title chargestitle"><i class="ti-image"></i> <span>Upload Hazardous Waste Photos</span></h4>
+          <div class="grid-x grid-padding-x">
+            <div class="small-10 small-offset-1 medium-8 medium-offset-2 cell">
+              <p>
+                <label for="upload_imgs" class="button hollow">Select Your Images +</label>
+                <input class="show-for-sr" onchange="UploadPermitFiles()" type="file" id="upload_imgs" name="upload_imgs" multiple="">
+              </p>
+              <div class="quote-imgs-thumbs quote-imgs-thumbs--hidden" id="img_preview" aria-live="polite"></div>
+              @*<p>
+                <input class="btn btn-primary" type="submit" name="submit" value="Upload Images" style="width: 100%;">
+              </p>*@
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6" style="margin-top: 30px;">
+      <div class="card">
+        <div class="card-body charges">
+          <h4 class="mt-0 header-title chargestitle"><i class="ti-file"></i> <span>Upload Material Safety Data Sheet</span></h4>
+          <div class="grid-x grid-padding-x">
+            <div class="small-10 small-offset-1 medium-8 medium-offset-2 cell">
+              <p>
+                <label for="upload_imgs" class="button hollow">Select Your file</label>
+                <input class="show-for-sr" type="file" onchange="UploadMSDSFiles()" id="upmsds" name="upmsds" multiple="" >
+              </p>
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12" style="margin-top: 30px;">
+      <div class="card">
+        <div class="card-body charges" style="display: flex; align-items: center;">
+          <label><input id="chkAcceptTerms" type="checkbox">&nbsp;&nbsp;I accept <a href="/HazardCertificate/HazardousGuidelines" target="_blank">Hazardous Waste Guidelines</a></label>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12" style="margin-top: 30px;">
+      <div id="validationErrors" style="display:none;">
+        <p > The following errors were found, please correct them and re-submit the form:</p>
+        <ul id="ulErorlist">
+         
+        </ul>
+      </div>
+      
+      <div class="form-group">
+        <label class="col-md-12 control-label"></label>
+        <div class="col-md-12" id="dvPreSubmitControl">
+          <input type="submit" class="btn btn-primary" value="Submit">
+          <span></span>
+          <input type="reset" class="btn btn-default" value="Cancel">
+        </div>
+        <div id="dvSubmitControl" style="display:none;">
+          <span> <img class="loading-image" src="~/Assets/images/loader.gif" alt="loading" /> Submitting......</span>
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+}
+
+
+@section Scripts{
+
+  <style>
+    #validationErrors{
+      color:red;
+      font-weight:bold;
+    }
+    .quote-imgs-thumbs {
+      background: #eee;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+      margin: 1.5rem 0;
+      padding: 0.75rem;
+    }
+
+    .quote-imgs-thumbs--hidden {
+      display: none;
+    }
+
+    .img-preview-thumb {
+      background: #fff;
+      border: 1px solid #777;
+      border-radius: 0.25rem;
+      box-shadow: 0.125rem 0.125rem 0.0625rem rgba(0, 0, 0, 0.12);
+      margin-right: 1rem;
+      max-width: 140px;
+      padding: 0.25rem;
+    }
+
+    .transportername {
+      position: absolute;
+      top: -10px;
+      width: 30%;
+      right: 15px;
+      background: #f2f3f5;
+      padding: 10px;
+    }
+    .errorForm {
+     border-bottom:1px solid red ;
+
+    }
+  </style>
+
+  <script src="~/Scripts/HazardCertificate/CreateHazarForm.js?@DateTime.Now.Ticks"></script>
+
+
+
+
+}

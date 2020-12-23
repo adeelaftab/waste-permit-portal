@@ -1,0 +1,218 @@
+﻿@model IEnumerable<HFZMVC.Models.UserManagement.UserMaster>
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Users Management</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashobard</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Users</a></li>
+            </ol>
+            <div class="state-information d-none d-sm-block">
+                <a href="/User/Create" class="btn btn-primary waves-effect waves-light"><i class="fa fa-plus-circle"></i> Add New User</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card m-b-20">
+            <div class="card-body">
+                <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="display: block; border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th style="width:200px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @i
+                                    </td>
+                                    <td>
+                                        @item.Name
+                                    </td>
+                                    <td>
+                                        @item.EmailID
+                                    </td>
+                                    <td>
+                                        @item.PhoneNumber
+                                    </td>
+                                    <td>
+                                        @item.Role
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.Status == "Active")
+                                            {
+                                                <span class="badge badge-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-danger">InActive</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary waves-effect waves-light" href="/User/View/@item.ID">
+                                            <i class="fa fa-eye">
+                                            </i>
+                                        </a>
+
+                                        <a class="btn btn-primary waves-effect waves-light" href="/User/EditUser/@item.ID">
+                                            <i class="fa fa-edit">
+                                            </i>
+                                        </a>
+                                        <div class="tooltipcustom">
+                                          <a class="btn btn-primary waves-effect waves-light" onclick="changestatus(@item.ID);" href="javascript:;">
+                                            <i class="fa fa-user-check">
+                                            </i>
+                                          </a>
+                                          <span class="tooltiptext">Change user status</span>
+                                        </div>
+                                         
+                                        
+                                       
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->
+@section styles{
+  
+  <style>
+    .tooltipcustom {
+      position: relative;
+      display: inline-block;
+    }
+
+      /* Tooltip text */
+      .tooltipcustom .tooltiptext {
+        visibility: hidden;
+        width: 135px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -60px;
+      }
+
+      /* Show the tooltip text when you mouse over the tooltip container */
+      .tooltipcustom:hover .tooltiptext {
+        visibility: visible;
+      }
+  </style>
+  
+  }
+
+<script type="text/javascript">
+
+
+    function changestatus(id) {
+        if (confirm("Are you sure want to continue?")) {
+            $.ajax({
+                url: "/Company/changeStatus/" + id,
+                async: false,
+                type: "POST",            // type of submision
+                dataType: "text",        // what type of data we'll get back
+                success: function (data) {
+                    if (data == 1) {
+                        alert("Status Has been Changed Successfully..!!!");
+                        location.reload(true);
+                    }
+                    else {
+                        alert("Unable to Change Status..!!!");
+                    }
+                }
+            });
+        }
+    }
+
+    $(".numberonly").keypress(function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            return false;
+        }
+    });
+    function checkformOne() {
+        if ($(".bs-example-modal-center input#Name").val().trim() == "") {
+            alert("Name is Required.");
+            return false;
+        }
+        if ($(".bs-example-modal-center input#EmailID").val().trim() == "") {
+            alert("Email is Required.");
+            return false;
+        }
+        else {
+            if (validateEmail($(".bs-example-modal-center input#EmailID").val().trim()) == false) {
+                alert("Invalid Email Address.");
+                return false;
+            }
+            else {
+                if ($(".bs-example-modal-center input#EmailID").hasClass("duplicate")) {
+                    alert("Email Already Exists..!!!");
+                    return false;
+                }
+            }
+        }
+        if ($(".bs-example-modal-center input#PhoneNumber").val().trim() == "") {
+            alert("Phone Number is Required.");
+            return false;
+        }
+        if ($(".bs-example-modal-center input#UserName").val().trim() == "") {
+            alert("UserName is Required.");
+            return false;
+        }
+        else {
+            if ($(".bs-example-modal-center input#UserName").hasClass("duplicate")) {
+                alert("UserName Already Exists..!!!");
+                return false;
+            }
+        }
+        if ($(".bs-example-modal-center input#Password").val().trim() == "") {
+            alert("Password is Required.");
+            return false;
+        }
+        return true;
+    }
+
+    function validateEmail($email) {
+        var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,6})?$/;
+        return ($email.length > 0 && emailReg.test($email));
+    }
+
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

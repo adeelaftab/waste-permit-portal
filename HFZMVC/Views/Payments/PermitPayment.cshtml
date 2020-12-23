@@ -1,0 +1,375 @@
+﻿@{
+    ViewBag.Title = "Permit Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Select Payment Method</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashoard</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Payments</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="row">
+    @if (TempData["message"] != null)
+    {
+        <label class="badge" style="color:red;font-weight:bold">@TempData["message"]</label>
+    }
+
+    <div class="col-lg-8">
+        <div class="card m-b-20">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- left column -->
+                        <!-- edit form column -->
+                        <div class="col-md-12 personal-info" style="border-left: 1px solid #eee;">
+
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <br>
+                                    <label class="col-lg-12 control-label payment-label"><input type="radio" name="colorRadio" value="creditcard" style="margin-right: 10px;">&nbsp;Pay by Creditcard</label>
+                                    <label class="col-lg-12 control-label payment-label"><input type="radio" name="colorRadio" value="wallet" style="margin-right: 10px;">&nbsp;Pay by Wallet Credit (@ViewBag.balance.ToString("0.0"))</label>
+                                    <label class="col-lg-12 control-label payment-label"><input type="radio" name="colorRadio" value="cashcheque" style="margin-right: 10px;">&nbsp;Pay by Cash/Cheque/transfer</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-md-12 creditcard box">
+                            <div class="creditcardpayment">
+                                <form id="currenttransactionform" action="" method="post">
+                                    <input type='Hidden' id="currenttransactionID" name='TransactionID' value="" />
+                                </form>
+                                <button onclick="Proceedtocreditcard();" type="button" class="btn btn-success waves-effect waves-light submitcheckout">Proceed to card payment</button>
+                            </div>
+                        </div>
+                        <div class="col-md-12 personal-info wallet box" style="border-left: 1px solid #eee;">
+                            @{
+                                if (ViewBag.balance >= ViewBag.invoiceData.TotalAmount)
+                                {
+                                    using (Html.BeginForm("WalletPayment", "Payments", FormMethod.Post, new { onsubmit = "return checkwalletpayment();", enctype = "multipart/form-data", accept_charset = "utf-8" }))
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label">Amount to be Paid:</label>
+                                                    <div class="col-lg-12">
+                                                        <input class="form-control floatNum totalbill" placeholder="Amount Paid" id="AmountPaid" value="@ViewBag.invoiceData.TotalAmount" name="AmountPaid" type="text">
+                                                    </div>
+                                                    <div>Your Current Balance is: <b style="float: right;" id="RemainingBalance">AED @((ViewBag.balance).ToString("0.0"))</b></div>
+                                                    <div>Your Current Bill is: <b style="float: right;" id="CurrentBill">AED @((ViewBag.invoiceData.TotalAmount).ToString("0.0"))</b></div>
+                                                    <div>Your Remaining Balance will be: <b style="float: right;" id="RemainingBalance">AED @((ViewBag.balance - ViewBag.invoiceData.TotalAmount).ToString("0.0"))</b></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label">Details:</label>
+                                                    <div class="col-lg-12">
+                                                        <textarea class="form-control" rows="6" placeholder="Details" id="Remarks" name="Remarks"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 control-label"></label>
+                                            <div class="col-md-12">
+                                                <input type="hidden" id="GrandTotalinput" class="GrandTotalinputval" name="GrandTotal" value="" />
+                                                <input type="hidden" id="currentPermitID" name="PermitID" value="@ViewBag.id" />
+                                                <input type="submit" class="btn btn-primary" value="Submit">
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="alert alert-danger alert-dismissable">
+                                        <a class="panel-close close" data-dismiss="alert">×</a>
+                                        <i class="fa fa-coffee"></i>
+                                        Your Account Balance is <strong>less</strong> then the required amount.
+                                    </div>
+                                }
+                            }
+
+
+
+                        </div>
+                        <div class="col-md-12 personal-info cashcheque box" style="border-left: 1px solid #eee;">
+                            @using (Html.BeginForm("ManualPayment", "Payments", FormMethod.Post, new { onsubmit = "return checkform();", enctype = "multipart/form-data", accept_charset = "utf-8" }))
+                            {
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label">Upload your Document (proof of payment):</label>
+                                    <div class="col-lg-12">
+                                        <input class="form-control" placeholder="Cheque or Money Transfer Document" onchange="checkfile(this);" id="ReferenceFile" name="ReferenceFile" type="file">
+                                       @* <label class="uploaddocument-btn" for="ReferenceFile"><i class="fa fa-upload"></i><span>Attach</span></label>*@
+                                    </div>
+                                    <input type="hidden" id="GrandTotalinput" class="GrandTotalinputval" name="GrandTotal" value="" />
+                                    <input type="hidden" id="currentPermitID" name="PermitID" value="@ViewBag.id" />
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                          <label class="col-lg-12 control-label">Cheque No/Transfer ref:</label>
+                                            <div class="col-lg-12">
+                                                <input class="form-control numberonly" placeholder="Cheque No" id="ReferenceNo" name="ReferenceNo" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-lg-12 control-label">Amount Paid:</label>
+                                            <div class="col-lg-12">
+                                                <input class="form-control floatNum totalbill" placeholder="Amount Paid" id="AmountPaid" name="AmountPaid" type="number" step=any>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-lg-12 control-label">Payment Date:</label>
+                                            <div class="col-lg-12">
+                                                <input class="form-control date-picker" readonly placeholder="Select Date" id="PaymentDate" name="PaymentDate" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="col-lg-12 control-label">Details:</label>
+                                            <div class="col-lg-12">
+                                                <textarea class="form-control" placeholder="Details" id="Remarks" name="Remarks"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-12 control-label"></label>
+                                    <div class="col-md-12">
+                                        <input type="submit" class="btn btn-primary" value="Submit">
+                                    </div>
+                                </div>
+                            }
+							<div class="col-md-12">
+								<div class="row bankdetails">
+									<div class="col-md-12"><hr style="width: 100%;"></div>
+									<div class="col-md-12"><h5>Our bank details for the payment are specified below. </h5></div>
+									<div class="col-md-12"><br></div>
+									<div class="col-md-3"><p>Bank Name</p></div> <div class="col-md-9"><p>Sharjah Islamic Bank</p></div>
+									<div class="col-md-3"><p>Name of Account</p></div> <div class="col-md-9"><p>SHJ.ENVIRONMENT CO.LLC-BEEAH</p></div>
+									<div class="col-md-3"><p>Account Number</p></div> <div class="col-md-9"><p>0011349103001</p></div>
+									<div class="col-md-3"><p>Account Type</p></div> <div class="col-md-9"><p>Current Account</p></div>
+									<div class="col-md-3"><p>IBAN</p></div> <div class="col-md-9"><p>AE680410000011349103001</p></div>
+									<div class="col-md-3"><p>SWIFT</p></div> <div class="col-md-9"><p>Address NBSHAEAS</p></div>
+									<div class="col-md-3"><p>Currency</p></div> <div class="col-md-9"><p>AED (United Arab Emirates Dirham)</p></div>
+								</div>
+							 </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card" style="min-height: 100%;">
+            <div class="card-body charges">
+                <h4 class="mt-0 header-title chargestitle"><i class="ti-receipt"></i> <span>Charges</span></h4>
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <tbody>
+                            <tr>
+                                <th scope="row" style="min-width: 220px;"><i class="ti-zip charges-icons"></i> Permit ID</th>
+                                @{
+                                    string readallow = "";
+
+                                    if (ViewBag.id != null)
+                                    {
+                                        readallow = "readonly";
+                                    }
+                                }
+                                <td colspan="2">
+                                    <input @readallow id="PermitID" value="@ViewBag.id" class="form-control" style="width: 100%;" onchange="getdata(this);" maxlength="20" type="text" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="ti-settings charges-icons"></i> Amount</th>
+                                <td>AED</td>
+                                <td id="totalAmount">00.0</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="ti-bookmark-alt charges-icons"></i> VAT</th>
+                                <td>AED</td>
+                                <td id="vatcharges">00.0</td>
+                            </tr>
+                            <tr class="totalcharges">
+                                <th scope="row"><i class="ti-files charges-icons"></i> Total</th>
+                                <td>AED</td>
+                                <td id="GrandTotal">00.0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('input[type="radio"]').click(function () {
+            var inputValue = $(this).attr("value");
+            var targetBox = $("." + inputValue);
+            $(".box").not(targetBox).hide();
+            $(targetBox).show();
+        });
+        $('.date-picker').datepicker({
+            //format: 'dd/mm/yyyy',
+            autoclose: true
+        });
+        $("#PermitID").change();
+    });
+    function checkform() {
+        if ($("#ReferenceNo").val().trim() == "") {
+            alert("Cheque No is required.");
+            return false;
+        }
+        if ($("#PermitID").val().trim() == "") {
+            alert("Permit ID is required.");
+            return false;
+        }
+        if ($("#ReferenceFile").val().split('\\').pop().trim() == "") {
+            alert("Reference File is required.");
+            return false;
+        }
+        if ($("#AmountPaid").val().trim() == "") {
+            alert("Amount Paid is required.");
+            return false;
+        }
+        else {
+            if ($("#AmountPaid").val().trim() < $("#GrandTotalinput").val().trim()) {
+                alert("Invalid Amount entered.");
+                return false;
+            }
+        }
+        if ($("#PaymentDate").val().trim() == "") {
+            alert("Payment Date is required.");
+            return false;
+        }
+        return true;
+    }
+    function checkwalletpayment() {
+        if ($("#AmountPaid").val().trim() == "") {
+            alert("Amount Paid is required.");
+            return false;
+        }
+        else {
+            if ($("#AmountPaid").val().trim() < $("#GrandTotalinput").val().trim()) {
+                alert("Invalid Amount entered.");
+                return false;
+            }
+      }
+      var confirmation = confirm("Are you sure you want to make the payment using your wallet balance? ")
+
+      return confirmation;
+        
+    }
+    function getdata(v) {
+        var permitid = $(v).val();
+        if (permitid) {
+            $.ajax({
+                url: "/Payments/getpermitVal/" + permitid,
+                async: false,
+                type: "POST",            // type of submision
+                dataType: "text",        // what type of data we'll get back
+                success: function (res) {
+                    var data = JSON.parse(res); console.log(data.Success);
+                    if (data.Success == true) {
+                        $('#totalAmount').html(data.totalAmount);
+                        $('#vatcharges').html(data.vatcharges);
+                        //$('#walletbalance').html(data.walletbalance);
+                        var grandtotal = (+data.totalAmount + +data.vatcharges);// - +data.walletbalance;
+                        $('#GrandTotal').html(data.grandtotal);
+                        $('#GrandTotalinput,.GrandTotalinputval').val(data.grandtotal);
+                        $("#currentPermitID").val(permitid);
+                        $('.totalbill').val(grandtotal);
+                    }
+                    else {
+                        alert(data.msg);
+                        $(v).val("").focus();
+                    }
+                }
+            });
+        }
+    }
+    $(document).on('keypress', '.numberonly', function () {
+        if (event.which != 8 && event.which != 0 && (event.which < 48 || event.which > 57)) {
+            return false;
+        }
+    });
+    $(document).on('keypress', '.floatNum', function () {
+        if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+    function checkfile(v) {
+        let file = $(v).val().split('\\').pop().trim();
+        let id = $(v).attr('id');
+        var regex = /(?:\.([^.]+))?$/;
+        var ext = regex.exec(file)[1].toLocaleLowerCase();
+        if (ext == "pdf" || ext == "jpg" || ext == "png") {
+            if (id == "inspection_form") {
+                $("#filenamedisplay").val(file);
+            }
+        }
+        else {
+            $("#filenamedisplay").val("");
+            alert("File with extension \"" + ext + "\" is not allowed. Only PDF, JPG and PNG formate are acceptable.");
+            $(v).val(null);
+        }
+    }
+    function Proceedtocreditcard() {
+            $("#loader").show();
+            $.ajax({
+                url: "/Payments/GetTransactionID/",
+                async: false,
+                type: "POST",            // type of submision
+                data: {
+                    PermitID: $('#currentPermitID').val(),
+                    Amount: $('.totalbill').val(),
+                    OrderID: "@ViewBag.invoiceData.InvoiceNo",
+                    OrderName: "Payment For Permit: "+$("#currentPermitID").val(),
+                    OrderInfo: "Payment For Permit: "+$("#currentPermitID").val()
+                },
+                beforeSend: function () {
+                    $("#loader").show();
+                },
+                error : function (xhr, textStatus, errorThrown) {
+                    $("#loader").hide();
+                },
+                success: function (res) {
+                    $("#loader").hide();
+                    if (isJson(res)) {
+                        var data = JSON.parse(res);
+                        $("#currenttransactionID").val(data.Transaction.TransactionID);
+                        $("#currenttransactionform").attr("action", data.Transaction.PaymentPortal);
+                        $("#currenttransactionform").submit();
+                    }
+                    else {
+                        alert(res);
+                    }
+                }
+            });
+    }
+    function isJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+</script>
